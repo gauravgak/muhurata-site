@@ -220,6 +220,27 @@ body.nk-scroll-lock {
 }
 
 /* ── Tarot ───────────────────────────────────────────────────────── */
+.tr-hint { font-size: 13px; color: var(--brass); margin: 14px 0 8px; }
+.tr-fan { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; }
+.tr-slot {
+  width: 44px; height: 68px; flex: none; cursor: pointer; padding: 0;
+  border: 1px solid var(--brass); border-radius: var(--radius-md);
+  background:
+    repeating-linear-gradient(45deg, transparent 0 4px,
+      color-mix(in srgb, var(--brass) 22%, transparent) 4px 8px),
+    var(--wall-lit);
+  transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+}
+.tr-slot:hover:not(:disabled):not(.is-picked) { transform: translateY(-4px); }
+.tr-slot:disabled { opacity: .35; cursor: default; }
+.tr-slot.is-picked {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--brass) 60%, transparent);
+  background: var(--brass);
+}
+.tr-slot.is-flipped { opacity: .5; }
+@media (max-width: 480px) { .tr-slot { width: 38px; height: 58px; } }
+
 .tr-cards { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
 .tr-card {
   flex: 1 1 150px; min-width: 130px;

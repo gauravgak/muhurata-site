@@ -12,6 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.74.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <script src="auth.js"></script>
 <script src="api.js"></script>
+<script src="profile.js"></script>
 <style>
 :root{
   --wall:#171410; --wall-lit:#2c2620; --wall-shade:#0f0d0a;
@@ -539,6 +540,7 @@ header *{position:relative;z-index:1}
   $('f-go').onclick=function(){
     var fd={name:$('f-name').value.trim(),dob:$('f-dob').value,tob:$('f-tob').value,place:$('f-pob').value.trim()};
     if(!fd.name||!fd.dob||!fd.tob||!fd.place){ $('f-err').textContent='Please fill in every field.'; $('f-err').classList.remove('hide'); return; }
+    if(window.mhSaveProfile) window.mhSaveProfile(fd);
     loadKundli(fd);
   };
 
@@ -551,6 +553,13 @@ header *{position:relative;z-index:1}
       if(fd.name) loadKundli(fd);
     }
   })();
+
+  // prefill from the signed-in user's saved birth details
+  function _fillKundli(){
+    if(window.mhFillForm) window.mhFillForm({name:'#f-name', dob:'#f-dob', tob:'#f-tob', place:'#f-pob'});
+  }
+  _fillKundli();
+  window.addEventListener('mh-profile', _fillKundli);
 })();
 </script>
 

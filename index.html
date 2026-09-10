@@ -588,6 +588,7 @@ button.go:disabled{opacity:.65;cursor:default}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.74.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <script src="auth.js"></script>
 <script src="api.js"></script>
+<script src="profile.js"></script>
 <script>
 (function(){
   var saved=null;
@@ -801,7 +802,6 @@ button.go:disabled{opacity:.65;cursor:default}
     <button class="svc-tab" data-svc="milan" role="tab">Matching</button>
     <button class="svc-tab" data-svc="horo" role="tab">Horoscope</button>
     <button class="svc-tab" data-svc="tarot" role="tab">Tarot</button>
-    <button class="svc-tab" data-svc="chat" role="tab">Chat <span class="soon">soon</span></button>
   </div>
 
   <!-- KUNDALI -->
@@ -878,24 +878,11 @@ button.go:disabled{opacity:.65;cursor:default}
         <button class="per" data-sp="one" type="button">One card</button>
         <button class="per" data-sp="cross" type="button">Six-card cross</button>
       </div>
-      <button class="go" id="tr-go" type="button" style="margin-top:14px">Draw the cards</button>
+      <button class="go" id="tr-go" type="button" style="margin-top:14px">Shuffle and lay the cards</button>
       <div id="tr-out" class="svc-out"></div>
     </div>
   </div>
 
-  <!-- CHAT -->
-  <div class="svc-pane" data-svcp="chat">
-    <div class="svc-card soon-card">
-      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
-        <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.3-.6L3 21l1.8-5A8.3 8.3 0 0 1 3.6 11.5 8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/>
-      </svg>
-      <h3>Chat and live Q&amp;A</h3>
-      <p>Ask your chart a question and get an answer grounded in your actual
-         positions, not a generic reply. We are building it carefully — an
-         answer that sounds confident and is wrong is worse than no answer.</p>
-      <p class="svc-sub">Coming soon. Enter your details above and we will tell you when it opens.</p>
-    </div>
-  </div>
 </section>
 
 <section class="sec">
@@ -1355,6 +1342,16 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 (function(){
   var card=document.getElementById('card'), btn=document.getElementById('go');
 
+  /* Prefill from the signed-in user's saved birth details. */
+  function _fillReading(){
+    if(window.mhFillForm) window.mhFillForm({
+      name:'#nm', place:'#pob', phone:'#wa', dob:'#dob', tob:'#tob',
+      dobTrigger:'#dob-trig', tobTrigger:'#tob-trig'
+    });
+  }
+  _fillReading();
+  window.addEventListener('mh-profile', _fillReading);
+
   /* Lead capture. Always runs, always first. This must never depend on the
      reading service being up, or you lose the signup. */
   var LEAD_ENDPOINT = 'https://formspree.io/f/mrpgyozv';
@@ -1645,6 +1642,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
               practice:r.practice
             };
           }catch(e){}
+          if(window.mhSaveProfile) window.mhSaveProfile({name:d.name, dob:d.dob, tob:d.tob, place:d.place, phone:d.phone});
           done(renderReading(reading), d);
         })
         .catch(function(){
@@ -2434,53 +2432,80 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 })();
 </script>
 <script>
-/* ---------- Tarot (free services tab) ---------- */
+/* ---------- Tarot: you lay the cards, then pick your own ---------- */
 (function(){
   var q=document.getElementById('tr-q'), go=document.getElementById('tr-go'),
       out=document.getElementById('tr-out'), sp=document.getElementById('tr-spread');
   if(!go) return;
-  var spread='three';
+  var SPREAD_N={one:1,three:3,cross:6}, spread='three', FAN=14;
+  var picks=[], laid=false;
   function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(m){
     return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+  function need(){ return SPREAD_N[spread]||3; }
 
   sp.addEventListener('click', function(e){
     var b=e.target.closest('.per'); if(!b) return;
     sp.querySelectorAll('.per').forEach(function(x){ x.classList.remove('is-on'); });
     b.classList.add('is-on'); spread=b.getAttribute('data-sp');
+    if(laid) lay();   /* re-lay if spread changed mid-flow */
   });
 
-  function render(d){
-    var cards=(d.cards||[]).map(function(c){
-      return '<div class="tr-card"><div class="pos">'+esc(c.position)+'</div>'
-        + '<div class="nm">'+esc(c.name)+'</div>'
-        + '<div class="or">'+esc(c.orientation)+'</div>'
-        + '<div class="mn">'+esc(c.meaning)+'</div></div>';
-    }).join('');
-    out.innerHTML='<div class="tr-cards">'+cards+'</div>'
-      + '<p class="tr-reading">'+esc(d.reading)+'</p>';
+  function signInPrompt(){
+    out.innerHTML='<p class="svc-sub">Sign in to draw a spread.</p>';
+    var b=document.createElement('button'); b.className='go'; b.style.marginTop='10px';
+    b.textContent='Sign in with Google';
+    b.addEventListener('click', function(){ if(window.mhAuth) window.mhAuth.signInGoogle(); });
+    out.appendChild(b);
   }
 
-  go.addEventListener('click', function(){
-    go.disabled=true; go.textContent='Drawing…';
-    out.innerHTML='<p class="svc-load">Turning the cards…</p>';
-    window.mhApiFetch((window.API_BASE||'')+'/api/tarot', {
-      body:{ question:(q.value||'').trim(), spread:spread },
-      onRetry:function(){ out.innerHTML='<p class="svc-load">Waking the server up — the free tier is slow on the first request…</p>'; }
-    })
-    .then(function(d){ render(d); })
-    .catch(function(e){
-      if(e && e.code==='unauthorized'){
-        out.innerHTML='<p class="svc-sub">Sign in to draw a spread.</p>';
-        var b=document.createElement('button'); b.className='go'; b.style.marginTop='10px';
-        b.textContent='Sign in with Google';
-        b.addEventListener('click', function(){ if(window.mhAuth) window.mhAuth.signInGoogle(); });
-        out.appendChild(b);
-      } else {
-        out.innerHTML='<p class="err">'+esc((window.MH_ERR&&window.MH_ERR[e.code])||e.message||'Could not draw right now.')+'</p>';
-      }
-    })
-    .then(function(){ go.disabled=false; go.textContent='Draw the cards'; });
+  function lay(){
+    if(!(window.mhAuth && window.mhAuth.user())){ signInPrompt(); return; }
+    laid=true; picks=[];
+    go.textContent='Reading…'; go.disabled=true;
+    var deck='';
+    for(var i=0;i<FAN;i++) deck+='<button class="tr-slot" type="button" data-i="'+i+'" aria-label="card '+(i+1)+'"></button>';
+    out.innerHTML='<p class="tr-hint" id="tr-hint">Pick '+need()+' card'+(need()>1?'s':'')+' — trust the pull.</p>'
+      + '<div class="tr-fan">'+deck+'</div><div id="tr-result"></div>';
+  }
+
+  out.addEventListener('click', function(e){
+    var s=e.target.closest('.tr-slot'); if(!s || s.classList.contains('is-picked') || s.disabled) return;
+    if(picks.length>=need()) return;
+    var i=+s.getAttribute('data-i'); s.classList.add('is-picked'); picks.push(i);
+    var left=need()-picks.length;
+    var hint=document.getElementById('tr-hint');
+    if(left>0){ hint.textContent='Pick '+left+' more.'; return; }
+    hint.textContent='Turning your cards…';
+    out.querySelectorAll('.tr-slot').forEach(function(x){ if(!x.classList.contains('is-picked')) x.disabled=true; });
+    draw();
   });
+
+  function draw(){
+    window.mhApiFetch((window.API_BASE||'')+'/api/tarot', {
+      body:{ question:(q.value||'').trim(), spread:spread, picks:picks },
+      onRetry:function(){ var h=document.getElementById('tr-hint'); if(h) h.textContent='Waking the server up — the free tier is slow on the first request…'; }
+    })
+    .then(function(d){
+      var slots=out.querySelectorAll('.tr-slot.is-picked');
+      (d.cards||[]).forEach(function(c,idx){ if(slots[idx]) slots[idx].classList.add('is-flipped'); });
+      var cards=(d.cards||[]).map(function(c){
+        return '<div class="tr-card"><div class="pos">'+esc(c.position)+'</div>'
+          + '<div class="nm">'+esc(c.name)+'</div><div class="or">'+esc(c.orientation)+'</div>'
+          + '<div class="mn">'+esc(c.meaning)+'</div></div>';
+      }).join('');
+      var h=document.getElementById('tr-hint'); if(h) h.remove();
+      document.getElementById('tr-result').innerHTML='<div class="tr-cards">'+cards+'</div>'
+        + '<p class="tr-reading">'+esc(d.reading)+'</p>';
+    })
+    .catch(function(e){
+      if(e && e.code==='unauthorized') return signInPrompt();
+      var h=document.getElementById('tr-hint');
+      if(h) h.innerHTML='<span class="err">'+esc((window.MH_ERR&&window.MH_ERR[e.code])||e.message||'Could not draw right now.')+'</span>';
+    })
+    .then(function(){ go.disabled=false; go.textContent='Lay a new spread'; laid=false; });
+  }
+
+  go.addEventListener('click', lay);
 })();
 </script>
 </body>
