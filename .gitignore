@@ -1,0 +1,16 @@
+# Local config & secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Nothing here needs a build step — no node_modules, no dist
+node_modules/
+
+# design reference, not part of the deployed site
+Muhurata Wireframes.html
+*.dc.html

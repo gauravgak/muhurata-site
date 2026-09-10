@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muhurata — know what to do, not just what's written</title>
+<meta name="description" content="Your chart, the dasha you are running, and your Ishta Devata - calculated the classical way and sent to your WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://muhurata.com/">
+<meta property="og:title" content="Muhurata - know what to do, not just what's written">
+<meta property="og:description" content="Your chart, your dasha, your Ishta Devata. Calculated the classical way, sent to your WhatsApp.">
+<meta property="og:image" content="https://muhurata.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F5EDDC">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="muhurata-lotus.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Karla:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#F5EDDC;
+  --wall-lit:#FCF7EB;
+  --wall-shade:#EADEC5;
+  --oxide:#9E4A34;
+  --oxide-dk:#7F3728;
+  --teak:#6A4423;
+  --teak-dk:#3D2514;
+  --brass:#A9801F;
+  --brass-lt:#D8B457;
+  --marigold:#DE8F22;
+  --kumkum:#8F221C;
+  --ink:#291A10;
+  --rule:rgba(106,68,35,.18);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:var(--wall);overflow-x:hidden;
+  font-family:"Karla",system-ui,sans-serif;font-size:17px;line-height:1.62}
+h1,h2,h3,.brand,.pull{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400}
+
+/* ---------- toran ---------- */
+.toran{display:block;width:100%;height:38px;background:var(--wall-lit)}
+
+/* ---------- scroll thread ---------- */
+.thread{position:fixed;top:0;left:14px;height:100vh;width:16px;z-index:9;pointer-events:none}
+.thread path{fill:none;stroke:var(--brass);stroke-width:1.2;opacity:.5;
+  stroke-dasharray:1200;stroke-dashoffset:1200}
+@media (max-width:960px){.thread{display:none}}
+
+/* ---------- room ---------- */
+.room{position:relative;overflow:hidden;
+  background:
+    radial-gradient(80% 55% at 72% 6%, rgba(216,180,87,.26), transparent 64%),
+    radial-gradient(60% 45% at 6% 34%, rgba(255,253,244,.8), transparent 72%),
+    linear-gradient(180deg,var(--wall-lit) 0%,var(--wall) 46%,var(--wall-shade) 100%)}
+.room::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;
+  background-image:radial-gradient(rgba(106,68,35,.08) .5px,transparent .6px);background-size:4px 4px}
+.stars{position:absolute;top:0;left:0;right:0;height:70%;z-index:1;pointer-events:none;will-change:transform}
+.wrap{position:relative;z-index:3;max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- header / logo ---------- */
+header{padding:20px 0 0}
+.head-row{display:flex;align-items:center;gap:12px}
+.logo{flex:none;overflow:visible}
+.logo .ring{fill:none;stroke:var(--brass);stroke-width:1.2}
+.logo .star{fill:none;stroke:var(--brass-lt);stroke-width:1.3;transform-origin:50px 50px}
+.logo .fl{fill:var(--marigold)}
+.logo .fl-core{fill:#FFF1CD}
+.brand{font-size:25px;color:var(--teak-dk);letter-spacing:.4px;line-height:1}
+.brand small{display:block;font-family:"Karla";font-size:10.5px;letter-spacing:2.4px;color:var(--brass);margin-top:3px}
+.sound{margin-left:auto;display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  background:rgba(255,252,242,.7);border:1px solid var(--rule);border-radius:999px;
+  padding:7px 15px 7px 11px;font:inherit;font-size:13.5px;color:var(--teak)}
+.sound:hover{border-color:var(--brass);background:#FFFCF0}
+.sound:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+.bars{display:inline-flex;align-items:flex-end;gap:2px;height:13px}
+.bars i{display:block;width:2px;height:4px;background:var(--brass);border-radius:1px}
+.sound.on .bars i{animation:eq .9s ease-in-out infinite}
+.sound.on .bars i:nth-child(2){animation-delay:.15s}
+.sound.on .bars i:nth-child(3){animation-delay:.3s}
+.sound.on .bars i:nth-child(4){animation-delay:.45s}
+@keyframes eq{0%,100%{height:4px}50%{height:13px}}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.02fr .98fr;gap:44px;align-items:center;padding:30px 0 34px}
+.pull{font-size:15.5px;font-style:italic;color:var(--kumkum);margin:0 0 8px}
+h1{font-size:49px;line-height:1.12;margin:0 0 15px;color:var(--teak-dk);max-width:14ch}
+.lede{font-size:18.5px;max-width:44ch;margin:0 0 26px;color:#4B3524}
+
+/* rasi wheel */
+.wheel-hold{display:flex;justify-content:center;position:relative}
+.wheel{width:100%;max-width:420px;height:auto;overflow:visible}
+.wheel .w-line{fill:none;stroke:var(--brass);stroke-width:1}
+.wheel .w-fine{fill:none;stroke:var(--brass);stroke-width:.6;opacity:.55}
+.wheel .w-strong{fill:none;stroke:var(--teak);stroke-width:1.3;opacity:.7}
+.wheel .w-dot{fill:var(--brass)}
+.wheel .w-accent{fill:none;stroke:var(--kumkum);stroke-width:1.1;opacity:.75}
+#wOuter{transform-origin:200px 200px;will-change:transform}
+#wNak{transform-origin:200px 200px;will-change:transform}
+.wheel-glow{position:absolute;width:60%;padding-bottom:60%;border-radius:50%;
+  background:radial-gradient(circle,rgba(216,180,87,.30),transparent 66%);filter:blur(6px);z-index:-1}
+
+/* ---------- card ---------- */
+.card{background:linear-gradient(180deg,#FFFCF3,#F9F0DC);border:1px solid var(--rule);
+  border-top:3px solid var(--brass);border-radius:2px;padding:26px 24px 22px;
+  box-shadow:0 20px 46px -34px rgba(61,37,20,.9),0 1px 0 rgba(255,255,255,.9) inset}
+.card h2{font-size:22px;margin:0 0 4px;color:var(--teak-dk)}
+.card .sub{font-size:14.5px;color:#6B5340;margin:0 0 18px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:5px;color:var(--teak)}
+.field input{width:100%;height:48px;padding:0 12px;font:inherit;font-size:16px;color:var(--ink);
+  background:#FFFEF9;border:1px solid rgba(106,68,35,.28);border-radius:2px;
+  -webkit-appearance:none;appearance:none;text-align:left;line-height:normal;
+  display:block;min-width:0}
+
+.field input:focus{outline:2px solid var(--marigold);outline-offset:1px;border-color:var(--brass)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two>div{min-width:0}
+.hint{font-size:13px;color:#7B6551;margin:-8px 0 14px}
+.wa{display:flex;gap:9px;align-items:flex-start;margin:4px 0 16px;font-size:14.5px;color:#4B3524}
+.wa input{margin-top:3px;accent-color:var(--kumkum)}
+button.go{width:100%;padding:14px 18px;font:inherit;font-size:16.5px;font-weight:700;letter-spacing:.2px;
+  color:#FFF6E2;background:linear-gradient(180deg,#A32720,var(--kumkum));border:0;border-radius:2px;cursor:pointer}
+button.go:hover{background:linear-gradient(180deg,#8A201A,#741A15)}
+button.go:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+.fine{font-size:12.5px;color:#7B6551;margin:11px 0 0;text-align:center}
+.done{display:none}
+.done h2{margin:0 0 8px}
+.done p{margin:0 0 6px;font-size:15.5px;color:#4B3524}
+.is-sent .form-body{display:none}
+.is-sent .done{display:block}
+
+/* ---------- floor ---------- */
+.floor{position:relative;background:linear-gradient(180deg,var(--oxide),var(--oxide-dk));
+  box-shadow:inset 0 8px 16px -10px rgba(0,0,0,.55)}
+.floor::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--brass-lt),transparent)}
+.floor-in{max-width:1120px;margin:0 auto;padding:24px 24px 26px;display:flex;justify-content:center}
+.kolam{width:100%;max-width:300px;height:auto}
+.kolam .kd{fill:#F5EDDC;opacity:.8}
+.kolam .kl{fill:none;stroke:#F5EDDC;stroke-width:1.8;stroke-linecap:round;opacity:.9}
+
+/* ---------- sections ---------- */
+.sec{max-width:1120px;margin:0 auto;padding:60px 24px 0}
+.sec h2{font-size:30px;margin:0 0 6px;color:var(--teak-dk)}
+.sec .say{font-size:16px;color:#6B5340;margin:0 0 26px;max-width:56ch}
+
+.gets{display:grid;grid-template-columns:repeat(3,1fr)}
+.get{padding:0 28px}
+.get:first-child{padding-left:0}
+.get:last-child{padding-right:0}
+.get+.get{border-left:1px solid var(--rule)}
+.get h3{font-size:20px;margin:10px 0 7px;color:var(--kumkum)}
+.get p{margin:0;font-size:15.5px;color:#4B3524}
+
+/* ---------- ishta devata ---------- */
+.ishta{margin-top:64px;position:relative;background:linear-gradient(180deg,#FBF4E4,#F3E9D2);
+  border:1px solid var(--rule);border-radius:2px;padding:34px 30px 30px}
+.ishta h2{margin-bottom:6px}
+.deities{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:24px;
+  background:var(--rule);border:1px solid var(--rule)}
+.d{background:#FCF7EA;padding:16px 16px 14px;display:flex;gap:13px;align-items:flex-start;
+  opacity:0;transform:translateY(8px)}
+.reveal .d{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+.d svg{flex:none;margin-top:2px}
+.d b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+  font-size:17px;color:var(--teak-dk);line-height:1.3}
+.d span{font-size:13.5px;color:#6B5340}
+.note{margin:22px 0 0;font-size:14.5px;color:#5C452F;max-width:66ch;
+  border-left:3px solid var(--marigold);padding-left:14px}
+
+/* ---------- trust ---------- */
+.trust{margin-top:60px;background:var(--wall-shade);border-left:3px solid var(--brass);
+  border-radius:2px;padding:28px 26px}
+.trust h2{font-size:23px;margin:0 0 16px}
+.trust ul{margin:0;padding:0;list-style:none}
+.trust li{position:relative;padding-left:22px;margin-bottom:12px;font-size:15.5px;color:#45301E;max-width:70ch}
+.trust li:last-child{margin-bottom:0}
+.trust li::before{content:"";position:absolute;left:0;top:8px;width:8px;height:8px;
+  background:var(--brass);transform:rotate(45deg)}
+
+footer{max-width:1120px;margin:56px auto 0;padding:20px 24px 44px;border-top:1px solid var(--rule);
+  font-size:13.5px;color:#7B6551;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+footer a{color:var(--teak);text-decoration:none;border-bottom:1px solid var(--brass)}
+
+/* section entrance: a quiet wipe, once */
+.sec>*{clip-path:inset(0 0 0 0)}
+.rise{opacity:0;transform:translateY(14px)}
+.rise.in{opacity:1;transform:none;transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.3,1)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rise,.d{opacity:1!important;transform:none!important}
+}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:14px;padding-top:20px}
+  h1{font-size:35px;max-width:none}
+  .wheel-hold{order:-1}
+  .wheel{max-width:250px}
+  .gets{grid-template-columns:1fr}
+  .get{padding:20px 0}
+  .get+.get{border-left:0;border-top:1px solid var(--rule)}
+  .get:first-child{padding-top:0}
+  .deities{grid-template-columns:1fr}
+  .ishta{padding:26px 20px}
+  .brand{font-size:22px}
+}
+
+.rd h2{font-size:24px;margin:0 0 16px;color:var(--teak-dk)}
+.rd h3{font-size:17px;margin:22px 0 6px;color:var(--kumkum);
+  font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400}
+.rd p{margin:0;font-size:15.5px;color:#4B3524;line-height:1.62}
+.rd-hi{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;
+  background:var(--wall-shade);padding:14px 16px;border-radius:2px;margin-bottom:6px}
+.rd-hi span{font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--brass)}
+.rd-hi b{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+  font-size:19px;color:var(--teak-dk)}
+.rd-planets{margin-top:8px;border-top:1px solid var(--rule)}
+.rd-p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;
+  padding:10px 0;border-bottom:1px solid rgba(106,68,35,.12)}
+.rd-p-name{font-weight:700;color:var(--teak-dk);min-width:64px;font-size:14.5px}
+.rd-p-detail{font-size:13.5px;color:#4B3524}
+[data-theme="dark"] .rd-p-detail{color:#D9C9AC}
+.rd-p-house{font-size:12px;color:var(--brass);margin-left:auto;white-space:nowrap}
+.rx{color:var(--kumkum);font-size:11px;font-style:normal}
+.rd-f{margin-top:22px;padding-top:14px;border-top:1px solid var(--rule);
+  font-size:14px;color:#7B6551}
+button.go:disabled{opacity:.65;cursor:default}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:24px;padding:15px 18px;background:#128C7E;color:#fff;font-weight:700;font-size:16.5px;border-radius:2px;text-decoration:none}
+.wa-btn:hover{background:#0f7268}
+.ct-tabs{display:flex;gap:0;margin:12px 0 0;border-bottom:1px solid var(--rule)}
+.ct-tab{flex:1;padding:9px 6px;font:inherit;font-size:13px;font-weight:600;background:none;border:0;border-bottom:2px solid transparent;color:#7B6551;cursor:pointer}
+.ct-tab.is-on{color:var(--kumkum);border-bottom-color:var(--kumkum)}
+.ct-tab:focus-visible{outline:2px solid var(--marigold);outline-offset:-2px}
+.ct-hold{display:flex;justify-content:center;padding:16px 0 4px}
+.ct-pane{display:none}
+.ct-pane.is-on{display:block}
+.ct-pane svg{max-width:100%;height:auto}
+.ct-key{margin:6px 0 0;font-size:12px;line-height:1.55;color:#7B6551}
+
+/* ---------- dark theme ---------- */
+[data-theme="dark"]{
+  --wall:#1C1409; --wall-lit:#241A0D; --wall-shade:#150F07;
+  --oxide:#7A3828; --oxide-dk:#5E2A1E;
+  --teak:#C9A45E; --teak-dk:#F2E4C8;
+  --brass:#D8B457; --brass-lt:#EBCE84;
+  --marigold:#E9A63B; --kumkum:#D4564C;
+  --ink:#EFE3CC; --rule:rgba(216,180,87,.2);
+}
+[data-theme="dark"] body{background:var(--wall)}
+[data-theme="dark"] .room{background:
+  radial-gradient(80% 55% at 72% 6%, rgba(216,180,87,.13), transparent 64%),
+  linear-gradient(180deg,#241A0D 0%,#1C1409 46%,#150F07 100%)}
+[data-theme="dark"] .room::after{background-image:radial-gradient(rgba(216,180,87,.06) .5px,transparent .6px)}
+[data-theme="dark"] .toran{background:#241A0D}
+[data-theme="dark"] .card,[data-theme="dark"] .svc-card{
+  background:linear-gradient(180deg,#2A1F10,#221809)}
+[data-theme="dark"] .field input,[data-theme="dark"] .field select{
+  background:#191203;color:var(--ink);border-color:rgba(216,180,87,.3)}
+[data-theme="dark"] .lede,[data-theme="dark"] .get p,[data-theme="dark"] .trust li,
+[data-theme="dark"] .rd p,[data-theme="dark"] .sec .say{color:#D9C9AC}
+[data-theme="dark"] .hint,[data-theme="dark"] .fine,[data-theme="dark"] .rd-f,
+[data-theme="dark"] .ct-key,[data-theme="dark"] footer{color:#A99570}
+[data-theme="dark"] .trust{background:#241A0D}
+[data-theme="dark"] .rd-hi{background:#241A0D}
+[data-theme="dark"] .ishta{background:linear-gradient(180deg,#241A0D,#1C1409)}
+[data-theme="dark"] .d{background:#241A0D}
+[data-theme="dark"] .ct-pane svg rect[fill="#FFFCF3"]{fill:#1F1608}
+[data-theme="dark"] .ct-pane svg text[fill="#3D2514"]{fill:#F2E4C8}
+
+.theme{display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:999px;cursor:pointer;
+  background:rgba(255,252,242,.7);border:1px solid var(--rule);color:var(--teak);
+  margin-left:10px;flex:none}
+[data-theme="dark"] .theme,[data-theme="dark"] .sound{background:rgba(36,26,13,.8)}
+.theme:hover{border-color:var(--brass)}
+.theme:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+.theme .sun{display:none}
+[data-theme="dark"] .theme .sun{display:block}
+[data-theme="dark"] .theme .moon{display:none}
+
+.svc-tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:0;overflow-x:auto}
+.svc-tab{flex:1;min-width:110px;padding:13px 8px;font:inherit;font-size:14.5px;font-weight:600;
+  background:none;border:0;border-bottom:2px solid transparent;color:#7B6551;cursor:pointer;white-space:nowrap}
+.svc-tab.is-on{color:var(--kumkum);border-bottom-color:var(--kumkum)}
+.svc-tab:focus-visible{outline:2px solid var(--marigold);outline-offset:-2px}
+[data-theme="dark"] .svc-tab{color:#A99570}
+.soon{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--brass);
+  border:1px solid var(--brass);border-radius:999px;padding:1px 6px;margin-left:5px;vertical-align:1px}
+.svc-pane{display:none;padding-top:22px}
+.svc-pane.is-on{display:block}
+.svc-card{background:linear-gradient(180deg,#FFFCF3,#F9F0DC);border:1px solid var(--rule);
+  border-top:3px solid var(--brass);border-radius:2px;padding:26px 24px 24px}
+.svc-card h3{font-size:23px;margin:0 0 4px;color:var(--teak-dk);
+  font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400}
+.svc-card h4{font-size:15px;margin:0 0 12px;color:var(--kumkum);letter-spacing:1.4px;
+  text-transform:uppercase;font-family:"Karla",sans-serif;font-weight:700}
+.svc-sub{font-size:14.5px;color:#6B5340;margin:0 0 20px}
+[data-theme="dark"] .svc-sub{color:#A99570}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:6px}
+.svc-out{margin-top:20px}
+.svc-load{font-size:14.5px;color:#7B6551}
+.soon-card{text-align:center;color:var(--brass)}
+.soon-card p{color:#4B3524;font-size:15.5px;max-width:52ch;margin:12px auto 0}
+[data-theme="dark"] .soon-card p{color:#D9C9AC}
+.soon-card .svc-sub{margin-top:16px}
+
+.per-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.per{padding:8px 15px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+  background:none;border:1px solid var(--rule);border-radius:999px;color:#7B6551}
+.per.is-on{background:var(--kumkum);border-color:var(--kumkum);color:#FFF6E2}
+.per:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+
+.horo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--rule);
+  border:1px solid var(--rule)}
+.hz{background:#FFFCF3;padding:15px 16px}
+[data-theme="dark"] .hz{background:#241A0D}
+.hz b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+  font-size:18px;color:var(--teak-dk);margin-bottom:3px}
+.hz .mood{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--kumkum);
+  font-weight:700;display:block;margin-bottom:6px}
+.hz p{margin:0;font-size:14px;color:#4B3524;line-height:1.55}
+[data-theme="dark"] .hz p{color:#D9C9AC}
+.transits{font-size:13px;color:#7B6551;margin:0 0 14px}
+
+.koot{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.koot th{text-align:left;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--brass);padding:8px 8px 8px 0;border-bottom:1px solid var(--rule)}
+.koot td{padding:9px 8px 9px 0;border-bottom:1px solid rgba(106,68,35,.1);color:#4B3524}
+[data-theme="dark"] .koot td{color:#D9C9AC;border-bottom-color:rgba(216,180,87,.12)}
+.koot td:first-child{font-weight:600;color:var(--teak-dk)}
+.koot .sc{text-align:right;font-weight:700;white-space:nowrap}
+.koot .zero{color:var(--kumkum)}
+.total{display:flex;align-items:baseline;gap:12px;margin:20px 0 6px;padding:16px 18px;
+  background:var(--wall-shade);border-radius:2px}
+.total b{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;font-size:34px;color:var(--teak-dk)}
+.total span{font-size:15px;color:#6B5340}
+[data-theme="dark"] .total span{color:#A99570}
+.verdict{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;
+  color:var(--kumkum);margin-left:auto}
+.caveat{font-size:13.5px;color:#7B6551;line-height:1.6;margin:16px 0 0;
+  border-left:3px solid var(--marigold);padding-left:13px}
+.mini-charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.mini-charts figure{margin:0;text-align:center}
+.mini-charts figcaption{font-size:12px;color:#7B6551;margin-top:6px}
+.mini-charts svg{max-width:100%;height:auto}
+.err{color:var(--kumkum);font-size:14.5px;margin:14px 0 0}
+
+@media (max-width:760px){
+  .pair{grid-template-columns:1fr;gap:8px}
+  .horo-grid{grid-template-columns:1fr}
+  .mini-charts{grid-template-columns:1fr}
+}
+
+.ac-wrap{position:relative}
+.ac-list{position:absolute;left:0;right:0;top:calc(100% + 2px);z-index:20;
+  max-height:220px;overflow-y:auto;background:#FFFEF9;border:1px solid var(--rule);
+  border-radius:2px;box-shadow:0 10px 26px -14px rgba(61,37,20,.4);display:none}
+[data-theme="dark"] .ac-list{background:#241A0D}
+.ac-list.is-open{display:block}
+.ac-item{padding:10px 12px;font-size:15px;color:var(--ink);cursor:pointer}
+.ac-item:hover,.ac-item.is-active{background:var(--wall-shade)}
+.ac-empty{padding:10px 12px;font-size:13.5px;color:#7B6551}
+
+/* ---------- wheel date/time picker ---------- */
+.wp-trigger{width:100%;height:48px;padding:0 12px;font:inherit;font-size:16px;text-align:left;
+  color:var(--ink);background:#FFFEF9;border:1px solid rgba(106,68,35,.28);border-radius:2px;
+  cursor:pointer;display:flex;align-items:center}
+.wp-trigger.has-value{color:var(--ink)}
+.wp-trigger:not(.has-value){color:#9B876C}
+[data-theme="dark"] .wp-trigger{background:#191203;color:var(--ink)}
+[data-theme="dark"] .wp-trigger:not(.has-value){color:#7A6A50}
+.wp-trigger:focus-visible{outline:2px solid var(--marigold);outline-offset:1px}
+
+.wp-overlay{position:fixed;inset:0;z-index:200;display:none;
+  background:rgba(28,20,9,.5);align-items:flex-end;justify-content:center}
+.wp-overlay.is-open{display:flex}
+@media (min-width:640px){.wp-overlay{align-items:center}}
+
+.wp-sheet{background:var(--wall-lit);border-radius:10px 10px 0 0;width:100%;max-width:420px;
+  box-shadow:0 -8px 40px rgba(0,0,0,.3);overflow:hidden}
+@media (min-width:640px){.wp-sheet{border-radius:10px}}
+[data-theme="dark"] .wp-sheet{background:#221809}
+
+.wp-head{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--rule)}
+.wp-head span{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-size:17px;color:var(--teak-dk)}
+.wp-done{background:var(--kumkum);color:#FFF6E2;border:0;border-radius:999px;
+  padding:8px 18px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.wp-done:hover{background:#7E1B15}
+
+.wp-cols{display:flex;height:210px;position:relative;padding:0 16px}
+.wp-hl{position:absolute;top:84px;left:16px;right:16px;height:42px;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);pointer-events:none}
+.wp-col{flex:1;height:210px;overflow-y:scroll;scroll-snap-type:y mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.wp-col::-webkit-scrollbar{display:none}
+.wp-spacer{height:84px}
+.wp-item{height:42px;line-height:42px;text-align:center;scroll-snap-align:center;
+  font-size:16.5px;color:#9B876C;transition:color .1s,font-size .1s}
+.wp-item.is-sel{font-weight:700;color:var(--kumkum);font-size:18.5px}
+[data-theme="dark"] .wp-item{color:#7A6A50}
+[data-theme="dark"] .wp-item.is-sel{color:var(--marigold)}
+
+/* ---------- naksha widget ---------- */
+.nk-fab{position:fixed;top:50%;right:18px;transform:translateY(-50%);width:58px;height:58px;border-radius:50%;
+  background:var(--wall-lit);border:1px solid var(--rule);cursor:pointer;z-index:150;
+  box-shadow:0 10px 26px -10px rgba(61,37,20,.5);padding:9px;
+  animation:nkbreathe 3.6s ease-in-out infinite}
+.nk-fab svg{width:100%;height:100%}
+[data-theme="dark"] .nk-fab{background:#241A0D}
+.nk-fab:hover{box-shadow:0 14px 32px -10px rgba(61,37,20,.6)}
+.nk-fab:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
+@keyframes nkbreathe{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.05)}}
+.nk-fab.is-hidden{display:none}
+
+.nk-panel{position:fixed;top:50%;right:18px;transform:translateY(-50%);width:370px;max-width:calc(100vw - 32px);
+  height:min(560px, calc(100vh - 100px));background:var(--wall-lit);border:1px solid var(--rule);
+  border-radius:14px;box-shadow:0 24px 60px -18px rgba(0,0,0,.4);z-index:151;
+  display:none;flex-direction:column;overflow:hidden}
+.nk-panel.is-open{display:flex}
+[data-theme="dark"] .nk-panel{background:#221809}
+
+.nk-head{flex:none;display:flex;align-items:center;gap:11px;padding:14px 14px;border-bottom:1px solid var(--rule)}
+.nk-head-mark{width:34px;height:34px;flex:none}
+.nk-head-txt{display:flex;flex-direction:column;line-height:1.25}
+.nk-head-txt b{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;font-size:18px;color:var(--teak-dk)}
+.nk-head-txt span{font-size:11.5px;color:var(--brass);letter-spacing:.4px}
+.nk-close{margin-left:auto;background:none;border:0;font-size:26px;line-height:1;color:#9B876C;cursor:pointer;padding:0 4px}
+.nk-close:hover{color:var(--kumkum)}
+
+.nk-body{flex:1;min-height:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.nk-msg{max-width:86%;padding:10px 13px;border-radius:12px;font-size:14.5px;line-height:1.55}
+.nk-msg p{margin:0}
+.nk-msg.nk-bot{align-self:flex-start;background:var(--wall-shade);color:#4B3524;border-bottom-left-radius:3px}
+.nk-msg.nk-user{align-self:flex-end;background:var(--kumkum);color:#FFF6E2;border-bottom-right-radius:3px}
+[data-theme="dark"] .nk-msg.nk-bot{background:#2A1F10;color:#D9C9AC}
+.nk-msg.nk-typing{align-self:flex-start;background:var(--wall-shade);padding:12px 16px}
+[data-theme="dark"] .nk-msg.nk-typing{background:#2A1F10}
+.nk-dots{display:inline-flex;gap:4px}
+.nk-dots i{width:6px;height:6px;border-radius:50%;background:var(--brass);display:block;
+  animation:nkdot 1.2s ease-in-out infinite}
+.nk-dots i:nth-child(2){animation-delay:.15s}
+.nk-dots i:nth-child(3){animation-delay:.3s}
+@keyframes nkdot{0%,60%,100%{opacity:.3}30%{opacity:1}}
+
+.nk-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.nk-chips-inline{margin-top:6px;padding-top:2px}
+.nk-chip{font:inherit;font-size:13px;padding:7px 12px;border-radius:999px;
+  border:1px solid var(--rule);background:var(--wall-lit);color:var(--teak);cursor:pointer}
+[data-theme="dark"] .nk-chip{background:#241A0D}
+.nk-chip:hover{border-color:var(--brass)}
+
+.nk-card{background:var(--wall-lit);border:1px solid var(--rule);border-left:3px solid var(--brass);
+  border-radius:6px;padding:10px 12px;font-size:13.5px;margin-top:2px}
+[data-theme="dark"] .nk-card{background:#1F1608}
+.nk-card b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+  font-size:15.5px;color:var(--teak-dk);margin-bottom:3px}
+.nk-card .row{display:flex;justify-content:space-between;padding:2px 0;color:#4B3524}
+[data-theme="dark"] .nk-card .row{color:#D9C9AC}
+.nk-card .row span:first-child{color:var(--brass)}
+
+.nk-quota{flex:none;padding:4px 14px;font-size:11.5px;color:#9B876C;text-align:center}
+.nk-input-row{flex:none;display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--rule)}
+#nk-input{flex:1;height:42px;padding:0 12px;font:inherit;font-size:14.5px;color:var(--ink);
+  background:#FFFEF9;border:1px solid rgba(106,68,35,.28);border-radius:999px}
+[data-theme="dark"] #nk-input{background:#191203;color:var(--ink)}
+#nk-input:focus{outline:2px solid var(--marigold);outline-offset:1px}
+.nk-send{width:42px;height:42px;border-radius:50%;background:var(--kumkum);color:#FFF6E2;
+  border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.nk-send:hover{background:#7E1B15}
+.nk-send:disabled{opacity:.5;cursor:default}
+
+.nk-upsell{background:linear-gradient(180deg,#FBF4E4,#F3E9D2);border:1px solid var(--rule);
+  border-radius:8px;padding:12px 14px;font-size:13.5px;color:#4B3524}
+[data-theme="dark"] .nk-upsell{background:#241A0D;color:#D9C9AC}
+.nk-upsell b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+  color:var(--teak-dk);font-size:15px;margin-bottom:4px}
+.nk-notify{margin-top:8px;background:var(--kumkum);color:#FFF6E2;border:0;border-radius:999px;
+  padding:7px 14px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+
+@media (max-width:480px){
+  .nk-panel{right:10px;left:10px;width:auto;bottom:16px;top:auto;transform:none;height:min(70vh,560px)}
+  .nk-fab{right:10px;width:52px;height:52px}
+}
+.toran-bg{fill:#FCF7EB;transition:fill .2s}
+[data-theme="dark"] .toran-bg{fill:#150F07}
+
+@media (max-width:640px){
+  .head-row{gap:8px}
+  .brand{font-size:18px}
+  .brand small{font-size:9px;letter-spacing:1.6px}
+  .sound{padding:8px;gap:0}
+  .sound span:not(.bars){display:none}
+  .theme{width:34px;height:34px;margin-left:auto}
+  .sound{margin-left:6px}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  #wOuter{animation:wheelspin 48s linear infinite}
+  #wNak{animation:wheelspinrev 64s linear infinite}
+}
+@keyframes wheelspin{to{transform:rotate(360deg)}}
+@keyframes wheelspinrev{to{transform:rotate(-360deg)}}
+
+.rd-summary{font-size:16.5px;line-height:1.65;color:var(--teak-dk);
+  background:var(--wall-shade);border-left:3px solid var(--kumkum);
+  padding:14px 16px;margin:14px 0 6px;border-radius:2px}
+[data-theme="dark"] .rd-summary{background:#241A0D;color:#F2E4C8}
+
+/* ---------- naksha + tab transitions ---------- */
+@keyframes nk-bubble-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.nk-msg{animation:nk-bubble-in .32s cubic-bezier(.2,.7,.3,1) both}
+.nk-chip{transition:border-color .18s ease, background .18s ease, transform .12s ease}
+.nk-chip:hover{transform:translateY(-1px)}
+.nk-chip:active{transform:translateY(0) scale(.97)}
+@keyframes nk-chips-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.nk-chips-inline{animation:nk-chips-in .35s ease both}
+.nk-dots i{animation:nk-dot 1.1s ease-in-out infinite}
+.nk-fab{transition:transform .2s cubic-bezier(.2,.7,.3,1), box-shadow .2s ease}
+.nk-fab:active{transform:scale(.92)}
+.nk-panel{transform-origin:bottom right}
+.nk-panel.is-open{animation:nk-panel-in .28s cubic-bezier(.2,.8,.3,1) both}
+@keyframes nk-panel-in{from{opacity:0;transform:translateY(calc(-50% + 14px)) scale(.96)}to{opacity:1;transform:translateY(-50%) scale(1)}}
+
+/* free-services tab panes: fade + slight rise when switched in */
+@keyframes tab-fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.svc-pane.is-on{animation:tab-fade-in .3s ease both}
+.svc-tab{transition:color .2s ease, border-bottom-color .25s cubic-bezier(.2,.7,.3,1)}
+
+/* chart-style panes (North/South/Navamsa) fade too */
+.ct-pane.is-on{animation:tab-fade-in .28s ease both}
+.ct-tab{transition:color .18s ease}
+.per{transition:background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease}
+.per:active{transform:scale(.96)}
+
+@media (prefers-reduced-motion:reduce){
+  .nk-msg,.nk-chips-inline,.nk-panel.is-on,.svc-pane.is-on,.ct-pane.is-on{animation:none}
+}
+
+/* Naksha glowing aura */
+.nk-fab::before{content:"";position:absolute;inset:-6px;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(222,143,34,.55),rgba(216,180,87,.2) 55%,transparent 72%);
+  animation:nk-glow 2.8s ease-in-out infinite}
+@keyframes nk-glow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.18)}}
+[data-theme="dark"] .nk-fab::before{background:radial-gradient(circle,rgba(233,166,59,.6),rgba(216,180,87,.22) 55%,transparent 72%)}
+
+/* pointer glow trail (main site too) */
+#glow-trail{position:fixed;top:0;left:0;width:280px;height:280px;pointer-events:none;z-index:9999;
+  border-radius:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity .4s ease;
+  background:radial-gradient(circle,rgba(222,143,34,.18),rgba(169,128,31,.07) 40%,transparent 70%);
+  mix-blend-mode:multiply}
+[data-theme="dark"] #glow-trail{mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(233,166,59,.26),rgba(216,180,87,.09) 40%,transparent 70%)}
+@media (prefers-reduced-motion:reduce){.nk-fab::before{animation:none}}
+
+.rd-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule)}
+.rd-pdf-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;height:46px;
+  font:inherit;font-size:14.5px;font-weight:600;color:var(--teak-dk);background:var(--wall-lit);
+  border:1px solid var(--brass);border-radius:2px;cursor:pointer;transition:background .18s ease}
+.rd-pdf-btn:hover{background:var(--wall-shade)}
+.rd-pdf-btn:disabled{opacity:.6;cursor:default}
+[data-theme="dark"] .rd-pdf-btn{background:#241A0D;color:#F2E4C8}
+.rd-full-link{display:block;text-align:center;font-size:13.5px;color:var(--kumkum);text-decoration:none;
+  font-weight:600;padding:4px}
+.rd-full-link:hover{text-decoration:underline}
+
+/* naksha proactive tooltip - appears once when a chart is ready, never forced open */
+.nk-tip{position:fixed;top:calc(50% - 76px);right:86px;z-index:149;
+  max-width:220px;background:var(--wall-lit);border:1px solid var(--brass);
+  border-radius:10px;padding:10px 30px 10px 14px;font-size:13px;color:var(--teak-dk);
+  box-shadow:0 10px 26px -10px rgba(0,0,0,.4);opacity:0;transform:translateX(8px) scale(.96);
+  pointer-events:none;transition:opacity .3s ease,transform .3s ease;cursor:pointer}
+[data-theme="dark"] .nk-tip{background:#241A0D;color:#F2E4C8}
+.nk-tip.is-shown{opacity:1;transform:none;pointer-events:auto}
+.nk-tip::after{content:"";position:absolute;right:-6px;top:50%;transform:translateY(-50%) rotate(45deg);
+  width:11px;height:11px;background:inherit;border-right:1px solid var(--brass);border-top:1px solid var(--brass)}
+.nk-tip-x{position:absolute;top:4px;right:6px;background:none;border:0;font-size:15px;
+  color:#9B876C;cursor:pointer;line-height:1;padding:3px}
+@media (max-width:480px){.nk-tip{display:none}}
+</style>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.74.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<script>
+(function(){
+  var saved=null;
+  try{ saved=localStorage.getItem('mh-theme'); }catch(e){}
+  if(!saved){
+    try{ saved = window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'; }catch(e){ saved='light'; }
+  }
+  document.documentElement.setAttribute('data-theme',saved);
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.getElementById('thm'); if(!b) return;
+    b.addEventListener('click',function(){
+      var now=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+      document.documentElement.setAttribute('data-theme',now);
+      try{ localStorage.setItem('mh-theme',now); }catch(e){}
+    });
+  });
+})();
+</script>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div id="glow-trail"></div>
+
+<!-- toran: fine chain, small leaves, tight rosettes -->
+<svg class="toran" preserveAspectRatio="none" viewBox="0 0 1200 38" aria-hidden="true">
+  <defs>
+    <pattern id="gar" width="60" height="38" patternUnits="userSpaceOnUse">
+      <path d="M0,5 Q30,13 60,5" fill="none" stroke="#A9801F" stroke-width=".9"/>
+      <path d="M15,10 C10,18 11,26 15,29 C19,26 20,18 15,10 Z" fill="none" stroke="#4E7A3C" stroke-width=".9"/>
+      <path d="M45,10 C40,18 41,26 45,29 C49,26 50,18 45,10 Z" fill="none" stroke="#4E7A3C" stroke-width=".9"/>
+      <g transform="translate(30,15)">
+        <circle r="6.2" fill="none" stroke="#DE8F22" stroke-width=".9"/>
+        <circle r="3.4" fill="none" stroke="#DE8F22" stroke-width=".9"/>
+        <circle r="1" fill="#A9801F"/>
+      </g>
+      <circle cx="0" cy="9" r="2.4" fill="none" stroke="#8F221C" stroke-width=".9"/>
+      <circle cx="60" cy="9" r="2.4" fill="none" stroke="#8F221C" stroke-width=".9"/>
+    </pattern>
+  </defs>
+  <rect class="toran-bg" width="1200" height="38" fill="#FCF7EB"/>
+  <rect width="1200" height="38" fill="url(#gar)"/>
+</svg>
+
+<!-- scroll thread -->
+<svg class="thread" viewBox="0 0 16 800" preserveAspectRatio="none" aria-hidden="true">
+  <path id="threadPath" d="M8,0 C2,60 14,120 8,180 C2,240 14,300 8,360 C2,420 14,480 8,540 C2,600 14,660 8,720 C4,760 8,780 8,800"/>
+</svg>
+
+<div class="room">
+  <svg class="stars" id="stars" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
+
+  <div class="wrap">
+    <header>
+      <div class="head-row">
+        <svg class="logo" width="44" height="44" viewBox="0 0 200 200" aria-label="Muhurata">
+  
+  <g class="ring">
+  <path d="M 85.05,39.83 Q 81.69,36.34 100.00,8.00 Q 118.31,36.34 114.95,39.83 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 117.14,40.42 Q 115.97,35.71 146.00,20.33 Q 147.69,54.02 143.03,55.37 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 144.63,56.97 Q 145.98,52.31 179.67,54.00 Q 164.29,84.03 159.58,82.86 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 160.17,85.05 Q 163.66,81.69 192.00,100.00 Q 163.66,118.31 160.17,114.95 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 159.58,117.14 Q 164.29,115.97 179.67,146.00 Q 145.98,147.69 144.63,143.03 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 143.03,144.63 Q 147.69,145.98 146.00,179.67 Q 115.97,164.29 117.14,159.58 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 114.95,160.17 Q 118.31,163.66 100.00,192.00 Q 81.69,163.66 85.05,160.17 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 82.86,159.58 Q 84.03,164.29 54.00,179.67 Q 52.31,145.98 56.97,144.63 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 55.37,143.03 Q 54.02,147.69 20.33,146.00 Q 35.71,115.97 40.42,117.14 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 39.83,114.95 Q 36.34,118.31 8.00,100.00 Q 36.34,81.69 39.83,85.05 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 40.42,82.86 Q 35.71,84.03 20.33,54.00 Q 54.02,52.31 55.37,56.97 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 56.97,55.37 Q 52.31,54.02 54.00,20.33 Q 84.03,35.71 82.86,40.42 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 119.67,21.39 L 120.92,25.34 L 124.87,26.59 L 120.92,27.84 L 119.67,31.79 L 118.42,27.84 L 114.47,26.59 L 118.42,25.34 Z" fill="#C79E33"/>
+  <path d="M 153.74,42.86 L 154.56,45.44 L 157.14,46.26 L 154.56,47.08 L 153.74,49.66 L 152.92,47.08 L 150.34,46.26 L 152.92,45.44 Z" fill="#C79E33"/>
+  <path d="M 173.41,76.93 L 174.23,79.51 L 176.81,80.33 L 174.23,81.15 L 173.41,83.73 L 172.59,81.15 L 170.01,80.33 L 172.59,79.51 Z" fill="#C79E33"/>
+  <path d="M 173.41,114.47 L 174.66,118.42 L 178.61,119.67 L 174.66,120.92 L 173.41,124.87 L 172.16,120.92 L 168.21,119.67 L 172.16,118.42 Z" fill="#C79E33"/>
+  <path d="M 153.74,150.34 L 154.56,152.92 L 157.14,153.74 L 154.56,154.56 L 153.74,157.14 L 152.92,154.56 L 150.34,153.74 L 152.92,152.92 Z" fill="#C79E33"/>
+  <path d="M 119.67,170.01 L 120.49,172.59 L 123.07,173.41 L 120.49,174.23 L 119.67,176.81 L 118.85,174.23 L 116.27,173.41 L 118.85,172.59 Z" fill="#C79E33"/>
+  <path d="M 80.33,168.21 L 81.58,172.16 L 85.53,173.41 L 81.58,174.66 L 80.33,178.61 L 79.08,174.66 L 75.13,173.41 L 79.08,172.16 Z" fill="#C79E33"/>
+  <path d="M 46.26,150.34 L 47.08,152.92 L 49.66,153.74 L 47.08,154.56 L 46.26,157.14 L 45.44,154.56 L 42.86,153.74 L 45.44,152.92 Z" fill="#C79E33"/>
+  <path d="M 26.59,116.27 L 27.41,118.85 L 29.99,119.67 L 27.41,120.49 L 26.59,123.07 L 25.77,120.49 L 23.19,119.67 L 25.77,118.85 Z" fill="#C79E33"/>
+  <path d="M 26.59,75.13 L 27.84,79.08 L 31.79,80.33 L 27.84,81.58 L 26.59,85.53 L 25.34,81.58 L 21.39,80.33 L 25.34,79.08 Z" fill="#C79E33"/>
+  <path d="M 46.26,42.86 L 47.08,45.44 L 49.66,46.26 L 47.08,47.08 L 46.26,49.66 L 45.44,47.08 L 42.86,46.26 L 45.44,45.44 Z" fill="#C79E33"/>
+  <path d="M 80.33,23.19 L 81.15,25.77 L 83.73,26.59 L 81.15,27.41 L 80.33,29.99 L 79.51,27.41 L 76.93,26.59 L 79.51,25.77 Z" fill="#C79E33"/>
+</g>
+  
+  <circle cx="100" cy="100" r="60" fill="none" stroke="#A9801F" stroke-width="2.6"/>
+  <rect x="62" y="62" width="76" height="76" transform="rotate(0 100 100)" fill="none" stroke="#C79E33" stroke-width="2.2"/>
+  <rect x="62" y="62" width="76" height="76" transform="rotate(45 100 100)" fill="none" stroke="#C79E33" stroke-width="2.2"/>
+  <path d="M100 72 C 115 90 116 107 106 122 C 102 128 98 128 94 122 C 84 107 85 90 100 72 Z" fill="#DE8F22" class="fl"/>
+  <path d="M100 92 C 107 102 107 110 103 115 C 101.5 117 98.5 117 97 115 C 93 110 93 102 100 92 Z" fill="#FFF1CD"/>
+
+</svg>
+        <span class="brand">Muhurata<small>CHART · TIMING · ACTION</small></span>
+        <button class="theme" id="thm" type="button" aria-label="Switch theme">
+          <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button class="sound" id="snd" type="button" aria-pressed="false">
+          <span class="bars"><i></i><i></i><i></i><i></i></span><span id="sndlbl">Play music</span>
+        </button>
+        <button class="sound" id="authbtn" type="button" data-mh-auth data-signed-out="Sign in">Sign in</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="pull">Muhurata — the right moment to act.</p>
+        <h1>Know what to do, not just what's written.</h1>
+        <p class="lede">Your chart, the dasha you are running, your ishta devata, and one clear remedy — with the date to do it on. Everything the remedy needs, sourced and sent to you.</p>
+
+        <div class="card" id="card">
+          <div class="form-body">
+            <h2>Start with your birth details</h2>
+            <p class="sub">Free chart and a short reading. Takes a minute.</p>
+            <div class="field">
+              <label for="nm">Full name</label>
+              <input id="nm" type="text" autocomplete="name" placeholder="As on your records">
+            </div>
+            <div class="field two">
+              <div><label for="dob-trig">Date of Birth</label><button type="button" class="wp-trigger" id="dob-trig" data-target="dob" data-kind="date">Select Date of Birth</button><input type="hidden" id="dob"></div>
+              <div><label for="tob-trig">Time of Birth</label><button type="button" class="wp-trigger" id="tob-trig" data-target="tob" data-kind="time">Select Time of Birth</button><input type="hidden" id="tob"></div>
+            </div>
+            <p class="hint">Time matters more than anything else here. Check your birth certificate if you can.</p>
+            <div class="field">
+              <label for="pob">Place of birth</label>
+              <div class="ac-wrap"><input id="pob" type="text" placeholder="City or town, and state"><div class="ac-list" id="pob-ac"></div></div>
+            </div>
+            <div class="field">
+              <label for="wa">WhatsApp number</label>
+              <input id="wa" type="tel" inputmode="numeric" placeholder="+91">
+            </div>
+            <label class="wa" for="waok">
+              <input id="waok" type="checkbox" checked>
+              <span>Send my reading on WhatsApp, and tell me when a remedy timing comes up in my chart.</span>
+            </label>
+            <input type="text" id="hp" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
+            <button class="go" id="go" type="button">Get my reading</button>
+            <p class="fine">No calls. No per-minute billing. You can stop the messages any time.</p>
+          </div>
+          <div class="done" role="status" aria-live="polite">
+            <h2>Details received</h2>
+            <p id="doneline">Your chart is being calculated. The reading lands on WhatsApp shortly.</p>
+            <p>If anything in the birth details was off, reply to that message and we will recalculate.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="wheel-hold">
+        <div class="wheel-glow"></div>
+        <svg class="wheel" viewBox="0 0 400 400" role="img" aria-label="A rasi chart wheel drawn in brass">
+          <!-- rotating nakshatra ring -->
+          <g id="wNak">
+            <circle class="w-fine" cx="200" cy="200" r="186"/>
+            <circle class="w-fine" cx="200" cy="200" r="172"/>
+            <g id="nakTicks"></g>
+          </g>
+          <!-- rotating house ring -->
+          <g id="wOuter">
+            <circle class="w-line" cx="200" cy="200" r="158"/>
+            <circle class="w-line" cx="200" cy="200" r="118"/>
+            <g id="spokes"></g>
+            <g id="glyphDots"></g>
+          </g>
+          <!-- fixed core -->
+          <circle class="w-strong" cx="200" cy="200" r="88"/>
+          <g class="w-accent">
+            <rect x="147" y="147" width="106" height="106"/>
+            <rect x="147" y="147" width="106" height="106" transform="rotate(45 200 200)"/>
+          </g>
+          <circle class="w-fine" cx="200" cy="200" r="44"/>
+          <path class="w-accent" d="M200,168 C214,186 212,204 200,214 C188,204 186,186 200,168 Z"/>
+          <circle class="w-dot" cx="200" cy="200" r="2.6"/>
+        </svg>
+      </div>
+    </section>
+  </div>
+
+  <div class="floor">
+    <div class="floor-in">
+      <svg class="kolam" viewBox="0 0 280 160" aria-hidden="true">
+        <g class="kd">
+          <circle cx="140" cy="34" r="2.4"/><circle cx="140" cy="80" r="2.4"/><circle cx="140" cy="126" r="2.4"/>
+          <circle cx="94" cy="80" r="2.4"/><circle cx="186" cy="80" r="2.4"/>
+          <circle cx="107" cy="47" r="2.4"/><circle cx="173" cy="47" r="2.4"/>
+          <circle cx="107" cy="113" r="2.4"/><circle cx="173" cy="113" r="2.4"/>
+          <circle cx="58" cy="80" r="2.4"/><circle cx="222" cy="80" r="2.4"/>
+        </g>
+        <g class="kl" id="kolamLine">
+          <g id="pet"><path d="M140,80 C122,74 113,52 125,43 C137,34 148,52 140,80 Z"/></g>
+          <use href="#pet" transform="rotate(45 140 80)"/>
+          <use href="#pet" transform="rotate(90 140 80)"/>
+          <use href="#pet" transform="rotate(135 140 80)"/>
+          <use href="#pet" transform="rotate(180 140 80)"/>
+          <use href="#pet" transform="rotate(225 140 80)"/>
+          <use href="#pet" transform="rotate(270 140 80)"/>
+          <use href="#pet" transform="rotate(315 140 80)"/>
+          <circle cx="140" cy="80" r="58" fill="none"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+
+
+<section class="sec" id="services">
+  <div class="rise">
+    <h2>Free services</h2>
+    <p class="say">No account, no phone number, no payment. Enter details, get the calculation.</p>
+  </div>
+
+  <div class="svc-tabs" role="tablist">
+    <button class="svc-tab is-on" data-svc="kundali" role="tab">Kundali</button>
+    <button class="svc-tab" data-svc="milan" role="tab">Matching</button>
+    <button class="svc-tab" data-svc="horo" role="tab">Horoscope</button>
+    <button class="svc-tab" data-svc="chat" role="tab">Chat <span class="soon">soon</span></button>
+  </div>
+
+  <!-- KUNDALI -->
+  <div class="svc-pane is-on" data-svcp="kundali">
+    <div class="svc-card">
+      <h3>Free kundali</h3>
+      <p class="svc-sub">Rasi, navamsa and your running dasha. Both chart styles.</p>
+      <div class="field"><label for="k-nm">Name</label><input id="k-nm" type="text" placeholder="Your name"></div>
+      <div class="field two">
+        <div><label for="k-dob-trig">Date of Birth</label><button type="button" class="wp-trigger" id="k-dob-trig" data-target="k-dob" data-kind="date">Select Date of Birth</button><input type="hidden" id="k-dob"></div>
+        <div><label for="k-tob-trig">Time of Birth</label><button type="button" class="wp-trigger" id="k-tob-trig" data-target="k-tob" data-kind="time">Select Time of Birth</button><input type="hidden" id="k-tob"></div>
+      </div>
+      <div class="field"><label for="k-pob">Place of birth</label><div class="ac-wrap"><input id="k-pob" type="text" placeholder="City or town"><div class="ac-list" id="k-pob-ac"></div></div></div>
+      <button class="go" id="k-go" type="button">Create my kundali</button>
+      <div id="k-out" class="svc-out"></div>
+    </div>
+  </div>
+
+  <!-- MATCHING -->
+  <div class="svc-pane" data-svcp="milan">
+    <div class="svc-card">
+      <h3>Kundali matching</h3>
+      <p class="svc-sub">Ashtakoot guna milan, all eight kootas out of 36, plus Mangal dosha.</p>
+      <div class="pair">
+        <div>
+          <h4>Groom</h4>
+          <div class="field"><label for="b-nm">Name</label><input id="b-nm" type="text"></div>
+          <div class="field two">
+            <div><label for="b-dob-trig">Date</label><button type="button" class="wp-trigger" id="b-dob-trig" data-target="b-dob" data-kind="date">Select Date</button><input type="hidden" id="b-dob"></div>
+            <div><label for="b-tob-trig">Time</label><button type="button" class="wp-trigger" id="b-tob-trig" data-target="b-tob" data-kind="time">Select Time</button><input type="hidden" id="b-tob"></div>
+          </div>
+          <div class="field"><label for="b-pob">Place</label><div class="ac-wrap"><input id="b-pob" type="text" placeholder="City"><div class="ac-list" id="b-pob-ac"></div></div></div>
+        </div>
+        <div>
+          <h4>Bride</h4>
+          <div class="field"><label for="g-nm">Name</label><input id="g-nm" type="text"></div>
+          <div class="field two">
+            <div><label for="g-dob-trig">Date</label><button type="button" class="wp-trigger" id="g-dob-trig" data-target="g-dob" data-kind="date">Select Date</button><input type="hidden" id="g-dob"></div>
+            <div><label for="g-tob-trig">Time</label><button type="button" class="wp-trigger" id="g-tob-trig" data-target="g-tob" data-kind="time">Select Time</button><input type="hidden" id="g-tob"></div>
+          </div>
+          <div class="field"><label for="g-pob">Place</label><div class="ac-wrap"><input id="g-pob" type="text" placeholder="City"><div class="ac-list" id="g-pob-ac"></div></div></div>
+        </div>
+      </div>
+      <button class="go" id="m-go" type="button">Match the kundalis</button>
+      <div id="m-out" class="svc-out"></div>
+    </div>
+  </div>
+
+  <!-- HOROSCOPE -->
+  <div class="svc-pane" data-svcp="horo">
+    <div class="svc-card">
+      <h3>Horoscope</h3>
+      <p class="svc-sub">Read from where the planets actually are today, not from a pool of stock text.</p>
+      <div class="per-tabs">
+        <button class="per is-on" data-per="today">Today</button>
+        <button class="per" data-per="tomorrow">Tomorrow</button>
+        <button class="per" data-per="monthly">Monthly</button>
+        <button class="per" data-per="yearly">Yearly</button>
+      </div>
+      <div id="h-out" class="svc-out"><p class="svc-load">Loading…</p></div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="svc-pane" data-svcp="chat">
+    <div class="svc-card soon-card">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.3-.6L3 21l1.8-5A8.3 8.3 0 0 1 3.6 11.5 8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/>
+      </svg>
+      <h3>Chat and live Q&amp;A</h3>
+      <p>Ask your chart a question and get an answer grounded in your actual
+         positions, not a generic reply. We are building it carefully — an
+         answer that sounds confident and is wrong is worse than no answer.</p>
+      <p class="svc-sub">Coming soon. Enter your details above and we will tell you when it opens.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="rise">
+    <h2>What comes back to you</h2>
+    <p class="say">Four things, in plain language, sent to your WhatsApp.</p>
+  </div>
+
+  <div class="gets rise">
+    <div class="get">
+      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="3.5" y="3.5" width="25" height="25" fill="none" stroke="#A9801F" stroke-width="1"/>
+        <path d="M3.5,3.5 L28.5,28.5 M28.5,3.5 L3.5,28.5" stroke="#A9801F" stroke-width=".7" opacity=".5"/>
+        <path d="M16,3.5 L28.5,16 L16,28.5 L3.5,16 Z" fill="none" stroke="#8F221C" stroke-width="1"/>
+      </svg>
+      <h3>Your chart</h3>
+      <p>Rasi and navamsa, planetary positions, the yogas and doshas actually present. Calculated, not guessed.</p>
+    </div>
+    <div class="get">
+      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="12.5" fill="none" stroke="#A9801F" stroke-width="1"/>
+        <circle cx="16" cy="16" r="7" fill="none" stroke="#A9801F" stroke-width=".7" opacity=".5"/>
+        <path d="M16,16 L16,4.5" stroke="#8F221C" stroke-width="1.2"/>
+        <path d="M16,16 L24,20" stroke="#8F221C" stroke-width="1.2"/>
+      </svg>
+      <h3>The period you are in</h3>
+      <p>Which mahadasha and antardasha is running, the date it turns, and what that period tends to press on.</p>
+    </div>
+    <div class="get">
+      <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16,4 C22,12 20.5,21 16,25 C11.5,21 10,12 16,4 Z" fill="none" stroke="#DE8F22" stroke-width="1.1"/>
+        <path d="M16,12 C18.6,16 18,21 16,23 C14,21 13.4,16 16,12 Z" fill="#DE8F22" opacity=".35"/>
+        <path d="M6,28.5 L26,28.5" stroke="#A9801F" stroke-width="1.2"/>
+      </svg>
+      <h3>One remedy, one date</h3>
+      <p>One thing to do, and the day to do it. We send what it needs — the stone, the mala, the items — so it actually happens.</p>
+    </div>
+  </div>
+
+  <div class="ishta rise" id="ishta">
+    <h2>Your ishta devata</h2>
+    <p class="say">The form of the divine your chart points you toward. Most people are never told theirs, and it is the one thing that makes every other remedy stick.</p>
+
+    <div class="deities">
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#A9801F"/><circle cx="13" cy="13" r="3" fill="#DE8F22"/></svg><div><b>Surya · Shiva</b><span>Sun</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M17,3 A10,10 0 1,0 17,23 A8,8 0 1,1 17,3 Z" fill="none" stroke="#A9801F"/></svg><div><b>Parvati · Gauri</b><span>Moon</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M13,3 L23,21 L3,21 Z" fill="none" stroke="#8F221C"/><path d="M13,9 L18,18 L8,18 Z" fill="none" stroke="#A9801F" opacity=".6"/></svg><div><b>Kartikeya · Hanuman</b><span>Mars</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#A9801F"/><path d="M13,3 L13,23 M3,13 L23,13" stroke="#A9801F" stroke-width=".7" opacity=".6"/></svg><div><b>Vishnu</b><span>Mercury</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M13,3 L23,21 L3,21 Z" fill="none" stroke="#A9801F"/><path d="M13,23 L3,5 L23,5 Z" fill="none" stroke="#A9801F"/></svg><div><b>Dakshinamurthy</b><span>Jupiter</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M13,23 L3,5 L23,5 Z" fill="none" stroke="#8F221C"/><circle cx="13" cy="11" r="3" fill="none" stroke="#DE8F22"/></svg><div><b>Lakshmi</b><span>Venus</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="4" y="4" width="18" height="18" fill="none" stroke="#A9801F"/><rect x="9" y="9" width="8" height="8" fill="none" stroke="#A9801F" opacity=".6"/></svg><div><b>Shani · Hanuman</b><span>Saturn</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M13,2 L24,13 L13,24 L2,13 Z" fill="none" stroke="#8F221C"/><path d="M13,8 L18,13 L13,18 L8,13 Z" fill="none" stroke="#A9801F" opacity=".6"/></svg><div><b>Durga</b><span>Rahu</span></div></div>
+      <div class="d"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M6,20 C6,10 20,10 20,20" fill="none" stroke="#A9801F"/><circle cx="13" cy="8" r="4" fill="none" stroke="#DE8F22"/></svg><div><b>Ganesha</b><span>Ketu</span></div></div>
+    </div>
+
+    <p class="note">Yours is worked out the classical way — from the atmakaraka in the navamsa, not from your sun sign. Two people born the same week will often get different answers, which is the point.</p>
+  </div>
+
+  <div class="trust rise">
+    <h2>How this works, plainly</h2>
+    <ul>
+      <li>Positions come from standard ephemeris data, sidereal, Lahiri ayanamsa. That part is arithmetic and it is the same everywhere.</li>
+      <li>Interpretation is drawn from classical texts. It is a reading, not a forecast, and we will not pretend otherwise.</li>
+      <li>Gemstones are certified and the certificate ships with the stone. You see the price, the origin, and the lab.</li>
+      <li>We do not sell fear. Nobody here will tell you something terrible is coming unless you buy a stone.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <svg width="24" height="24" viewBox="0 0 200 200" aria-hidden="true">
+  
+  <g class="ring">
+  <path d="M 85.05,39.83 Q 81.69,36.34 100.00,8.00 Q 118.31,36.34 114.95,39.83 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 117.14,40.42 Q 115.97,35.71 146.00,20.33 Q 147.69,54.02 143.03,55.37 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 144.63,56.97 Q 145.98,52.31 179.67,54.00 Q 164.29,84.03 159.58,82.86 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 160.17,85.05 Q 163.66,81.69 192.00,100.00 Q 163.66,118.31 160.17,114.95 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 159.58,117.14 Q 164.29,115.97 179.67,146.00 Q 145.98,147.69 144.63,143.03 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 143.03,144.63 Q 147.69,145.98 146.00,179.67 Q 115.97,164.29 117.14,159.58 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 114.95,160.17 Q 118.31,163.66 100.00,192.00 Q 81.69,163.66 85.05,160.17 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 82.86,159.58 Q 84.03,164.29 54.00,179.67 Q 52.31,145.98 56.97,144.63 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 55.37,143.03 Q 54.02,147.69 20.33,146.00 Q 35.71,115.97 40.42,117.14 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 39.83,114.95 Q 36.34,118.31 8.00,100.00 Q 36.34,81.69 39.83,85.05 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 40.42,82.86 Q 35.71,84.03 20.33,54.00 Q 54.02,52.31 55.37,56.97 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 56.97,55.37 Q 52.31,54.02 54.00,20.33 Q 84.03,35.71 82.86,40.42 Z" fill="none" stroke="#A9801F" stroke-width="2.4" class="pt"/>
+  <path d="M 119.67,21.39 L 120.92,25.34 L 124.87,26.59 L 120.92,27.84 L 119.67,31.79 L 118.42,27.84 L 114.47,26.59 L 118.42,25.34 Z" fill="#C79E33"/>
+  <path d="M 153.74,42.86 L 154.56,45.44 L 157.14,46.26 L 154.56,47.08 L 153.74,49.66 L 152.92,47.08 L 150.34,46.26 L 152.92,45.44 Z" fill="#C79E33"/>
+  <path d="M 173.41,76.93 L 174.23,79.51 L 176.81,80.33 L 174.23,81.15 L 173.41,83.73 L 172.59,81.15 L 170.01,80.33 L 172.59,79.51 Z" fill="#C79E33"/>
+  <path d="M 173.41,114.47 L 174.66,118.42 L 178.61,119.67 L 174.66,120.92 L 173.41,124.87 L 172.16,120.92 L 168.21,119.67 L 172.16,118.42 Z" fill="#C79E33"/>
+  <path d="M 153.74,150.34 L 154.56,152.92 L 157.14,153.74 L 154.56,154.56 L 153.74,157.14 L 152.92,154.56 L 150.34,153.74 L 152.92,152.92 Z" fill="#C79E33"/>
+  <path d="M 119.67,170.01 L 120.49,172.59 L 123.07,173.41 L 120.49,174.23 L 119.67,176.81 L 118.85,174.23 L 116.27,173.41 L 118.85,172.59 Z" fill="#C79E33"/>
+  <path d="M 80.33,168.21 L 81.58,172.16 L 85.53,173.41 L 81.58,174.66 L 80.33,178.61 L 79.08,174.66 L 75.13,173.41 L 79.08,172.16 Z" fill="#C79E33"/>
+  <path d="M 46.26,150.34 L 47.08,152.92 L 49.66,153.74 L 47.08,154.56 L 46.26,157.14 L 45.44,154.56 L 42.86,153.74 L 45.44,152.92 Z" fill="#C79E33"/>
+  <path d="M 26.59,116.27 L 27.41,118.85 L 29.99,119.67 L 27.41,120.49 L 26.59,123.07 L 25.77,120.49 L 23.19,119.67 L 25.77,118.85 Z" fill="#C79E33"/>
+  <path d="M 26.59,75.13 L 27.84,79.08 L 31.79,80.33 L 27.84,81.58 L 26.59,85.53 L 25.34,81.58 L 21.39,80.33 L 25.34,79.08 Z" fill="#C79E33"/>
+  <path d="M 46.26,42.86 L 47.08,45.44 L 49.66,46.26 L 47.08,47.08 L 46.26,49.66 L 45.44,47.08 L 42.86,46.26 L 45.44,45.44 Z" fill="#C79E33"/>
+  <path d="M 80.33,23.19 L 81.15,25.77 L 83.73,26.59 L 81.15,27.41 L 80.33,29.99 L 79.51,27.41 L 76.93,26.59 L 79.51,25.77 Z" fill="#C79E33"/>
+</g>
+  
+  <circle cx="100" cy="100" r="60" fill="none" stroke="#A9801F" stroke-width="2.6"/>
+  <rect x="62" y="62" width="76" height="76" transform="rotate(0 100 100)" fill="none" stroke="#C79E33" stroke-width="2.2"/>
+  <rect x="62" y="62" width="76" height="76" transform="rotate(45 100 100)" fill="none" stroke="#C79E33" stroke-width="2.2"/>
+  <path d="M100 72 C 115 90 116 107 106 122 C 102 128 98 128 94 122 C 84 107 85 90 100 72 Z" fill="#DE8F22" class="fl"/>
+  <path d="M100 92 C 107 102 107 110 103 115 C 101.5 117 98.5 117 97 115 C 93 110 93 102 100 92 Z" fill="#FFF1CD"/>
+
+</svg>
+    <span>Muhurata</span>
+    <a href="#card">Get your reading</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+    <a href="mailto:hello@muhurata.com">hello@muhurata.com</a>
+  </footer>
+</section>
+
+<script>
+var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- build wheel geometry ---------- */
+(function(){
+  var NS='http://www.w3.org/2000/svg', cx=200, cy=200;
+  function pt(r,deg){var a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a), cy+r*Math.sin(a)];}
+
+  var spokes=document.getElementById('spokes');
+  for(var i=0;i<12;i++){
+    var a=i*30, p1=pt(118,a), p2=pt(158,a);
+    var l=document.createElementNS(NS,'line');
+    l.setAttribute('x1',p1[0].toFixed(1));l.setAttribute('y1',p1[1].toFixed(1));
+    l.setAttribute('x2',p2[0].toFixed(1));l.setAttribute('y2',p2[1].toFixed(1));
+    l.setAttribute('class','w-line');
+    spokes.appendChild(l);
+  }
+  var gd=document.getElementById('glyphDots');
+  for(var j=0;j<12;j++){
+    var q=pt(138, j*30+15);
+    var c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',q[0].toFixed(1));c.setAttribute('cy',q[1].toFixed(1));
+    c.setAttribute('r', j%3===0 ? '3' : '1.8');
+    c.setAttribute('class','w-dot');
+    c.setAttribute('opacity', j%3===0 ? '.9' : '.5');
+    gd.appendChild(c);
+  }
+  var nt=document.getElementById('nakTicks');
+  for(var k=0;k<27;k++){
+    var b=k*(360/27), a1=pt(172,b), a2=pt(186,b);
+    var t=document.createElementNS(NS,'line');
+    t.setAttribute('x1',a1[0].toFixed(1));t.setAttribute('y1',a1[1].toFixed(1));
+    t.setAttribute('x2',a2[0].toFixed(1));t.setAttribute('y2',a2[1].toFixed(1));
+    t.setAttribute('class','w-fine');
+    nt.appendChild(t);
+    if(k%3===0){
+      var s=document.createElementNS(NS,'circle'), sp=pt(179,b+ (360/27)/2);
+      s.setAttribute('cx',sp[0].toFixed(1));s.setAttribute('cy',sp[1].toFixed(1));
+      s.setAttribute('r','1.4');s.setAttribute('class','w-dot');s.setAttribute('opacity','.7');
+      nt.appendChild(s);
+    }
+  }
+})();
+
+/* ---------- nakshatra field ---------- */
+(function(){
+  var svg=document.getElementById('stars'); if(!svg) return;
+  var NS='http://www.w3.org/2000/svg', seed=11;
+  function rnd(){seed=(seed*9301+49297)%233280;return seed/233280;}
+  var pts=[];
+  for(var i=0;i<58;i++){
+    var x=rnd()*1000, y=rnd()*400, r=.8+rnd()*2;
+    pts.push([x,y]);
+    var c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',x.toFixed(1));c.setAttribute('cy',y.toFixed(1));c.setAttribute('r',r.toFixed(2));
+    c.setAttribute('fill','#A9801F');c.setAttribute('opacity',(.2+rnd()*.45).toFixed(2));
+    if(!RM) c.style.animation='tw '+(3.5+rnd()*5).toFixed(1)+'s ease-in-out '+(rnd()*5).toFixed(1)+'s infinite';
+    svg.appendChild(c);
+  }
+  [[3,11],[11,19],[19,26],[26,34],[7,21],[21,31],[31,42],[14,28],[28,39],[39,50]].forEach(function(j){
+    var a=pts[j[0]],b=pts[j[1]]; if(!a||!b)return;
+    var l=document.createElementNS(NS,'line');
+    l.setAttribute('x1',a[0].toFixed(1));l.setAttribute('y1',a[1].toFixed(1));
+    l.setAttribute('x2',b[0].toFixed(1));l.setAttribute('y2',b[1].toFixed(1));
+    l.setAttribute('stroke','#A9801F');l.setAttribute('stroke-width','.6');l.setAttribute('opacity','.2');
+    svg.insertBefore(l,svg.firstChild);
+  });
+  var st=document.createElement('style');
+  st.textContent='@keyframes tw{0%,100%{opacity:.2}50%{opacity:.8}}';
+  document.head.appendChild(st);
+})();
+
+/* ---------- logo: lights on load, breathes ---------- */
+(function(){
+  if(RM) return;
+  var st=document.createElement('style');
+  st.textContent=
+    '@keyframes lgspin{to{transform:rotate(360deg)}}'+
+    '@keyframes lgbreathe{0%,100%{transform:scaleY(1);opacity:.95}50%{transform:scaleY(1.09);opacity:1}}'+
+    ''+
+    '.logo .fl{transform-origin:100px 122px;animation:lgbreathe 3.4s ease-in-out infinite}'+'.logo .pt{stroke-dasharray:150;stroke-dashoffset:150;animation:lgdraw 1.6s ease-out forwards}'+'.logo .ring{transform-origin:100px 100px;animation:lgspin 70s linear infinite}'+'.logo .pt:nth-of-type(2){animation-delay:.06s}.logo .pt:nth-of-type(3){animation-delay:.12s}'+'.logo .pt:nth-of-type(4){animation-delay:.18s}.logo .pt:nth-of-type(5){animation-delay:.24s}'+'.logo .pt:nth-of-type(6){animation-delay:.3s}.logo .pt:nth-of-type(7){animation-delay:.36s}'+'.logo .pt:nth-of-type(8){animation-delay:.42s}.logo .pt:nth-of-type(9){animation-delay:.48s}'+'.logo .pt:nth-of-type(10){animation-delay:.54s}.logo .pt:nth-of-type(11){animation-delay:.6s}'+'.logo .pt:nth-of-type(12){animation-delay:.66s}'+
+    
+    '@keyframes lgdraw{to{stroke-dashoffset:0}}';
+  document.head.appendChild(st);
+})();
+
+/* ---------- scroll-linked motion ---------- */
+(function(){
+  var wOuter=document.getElementById('wOuter'),
+      wNak=document.getElementById('wNak'),
+      stars=document.getElementById('stars'),
+      thread=document.getElementById('threadPath'),
+      ticking=false;
+
+  function frame(){
+    ticking=false;
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    var p = max>0 ? Math.min(1, window.scrollY/max) : 0;
+    if(!RM){
+      stars.style.transform='translateY('+(-p*70).toFixed(1)+'px)';
+    }
+    if(thread) thread.style.strokeDashoffset=(1200-(p*1200)).toFixed(0);
+  }
+  window.addEventListener('scroll',function(){
+    if(!ticking){ticking=true;requestAnimationFrame(frame);}
+  },{passive:true});
+  frame();
+
+  /* kolam draws when the floor comes into view */
+  var kl=document.getElementById('kolamLine');
+  if(kl && !RM){
+    kl.querySelectorAll('path,circle,use').forEach(function(el){
+      el.style.strokeDasharray='900'; el.style.strokeDashoffset='900';
+    });
+    new IntersectionObserver(function(es,o){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          var d=0;
+          kl.querySelectorAll('path,circle,use').forEach(function(el){
+            el.style.transition='stroke-dashoffset 1.9s cubic-bezier(.35,0,.2,1) '+d+'s';
+            el.style.strokeDashoffset='0'; d+=0.11;
+          });
+          o.unobserve(e.target);
+        }
+      });
+    },{threshold:.35}).observe(kl);
+  }
+
+  /* section entrances */
+  var io=new IntersectionObserver(function(es,o){
+    es.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); o.unobserve(e.target); }
+    });
+  },{threshold:.14});
+  document.querySelectorAll('.rise').forEach(function(el){io.observe(el)});
+
+  /* deity glyphs stagger once */
+  var ish=document.getElementById('ishta');
+  if(ish){
+    new IntersectionObserver(function(es,o){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          ish.classList.add('reveal');
+          ish.querySelectorAll('.d').forEach(function(d,i){ d.style.transitionDelay=(i*0.06)+'s'; });
+          o.unobserve(e.target);
+        }
+      });
+    },{threshold:.2}).observe(ish);
+  }
+})();
+
+/* ---------- sitar (Hansadhwani) + tabla (teental), synthesised ---------- */
+(function(){
+  var btn=document.getElementById('snd'), lbl=document.getElementById('sndlbl');
+  var ctx=null, master=null, tablaBus=null, on=false, melT=null, tanT=null, schedT=null;
+  var tanI=0, noiseBuf=null;
+
+  /* Hansadhwani: Sa Re Ga Pa Ni - the invocation raga, no komal swaras. */
+  var SA=146.83;
+  var SCALE=[1, 9/8, 5/4, 3/2, 15/8, 2, 9/4, 5/2, 3, 15/4];
+  var VADI=0, SAMVADI=3;
+  function hz(i){ return SA*SCALE[Math.max(0,Math.min(SCALE.length-1,i))]; }
+
+  /* Teental, 16 matras. Slow lay so it sits under the sitar. */
+  var TEENTAL=['dha','dhin','dhin','dha','dha','dhin','dhin','dha',
+               'dha','tin','tin','ta','ta','dhin','dhin','dha'];
+  var BEAT=0.58, beatIdx=0, nextBeat=0;
+
+  function curve(k){
+    var n=1024,c=new Float32Array(n);
+    for(var i=0;i<n;i++){var x=i*2/n-1;c[i]=(1+k)*x/(1+k*Math.abs(x));}
+    return c;
+  }
+  function reverb(sec,decay){
+    var rate=ctx.sampleRate,len=rate*sec,buf=ctx.createBuffer(2,len,rate);
+    for(var ch=0;ch<2;ch++){
+      var d=buf.getChannelData(ch);
+      for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);
+    }
+    var c=ctx.createConvolver(); c.buffer=buf; return c;
+  }
+  function noise(){
+    var len=ctx.sampleRate*0.4, b=ctx.createBuffer(1,len,ctx.sampleRate), d=b.getChannelData(0);
+    for(var i=0;i<len;i++) d[i]=Math.random()*2-1;
+    return b;
+  }
+
+  function build(){
+    ctx=new (window.AudioContext||window.webkitAudioContext)();
+    noiseBuf=noise();
+    master=ctx.createGain(); master.gain.value=0;
+    var out=ctx.createGain(); out.gain.value=.78;
+    var wet=ctx.createGain(); wet.gain.value=.5;
+    var v=reverb(4.2,2.2);
+    master.connect(out); out.connect(ctx.destination);
+    master.connect(v); v.connect(wet); wet.connect(ctx.destination);
+    /* tabla sits lower in the mix and drier than the sitar */
+    tablaBus=ctx.createGain(); tablaBus.gain.value=.42;
+    tablaBus.connect(out);
+    var tv=ctx.createGain(); tv.gain.value=.16;
+    tablaBus.connect(v);
+  }
+
+  /* ---- sitar ---- */
+  function pluck(f, amp, dur, bendFrom){
+    var t=ctx.currentTime;
+    var g=ctx.createGain();
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(amp,t+.03);
+    g.gain.exponentialRampToValueAtTime(amp*.3,t+.7);
+    g.gain.exponentialRampToValueAtTime(.0005,t+dur);
+
+    var sh=ctx.createWaveShaper(); sh.curve=curve(1.9); sh.oversample='2x';
+    var bp=ctx.createBiquadFilter(); bp.type='lowpass';
+    bp.frequency.setValueAtTime(Math.min(5200,f*8),t);
+    bp.frequency.exponentialRampToValueAtTime(Math.max(360,f*1.8),t+dur*.9);
+    bp.Q.value=.8;
+
+    var o1=ctx.createOscillator(); o1.type='sawtooth';
+    var o2=ctx.createOscillator(); o2.type='triangle';
+    var o3=ctx.createOscillator(); o3.type='sine';
+    var g2=ctx.createGain(); g2.gain.value=.26;
+    var g3=ctx.createGain(); g3.gain.value=.10;
+
+    if(bendFrom){
+      o1.frequency.setValueAtTime(f*bendFrom,t);
+      o1.frequency.exponentialRampToValueAtTime(f,t+.34);
+      o2.frequency.setValueAtTime(f*2*bendFrom,t);
+      o2.frequency.exponentialRampToValueAtTime(f*2,t+.34);
+    } else {
+      o1.frequency.setValueAtTime(f,t);
+      o2.frequency.setValueAtTime(f*2,t);
+    }
+    o3.frequency.setValueAtTime(f*3.01,t);
+
+    o1.connect(sh); o2.connect(g2); g2.connect(sh); o3.connect(g3); g3.connect(sh);
+    sh.connect(bp); bp.connect(g); g.connect(master);
+    [o1,o2,o3].forEach(function(o){o.start(t); o.stop(t+dur+.15);});
+  }
+
+  /* ---- tabla ---- */
+  /* dayan (right hand): pitched ring with a short attack click */
+  function dayan(t, freq, decay, amp){
+    var o=ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(freq,t);
+    var h=ctx.createOscillator(); h.type='sine'; h.frequency.setValueAtTime(freq*2.4,t);
+    var hg=ctx.createGain(); hg.gain.value=.28;
+    var g=ctx.createGain();
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(amp,t+.004);
+    g.gain.exponentialRampToValueAtTime(.0004,t+decay);
+
+    var n=ctx.createBufferSource(); n.buffer=noiseBuf;
+    var nf=ctx.createBiquadFilter(); nf.type='bandpass'; nf.frequency.value=freq*3.2; nf.Q.value=1.4;
+    var ng=ctx.createGain();
+    ng.gain.setValueAtTime(amp*.5,t);
+    ng.gain.exponentialRampToValueAtTime(.0004,t+.045);
+
+    o.connect(g); h.connect(hg); hg.connect(g);
+    n.connect(nf); nf.connect(ng); ng.connect(tablaBus);
+    g.connect(tablaBus);
+    o.start(t); h.start(t); n.start(t);
+    o.stop(t+decay+.05); h.stop(t+decay+.05); n.stop(t+.1);
+  }
+  /* bayan (left hand): the low sweep that gives 'ge' its character */
+  function bayan(t, amp){
+    var o=ctx.createOscillator(); o.type='sine';
+    o.frequency.setValueAtTime(128,t);
+    o.frequency.exponentialRampToValueAtTime(62,t+.28);
+    var g=ctx.createGain();
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(amp,t+.006);
+    g.gain.exponentialRampToValueAtTime(.0004,t+.45);
+    o.connect(g); g.connect(tablaBus);
+    o.start(t); o.stop(t+.5);
+  }
+  function bol(name, t){
+    switch(name){
+      case 'dha':  bayan(t,.30); dayan(t,392,.30,.20); break;
+      case 'dhin': bayan(t,.24); dayan(t,340,.42,.17); break;
+      case 'tin':  dayan(t,340,.42,.17); break;
+      case 'ta':   dayan(t,392,.26,.17); break;
+    }
+  }
+  function scheduler(){
+    while(nextBeat < ctx.currentTime + 0.15){
+      bol(TEENTAL[beatIdx%16], nextBeat);
+      nextBeat += BEAT;
+      beatIdx++;
+    }
+    schedT=setTimeout(scheduler, 25);
+  }
+
+  /* ---- tanpura ---- */
+  var TAN=[SA*1.5/2, SA/2, SA/2, SA];
+  function tanpura(){
+    pluck(TAN[tanI%4], .07, 6, 0);
+    tanI++;
+    tanT=setTimeout(tanpura, 1500);
+  }
+
+  /* ---- melody ---- */
+  var idx=0, inPhrase=0, phraseLen=0, dir=1;
+  function melody(){
+    if(inPhrase===0){
+      phraseLen = 3 + Math.floor(Math.random()*4);
+      dir = Math.random()<.68 ? 1 : -1;
+    }
+    var step = Math.random()<.78 ? dir : -dir;
+    idx += step;
+    if(idx<0) idx=1;
+    if(idx>SCALE.length-1) idx=SCALE.length-2;
+    inPhrase++;
+    var last = inPhrase>=phraseLen;
+    if(last) idx = Math.random()<.6 ? VADI : SAMVADI;
+    var bend = Math.random()<.4 ? (step>0?0.93:1.07) : 0;
+    pluck(hz(idx), last?.13:.15, last?4.4:3.2, bend);
+    var gap;
+    if(last){ inPhrase=0; gap=2400+Math.random()*2200; }
+    else    { gap=760+Math.random()*680; }
+    melT=setTimeout(melody, gap);
+  }
+
+  btn.addEventListener('click', function(){
+    if(!ctx) build();
+    if(ctx.state==='suspended') ctx.resume();
+    on=!on;
+    btn.classList.toggle('on',on);
+    btn.setAttribute('aria-pressed',String(on));
+    lbl.textContent = on ? 'Stop music' : 'Play music';
+    master.gain.cancelScheduledValues(ctx.currentTime);
+    master.gain.linearRampToValueAtTime(on?.85:0, ctx.currentTime+(on?2.2:.9));
+    if(on){
+      tanI=0; idx=0; inPhrase=0; beatIdx=0;
+      nextBeat = ctx.currentTime + 0.3;
+      tanpura(); scheduler();
+      melT=setTimeout(melody, 2000);
+    } else {
+      clearTimeout(melT); clearTimeout(tanT); clearTimeout(schedT);
+    }
+  });
+})();
+
+/* ---------- form -> lead capture (Formspree) + reading (your API) ---------- */
+(function(){
+  var card=document.getElementById('card'), btn=document.getElementById('go');
+
+  /* Lead capture. Always runs, always first. This must never depend on the
+     reading service being up, or you lose the signup. */
+  var LEAD_ENDPOINT = 'https://formspree.io/f/mrpgyozv';
+
+  /* Reading service. Leave as-is until deployed - the page degrades cleanly. */
+  var API = API_BASE + '/api/reading';
+
+  function esc(s){ return String(s).replace(/[&<>]/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+  function captureLead(d){
+    /* Best-effort notification only - the ACTUAL durable save happens
+       server-side, inside /api/reading itself, the moment it succeeds
+       (it writes to the leads table right after computing the chart,
+       before responding). Formspree here is just a bonus "email me
+       when someone signs up" convenience layer. It must NEVER be able
+       to block or fail the real flow - if it's down, over quota, or
+       misconfigured, that costs a notification email, not a chart. */
+    try{
+      fetch(LEAD_ENDPOINT, {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({
+          name: d.name,
+          dateOfBirth: d.dob,
+          timeOfBirth: d.tob,
+          placeOfBirth: d.place,
+          whatsapp: d.phone,
+          whatsappOptIn: d.whatsappOptIn ? 'yes' : 'no',
+          _subject: 'New Muhurata reading request - ' + d.name,
+          _gotcha: document.getElementById('hp').value
+        })
+      }).catch(function(){ /* swallowed on purpose - see note above */ });
+    }catch(e){ /* swallowed on purpose - see note above */ }
+  }
+
+  function renderReading(d){
+    var r=d.reading;
+    var rows = d.positions.map(function(p){
+      return '<div class="rd-p">'
+        + '<span class="rd-p-name">'+esc(p.name)+(p.retrograde?' <i class="rx">R</i>':'')+'</span>'
+        + '<span class="rd-p-detail">'+esc(p.sign)+' '+esc(p.degree_in_sign)+'</span>'
+        + '<span class="rd-p-detail">'+esc(p.nakshatra)+' pada '+p.pada+'</span>'
+        + '<span class="rd-p-house">House '+p.house+'</span>'
+        + '</div>';
+    }).join('');
+    return '<div class="rd">'
+      + '<h2>'+esc(r.greeting)+'</h2>'
+      + '<div class="rd-hi"><span>Lagna</span><b>'+esc(d.ascendant.sign)+'</b>'
+      + '<span>Moon</span><b>'+esc(d.moon_sign)+'</b>'
+      + '<span>Nakshatra</span><b>'+esc(d.birth_nakshatra)+'</b></div>'
+      + '<p class="rd-summary">'+esc(r.summary)+'</p>'
+      + '<h3>Your lagna</h3><p>'+esc(r.lagna)+'</p>'
+      + '<h3>Your mind</h3><p>'+esc(r.mind)+'</p>'
+      + '<h3>Money and family</h3><p>'+esc(r.money)+'</p>'
+      + '<h3>Work and health</h3><p>'+esc(r.health)+'</p>'
+      + '<h3>Relationships</h3><p>'+esc(r.relationships)+'</p>'
+      + '<h3>Career</h3><p>'+esc(r.career)+'</p>'
+      + '<h3>The period you are in</h3><p>'+esc(r.period)+'</p>'
+      + '<h3>Your Ishta Devata</h3><p>'+esc(r.devata)+'</p>'
+      + '<h3>One practice</h3><p>'+esc(r.practice)+'</p>'
+      + (d.charts ? (
+            '<h3>Your chart</h3>'
+          + '<div class="ct-tabs" role="tablist">'
+          +   '<button class="ct-tab is-on" data-ct="north" role="tab">North Indian</button>'
+          +   '<button class="ct-tab" data-ct="south" role="tab">South Indian</button>'
+          +   '<button class="ct-tab" data-ct="navamsa" role="tab">Navamsa D9</button>'
+          + '</div>'
+          + '<div class="ct-hold">'
+          +   '<div class="ct-pane is-on" data-ctp="north">'+d.charts.north+'</div>'
+          +   '<div class="ct-pane" data-ctp="south">'+d.charts.south+'</div>'
+          +   '<div class="ct-pane" data-ctp="navamsa">'+d.charts.navamsa+'</div>'
+          + '</div>'
+          + '<p class="ct-key">Su Sun \u00b7 Mo Moon \u00b7 Ma Mars \u00b7 Me Mercury \u00b7 '
+          + 'Ju Jupiter \u00b7 Ve Venus \u00b7 Sa Saturn \u00b7 Ra Rahu \u00b7 Ke Ketu. '
+          + 'Numbers are signs, 1 Mesha through 12 Meena.</p>'
+        ) : '')
+      + '<h3>Positions</h3>'
+      + '<div class="rd-planets">'+rows+'</div>'
+      + (d.whatsapp_link
+          ? '<a class="wa-btn" href="'+esc(d.whatsapp_link)+'" target="_blank" rel="noopener">'
+            + '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+            + '<path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1a14 14 0 0 1-6.4-5.6c-.5-.8-.8-1.7-.8-2.5 0-.8.4-1.5.9-1.9.2-.2.4-.2.6-.2h.4c.2 0 .4 0 .5.4l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.1.2-.3.3-.1.6.5.9 1.2 1.6 2.1 2.1.3.2.5.1.6 0l.6-.7c.2-.2.3-.2.5-.1l1.8.9c.2.1.4.2.4.3v.5z"/></svg>'
+            + '<span>Send it to my WhatsApp</span></a>'
+            + '<p class="rd-f">Tap the button, then send the message that opens. '
+            + 'Your full reading comes straight back.</p>'
+          : '<p class="rd-f">A copy is on its way to your WhatsApp.</p>')
+      + '<div class="rd-actions">'
+      +   '<button class="rd-pdf-btn" id="rd-pdf-btn" type="button">'
+      +     '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0-4-4m4 4 4-4M5 21h14"/></svg>'
+      +     '<span>Download full PDF report</span></button>'
+      +   '<a class="rd-full-link" id="rd-full-link" href="#">'
+      +     'See your full reading \u2014 KP, Ashtakvarga, Dasha timeline &amp; more &rarr;</a>'
+      + '</div>'
+      + '</div>';
+  }
+
+  function renderWaking(){
+    return '<div class="rd"><h2>Warming up your chart\u2026</h2>'
+      + '<p>The first calculation of the day can take up to thirty seconds. '
+      + 'Trying again now.</p></div>';
+  }
+
+  function renderRetry(firstName, onRetry){
+    /* fetchReading failing is now the only real failure mode - a
+       successful chart calculation IS the save (the backend writes the
+       lead right after computing it, before responding), so there is
+       no more "lead saved but chart failed" state to distinguish. */
+    var box=document.createElement('div');
+    box.className='rd';
+    box.innerHTML = '<h2>'+esc(firstName)+', something went wrong.</h2>'
+      + '<p>We could not calculate the chart just now \u2014 tap below to try again.</p>';
+    var btn=document.createElement('button');
+    btn.className='go'; btn.type='button'; btn.style.marginTop='14px';
+    btn.textContent = 'Try again';
+    btn.addEventListener('click', onRetry);
+    box.appendChild(btn);
+    return box;
+  }
+
+  function done(html, formData){
+    card.classList.add('is-sent');
+    var box = card.querySelector('.done');
+    box.innerHTML = html;
+
+    /* Naksha's proactive nudge - shown once, only after a REAL chart
+       has actually appeared (never on a blank page), and never again
+       once dismissed or engaged with. This is the "will it pop and
+       invite" behaviour - a small bubble, not a forced-open panel,
+       so it stays a companion rather than an interruption. */
+    if(formData){
+      try{
+        if(!localStorage.getItem('mh-nk-tip-seen')){
+          setTimeout(function(){
+            var tip = document.getElementById('nk-tip');
+            if(!tip) return;
+            tip.querySelector('span').textContent = 'Want me to read this chart for you?';
+            tip.classList.add('is-shown');
+            tip.addEventListener('click', function(e){
+              if(e.target.id === 'nk-tip-x') return;
+              tip.classList.remove('is-shown');
+              localStorage.setItem('mh-nk-tip-seen', '1');
+              if(typeof window.__mhOpenNaksha === 'function') window.__mhOpenNaksha();
+            });
+            document.getElementById('nk-tip-x').addEventListener('click', function(ev){
+              ev.stopPropagation();
+              tip.classList.remove('is-shown');
+              localStorage.setItem('mh-nk-tip-seen', '1');
+            });
+            setTimeout(function(){
+              tip.classList.remove('is-shown');
+              localStorage.setItem('mh-nk-tip-seen', '1');
+            }, 12000);
+          }, 2200);
+        }
+      }catch(e){}
+    }
+
+    /* full-report deep link, using the actual submitted birth details */
+    var fullLink = box.querySelector('#rd-full-link');
+    if(fullLink && formData){
+      var qs = new URLSearchParams({name:formData.name, dob:formData.dob, tob:formData.tob, place:formData.place});
+      fullLink.href = 'kundli.html?' + qs.toString();
+    }
+
+    /* PDF download - fetches the actual PDF bytes and triggers a browser save */
+    var pdfBtn = box.querySelector('#rd-pdf-btn');
+    if(pdfBtn && formData){
+      pdfBtn.addEventListener('click', function(){
+        var origText = pdfBtn.innerHTML;
+        pdfBtn.disabled = true;
+        pdfBtn.querySelector('span').textContent = 'Preparing your PDF\u2026';
+        fetch(API_BASE + '/api/reading/pdf', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({name:formData.name, dob:formData.dob, tob:formData.tob, place:formData.place, phone:formData.phone||''})
+        })
+        .then(function(r){
+          if(!r.ok) throw new Error('Could not generate the PDF right now.');
+          return r.blob();
+        })
+        .then(function(blob){
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'muhurata-reading-' + (formData.name||'chart').trim().split(' ')[0].toLowerCase() + '.pdf';
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+        })
+        .catch(function(e){
+          alert(e.message || 'Could not download the PDF just now. Please try again.');
+        })
+        .then(function(){
+          pdfBtn.disabled = false;
+          pdfBtn.innerHTML = origText;
+        });
+      });
+    }
+
+    var tabs = box.querySelectorAll('.ct-tab');
+    for(var i=0;i<tabs.length;i++){
+      tabs[i].addEventListener('click', function(){
+        var want = this.getAttribute('data-ct');
+        var all = box.querySelectorAll('.ct-tab');
+        for(var j=0;j<all.length;j++) all[j].classList.remove('is-on');
+        this.classList.add('is-on');
+        var panes = box.querySelectorAll('.ct-pane');
+        for(var k=0;k<panes.length;k++){
+          panes[k].classList.toggle('is-on', panes[k].getAttribute('data-ctp')===want);
+        }
+      });
+    }
+    card.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  btn.addEventListener('click', function(){
+    var d = {
+      name:  document.getElementById('nm').value.trim(),
+      dob:   document.getElementById('dob').value,
+      tob:   document.getElementById('tob').value,
+      place: document.getElementById('pob').value.trim(),
+      phone: document.getElementById('wa').value.trim(),
+      whatsappOptIn: document.getElementById('waok').checked,
+      website: (document.getElementById('hp') || {}).value || ''   /* honeypot */
+    };
+
+    if(!d.name || !d.dob || !d.tob || !d.place || !d.phone){
+      alert('Please fill in every field. Time of birth matters most.');
+      return;
+    }
+    if(!window.mhValidDate(d.dob)){
+      alert('That date of birth does not look right. Please check the year.');
+      return;
+    }
+
+    var first = d.name.split(' ')[0];
+    var lastErr = null;
+    btn.disabled=true; btn.textContent='Calculating your chart\u2026';
+
+    function fetchReading(){
+      /* mhApiFetch prefixes API_BASE, maps 429 -> code "rate_limited",
+         503 -> "unavailable", network fail -> "cold", and returns the
+         parsed JSON on success. Reading is anonymous (no sign-in). */
+      return window.mhApiFetch(API, { anon:true, body:d }).catch(function(e){
+        lastErr = e; throw e;
+      });
+    }
+
+    function fullRetry(){
+      btn.disabled=true; btn.textContent='Trying again\u2026';
+      attempt();
+    }
+
+    function showRetry(){
+      var doneBox = card.querySelector('.done');
+      doneBox.innerHTML = '';
+      var msg = (lastErr && (window.MH_ERR[lastErr.code] || lastErr.message))
+                || 'We could not calculate the chart just now.';
+      var box = renderRetry(first, fullRetry);
+      var p = box.querySelector('p'); if(p) p.textContent = msg;
+      doneBox.appendChild(box);
+      card.classList.add('is-sent');
+      card.scrollIntoView({behavior:'smooth', block:'start'});
+      btn.disabled=false; btn.textContent='Get my reading';
+    }
+
+    function attempt(){
+      captureLead(d);  /* fire-and-forget notification, never awaited or gated on */
+
+      fetchReading().catch(function(){
+        card.classList.add('is-sent');
+        card.querySelector('.done').innerHTML = renderWaking();
+        return new Promise(function(res){ setTimeout(res, 5000); }).then(fetchReading);
+      })
+        .then(function(reading){
+          btn.disabled=false; btn.textContent='Get my reading';
+          try{
+            var r = reading.reading || {};
+            window.__mhPageContext = {
+              name:d.name, dob:d.dob, tob:d.tob, place:d.place,
+              lagna:(reading.ascendant||{}).sign, moon_sign:reading.moon_sign,
+              nakshatra:reading.birth_nakshatra,
+              mahadasha:(reading.running||{}).mahadasha,
+              antardasha:(reading.running||{}).antardasha,
+              ishta_devata:(reading.ishta_devata||{}).devata,
+              positions:(reading.positions||[]).map(function(p){
+                return {name:p.name,sign:p.sign,house:p.house,retro:p.retrograde}; }),
+              summary:[r.summary,r.lagna,r.mind,r.career,r.relationships,r.period].filter(Boolean).join(' '),
+              practice:r.practice
+            };
+          }catch(e){}
+          done(renderReading(reading), d);
+        })
+        .catch(function(){
+          btn.disabled=false; btn.textContent='Get my reading';
+          showRetry();
+        });
+    }
+
+    attempt();
+  });
+})();
+</script>
+<script>
+/* ---------- free services ---------- */
+(function(){
+  var BASE = (typeof API_BASE !== 'undefined') ? API_BASE : 'https://api.muhurata.com';
+  function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+  /* service tabs */
+  var tabs=document.querySelectorAll('.svc-tab');
+  for(var i=0;i<tabs.length;i++){
+    tabs[i].addEventListener('click', function(){
+      var w=this.getAttribute('data-svc');
+      var t=document.querySelectorAll('.svc-tab');
+      for(var j=0;j<t.length;j++) t[j].classList.remove('is-on');
+      this.classList.add('is-on');
+      var p=document.querySelectorAll('.svc-pane');
+      for(var k=0;k<p.length;k++) p[k].classList.toggle('is-on', p[k].getAttribute('data-svcp')===w);
+      if(w==='horo' && !horoLoaded) loadHoro('today');
+    });
+  }
+
+  function chartTabs(box){
+    var t=box.querySelectorAll('.ct-tab');
+    for(var i=0;i<t.length;i++){
+      t[i].addEventListener('click', function(){
+        var w=this.getAttribute('data-ct');
+        var all=box.querySelectorAll('.ct-tab');
+        for(var j=0;j<all.length;j++) all[j].classList.remove('is-on');
+        this.classList.add('is-on');
+        var pn=box.querySelectorAll('.ct-pane');
+        for(var k=0;k<pn.length;k++) pn[k].classList.toggle('is-on', pn[k].getAttribute('data-ctp')===w);
+      });
+    }
+  }
+
+  function chartBlock(ch){
+    return '<div class="ct-tabs" role="tablist">'
+      + '<button class="ct-tab is-on" data-ct="north" role="tab">North Indian</button>'
+      + '<button class="ct-tab" data-ct="south" role="tab">South Indian</button>'
+      + '<button class="ct-tab" data-ct="navamsa" role="tab">Navamsa D9</button></div>'
+      + '<div class="ct-hold">'
+      + '<div class="ct-pane is-on" data-ctp="north">'+ch.north+'</div>'
+      + '<div class="ct-pane" data-ctp="south">'+ch.south+'</div>'
+      + '<div class="ct-pane" data-ctp="navamsa">'+ch.navamsa+'</div></div>'
+      + '<p class="ct-key">Su Sun \u00b7 Mo Moon \u00b7 Ma Mars \u00b7 Me Mercury \u00b7 Ju Jupiter \u00b7 '
+      + 'Ve Venus \u00b7 Sa Saturn \u00b7 Ra Rahu \u00b7 Ke Ketu. Numbers are signs, 1 Mesha to 12 Meena.</p>';
+  }
+
+  /* ---- kundali ---- */
+  var kgo=document.getElementById('k-go'), kout=document.getElementById('k-out');
+  if(kgo) kgo.addEventListener('click', function(){
+    var b={name:val('k-nm'),dob:val('k-dob'),tob:val('k-tob'),place:val('k-pob')};
+    if(!b.name||!b.dob||!b.tob||!b.place){ kout.innerHTML='<p class="err">Fill in every field. Time of birth matters most.</p>'; return; }
+    if(!window.mhValidDate(b.dob)){ kout.innerHTML='<p class="err">That date of birth does not look right. Please check the year.</p>'; return; }
+    kgo.disabled=true; kgo.textContent='Calculating\u2026';
+    post('/api/kundali', b, function(d){
+      kout.innerHTML =
+          '<div class="rd-hi"><span>Lagna</span><b>'+esc(d.ascendant.sign)+'</b>'
+        + '<span>Moon</span><b>'+esc(d.moon_sign)+'</b>'
+        + '<span>Nakshatra</span><b>'+esc(d.birth_nakshatra)+'</b>'
+        + '<span>Devata</span><b>'+esc(d.ishta_devata.devata)+'</b></div>'
+        + chartBlock(d.charts)
+        + '<p class="svc-sub" style="margin-top:14px">Running '
+        + esc(d.running.mahadasha)+' mahadasha, '+esc(d.running.antardasha)
+        + ' antardasha, until '+esc(d.running.antardasha_ends)+'.</p>';
+      chartTabs(kout);
+    }, function(msg){ kout.innerHTML='<p class="err">'+esc(msg)+'</p>'; },
+       function(){ kgo.disabled=false; kgo.textContent='Create my kundali'; });
+  });
+
+  /* ---- matching ---- */
+  var mgo=document.getElementById('m-go'), mout=document.getElementById('m-out');
+  if(mgo) mgo.addEventListener('click', function(){
+    var boy={name:val('b-nm')||'Groom',dob:val('b-dob'),tob:val('b-tob'),place:val('b-pob')};
+    var girl={name:val('g-nm')||'Bride',dob:val('g-dob'),tob:val('g-tob'),place:val('g-pob')};
+    if(!boy.dob||!boy.tob||!boy.place||!girl.dob||!girl.tob||!girl.place){
+      mout.innerHTML='<p class="err">Both sets of birth details are needed.</p>'; return; }
+    if(!window.mhValidDate(boy.dob) || !window.mhValidDate(girl.dob)){
+      mout.innerHTML='<p class="err">One of the dates of birth does not look right. Please check the years.</p>'; return; }
+    mgo.disabled=true; mgo.textContent='Matching\u2026';
+    post('/api/matching',{boy:boy,girl:girl}, function(d){
+      var rows=d.kootas.map(function(k){
+        return '<tr><td>'+esc(k.name)+'</td><td>'+esc(k.detail)+'</td>'
+             + '<td class="sc'+(k.score===0?' zero':'')+'">'+k.score+' / '+k.max+'</td></tr>';
+      }).join('');
+      var mang='';
+      if(d.mangal.boy.present||d.mangal.girl.present){
+        mang='<p class="caveat"><b>Mangal dosha.</b> '
+          +(d.mangal.boy.present?esc(d.names.boy)+': '+esc(d.mangal.boy.note)+' ':'')
+          +(d.mangal.girl.present?esc(d.names.girl)+': '+esc(d.mangal.girl.note):'')+'</p>';
+      }
+      mout.innerHTML =
+          '<div class="total"><b>'+d.total+'</b><span>out of '+d.out_of+'</span>'
+        + '<span class="verdict">'+esc(d.verdict)+'</span></div>'
+        + '<p class="svc-sub">'+esc(d.summary)+'</p>'
+        + '<table class="koot"><thead><tr><th>Koota</th><th>Detail</th><th class="sc">Score</th></tr></thead>'
+        + '<tbody>'+rows+'</tbody></table>'
+        + mang
+        + '<div class="mini-charts">'
+        + '<figure>'+d.charts.boy+'<figcaption>'+esc(d.names.boy)+'</figcaption></figure>'
+        + '<figure>'+d.charts.girl+'<figcaption>'+esc(d.names.girl)+'</figcaption></figure></div>'
+        + '<p class="caveat">'+esc(d.caveat)+'</p>';
+    }, function(msg){ mout.innerHTML='<p class="err">'+esc(msg)+'</p>'; },
+       function(){ mgo.disabled=false; mgo.textContent='Match the kundalis'; });
+  });
+
+  /* ---- horoscope ---- */
+  var hout=document.getElementById('h-out'), horoLoaded=false;
+  var pers=document.querySelectorAll('.per');
+  for(var q=0;q<pers.length;q++){
+    pers[q].addEventListener('click', function(){
+      var all=document.querySelectorAll('.per');
+      for(var j=0;j<all.length;j++) all[j].classList.remove('is-on');
+      this.classList.add('is-on');
+      loadHoro(this.getAttribute('data-per'));
+    });
+  }
+  function loadHoro(period){
+    if(!hout) return;
+    horoLoaded=true;
+    hout.innerHTML='<p class="svc-load">Reading the transits\u2026</p>';
+    fetch(BASE+'/api/horoscope?period='+encodeURIComponent(period))
+      .then(function(r){ if(!r.ok) throw new Error('Could not load horoscopes.'); return r.json(); })
+      .then(function(d){
+        var cards=d.signs.map(function(s){
+          return '<div class="hz"><b>'+esc(s.sign)+'</b>'
+            + (s.mood?'<span class="mood">'+esc(s.mood)+'</span>':'')
+            + '<p>'+esc(s.text)+'</p></div>';
+        }).join('');
+        hout.innerHTML='<p class="transits">'+esc(d.label)+', '+esc(d.date)+'. Moon in '
+          + esc(d.transits.moon)+', Sun in '+esc(d.transits.sun)+', Jupiter in '
+          + esc(d.transits.jupiter)+', Saturn in '+esc(d.transits.saturn)+'.</p>'
+          + '<div class="horo-grid">'+cards+'</div>'
+          + '<p class="caveat">'+esc(d.note)+'</p>';
+      })
+      .catch(function(e){ hout.innerHTML='<p class="err">'+esc(e.message)+'</p>'; });
+  }
+
+  function val(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+  function post(path, body, ok, bad, done){
+    fetch(BASE+path,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)})
+      .then(function(r){ return r.json().then(function(j){
+        if(!r.ok) throw new Error(j.detail||'Something went wrong.'); return j; }); })
+      .then(ok)
+      .catch(function(e){ bad(e.message||'Could not reach the service.'); })
+      .then(done, done);
+  }
+})();
+</script>
+<script>
+/* ---------- place autocomplete + date sanity ---------- */
+(function(){
+  var BASE = (typeof API_BASE !== 'undefined') ? API_BASE : 'https://api.muhurata.com';
+  var CITY_CACHE = null, CITY_PROMISE = null;
+
+  function getCities(){
+    if(CITY_CACHE) return Promise.resolve(CITY_CACHE);
+    if(!CITY_PROMISE){
+      CITY_PROMISE = fetch(BASE + '/api/cities').then(function(r){ return r.json(); })
+        .then(function(d){ CITY_CACHE = d.cities || []; return CITY_CACHE; })
+        .catch(function(){ return []; });
+    }
+    return CITY_PROMISE;
+  }
+
+  function wireAutocomplete(inputId, listId){
+    var input = document.getElementById(inputId), list = document.getElementById(listId);
+    if(!input || !list) return;
+    var active = -1;
+
+    function render(items){
+      if(!items.length){ list.innerHTML=''; list.classList.remove('is-open'); return; }
+      list.innerHTML = items.slice(0,8).map(function(c,i){
+        return '<div class="ac-item" data-i="'+i+'">'+c+'</div>';
+      }).join('');
+      list.classList.add('is-open');
+      active = -1;
+      var els = list.querySelectorAll('.ac-item');
+      for(var i=0;i<els.length;i++){
+        els[i].addEventListener('mousedown', function(e){
+          e.preventDefault();
+          input.value = this.textContent;
+          list.classList.remove('is-open');
+        });
+      }
+    }
+
+    input.addEventListener('input', function(){
+      var q = input.value.trim().toLowerCase();
+      if(q.length < 1){ list.classList.remove('is-open'); return; }
+      getCities().then(function(all){
+        var matches = all.filter(function(c){ return c.toLowerCase().indexOf(q) !== -1; });
+        matches.sort(function(a,b){
+          var ai=a.toLowerCase().indexOf(q), bi=b.toLowerCase().indexOf(q);
+          if(ai!==bi) return ai-bi;
+          return a.length-b.length;
+        });
+        render(matches);
+      });
+    });
+
+    input.addEventListener('keydown', function(e){
+      var els = list.querySelectorAll('.ac-item');
+      if(!els.length) return;
+      if(e.key==='ArrowDown'){ e.preventDefault(); active=Math.min(active+1, els.length-1); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); active=Math.max(active-1, 0); }
+      else if(e.key==='Enter' && active>=0){ e.preventDefault(); input.value=els[active].textContent; list.classList.remove('is-open'); return; }
+      else return;
+      for(var i=0;i<els.length;i++) els[i].classList.toggle('is-active', i===active);
+    });
+
+    input.addEventListener('blur', function(){ setTimeout(function(){ list.classList.remove('is-open'); }, 120); });
+    input.addEventListener('focus', function(){ if(input.value.trim().length) input.dispatchEvent(new Event('input')); });
+  }
+
+  ['pob','k-pob','b-pob','g-pob'].forEach(function(id){ wireAutocomplete(id, id+'-ac'); });
+
+  /* date sanity: HTML min= stops most junk, this catches whatever slips through */
+  window.mhValidDate = function(value){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    var y = parseInt(value.slice(0,4), 10);
+    var now = new Date().getFullYear();
+    if(y < 1900 || y > now) return false;
+    var d = new Date(value + 'T00:00:00');
+    return !isNaN(d.getTime()) && d <= new Date();
+  };
+})();
+</script>
+
+<div class="wp-overlay" id="wp-overlay">
+  <div class="wp-sheet">
+    <div class="wp-head"><span id="wp-title">Select</span>
+      <button class="wp-done" type="button" id="wp-done">Done</button></div>
+    <div class="wp-cols" id="wp-cols"><div class="wp-hl"></div></div>
+  </div>
+</div>
+
+<script>
+/* ---------- wheel date/time picker ---------- */
+(function(){
+  var IH = 42, ROWS = 5, PAD = (ROWS-1)/2 * IH;   /* 84 */
+  var overlay=document.getElementById('wp-overlay'),
+      colsBox=document.getElementById('wp-cols'),
+      title=document.getElementById('wp-title'),
+      doneBtn=document.getElementById('wp-done');
+
+  var MONTHS=['January','February','March','April','May','June','July',
+              'August','September','October','November','December'];
+  var YEAR_MIN=1900, YEAR_MAX=new Date().getFullYear();
+
+  function daysIn(year,monthIdx){ return new Date(year, monthIdx+1, 0).getDate(); }
+  function pad2(n){ return n<10 ? '0'+n : ''+n; }
+  function mod(n,m){ return ((n%m)+m)%m; }   /* always non-negative, unlike JS % */
+
+  var state = {}, cols = {}, colMeta = {}, targetId=null, kind=null;
+
+  function makeCol(key){
+    var col=document.createElement('div');
+    col.className='wp-col'; col.dataset.col=key;
+    colsBox.appendChild(col);
+    cols[key]=col;
+    col.addEventListener('scroll', function(){ onScroll(key); });
+    return col;
+  }
+
+  /* circular=true triples the list and silently re-centers on wrap, so
+     scrolling past the last item continues into the first - an actual
+     wheel, not a list with two dead ends. day/year stay linear since
+     their bounds are meaningful (a month really does end, a birth year
+     really is bounded); month/hour/minute/period wrap because on a
+     clock or calendar face they actually do. */
+  function fillCol(key, items, selIndex, circular){
+    var col=cols[key];
+    col.innerHTML='';
+    var n=items.length;
+    var full = circular ? items.concat(items).concat(items) : items;
+    var top=document.createElement('div'); top.className='wp-spacer'; col.appendChild(top);
+    full.forEach(function(label){
+      var it=document.createElement('div');
+      it.className='wp-item';
+      it.textContent=label;
+      col.appendChild(it);
+    });
+    var bot=document.createElement('div'); bot.className='wp-spacer'; col.appendChild(bot);
+
+    colMeta[key] = {n:n, circular:!!circular};
+    var startIndex = circular ? n + selIndex : selIndex;
+    col._items = full;
+
+    markSelByIndex(key, startIndex);
+    void col.offsetHeight;   /* force reflow before reading/setting scrollTop */
+    col.scrollTop = startIndex*IH;
+    requestAnimationFrame(function(){
+      col.scrollTop = startIndex*IH;
+      requestAnimationFrame(function(){ col.scrollTop = startIndex*IH; });
+    });
+  }
+
+  function markSelByIndex(key, idx){
+    var col=cols[key], items=col.querySelectorAll('.wp-item');
+    for(var i=0;i<items.length;i++) items[i].classList.toggle('is-sel', i===idx);
+  }
+
+  /* The single source of truth for "what is centered right now" - reads
+     the real scroll position rather than a variable that a settle()
+     call might not have gotten around to updating yet. This is what a
+     commit reads, so what you see is always exactly what you get. */
+  function currentRealIndex(key){
+    var col=cols[key], meta=colMeta[key];
+    var raw = Math.round(col.scrollTop / IH);
+    raw = Math.max(0, Math.min(col._items.length-1, raw));
+    return meta.circular ? mod(raw, meta.n) : raw;
+  }
+
+  var settleT={};
+  function onScroll(key){
+    clearTimeout(settleT[key]);
+    settleT[key]=setTimeout(function(){ settle(key); }, 110);
+  }
+
+  function settle(key){
+    var col=cols[key], meta=colMeta[key];
+    var raw=Math.round(col.scrollTop / IH);
+    raw=Math.max(0, Math.min(col._items.length-1, raw));
+
+    if(meta.circular){
+      var realIdx = mod(raw, meta.n);
+      /* if we've drifted into the first or third copy, jump back to the
+         equivalent spot in the middle copy - instant, same content, so
+         the jump is invisible and scrolling can continue forever */
+      var middleIdx = meta.n + realIdx;
+      if(raw !== middleIdx){ col.scrollTop = middleIdx*IH; raw = middleIdx; }
+      markSelByIndex(key, middleIdx);
+    } else {
+      if(col.scrollTop !== raw*IH) col.scrollTop = raw*IH;
+      markSelByIndex(key, raw);
+    }
+
+    var realIdx2 = currentRealIndex(key);
+    if(kind==='date'){
+      if(key==='month') state.month=realIdx2;
+      if(key==='year') state.year=YEAR_MIN+realIdx2;
+      if(key==='day') state.day=realIdx2+1;
+      if(key==='month' || key==='year') rebuildDay();
+    } else {
+      if(key==='hour') state.hour12=realIdx2+1;
+      if(key==='minute') state.minute=realIdx2;
+      if(key==='period') state.period=realIdx2===0?'AM':'PM';
+    }
+  }
+
+  function rebuildDay(){
+    var n=daysIn(state.year, state.month);
+    var items=[]; for(var i=1;i<=n;i++) items.push(String(i));
+    if(state.day>n) state.day=n;
+    fillCol('day', items, state.day-1, false);
+  }
+
+  function mkHl(){ var d=document.createElement('div'); d.className='wp-hl'; return d; }
+
+  function buildDate(){
+    colsBox.innerHTML=''; colsBox.appendChild(mkHl()); cols={}; colMeta={};
+    makeCol('day'); makeCol('month'); makeCol('year');
+    var dn=daysIn(state.year, state.month);
+    var dayItems=[]; for(var i=1;i<=dn;i++) dayItems.push(String(i));
+    fillCol('day', dayItems, state.day-1, false);
+    fillCol('month', MONTHS, state.month, true);
+    var yearItems=[]; for(var y=YEAR_MIN;y<=YEAR_MAX;y++) yearItems.push(String(y));
+    fillCol('year', yearItems, state.year-YEAR_MIN, false);
+  }
+
+  function buildTime(){
+    colsBox.innerHTML=''; colsBox.appendChild(mkHl()); cols={}; colMeta={};
+    makeCol('hour'); makeCol('minute'); makeCol('period');
+    var hourItems=[]; for(var h=1;h<=12;h++) hourItems.push(String(h));
+    fillCol('hour', hourItems, state.hour12-1, true);
+    var minItems=[]; for(var m=0;m<60;m++) minItems.push(pad2(m));
+    fillCol('minute', minItems, state.minute, true);
+    fillCol('period', ['AM','PM'], state.period==='AM'?0:1, true);
+  }
+
+  function openPicker(fid, k){
+    targetId=fid; kind=k;
+    var hidden=document.getElementById(fid);
+    var val=hidden.value;
+
+    if(k==='date'){
+      title.textContent='Date of Birth';
+      if(val){
+        var parts=val.split('-');
+        state={year:+parts[0], month:+parts[1]-1, day:+parts[2]};
+      } else {
+        state={year:YEAR_MAX-25, month:0, day:1};
+      }
+      buildDate();
+    } else {
+      title.textContent='Time of Birth';
+      if(val){
+        var hm=val.split(':'); var h24=+hm[0], m=+hm[1];
+        var period = h24>=12 ? 'PM' : 'AM';
+        var h12 = h24%12; if(h12===0) h12=12;
+        state={hour12:h12, minute:m, period:period};
+      } else {
+        state={hour12:12, minute:0, period:'PM'};
+      }
+      buildTime();
+    }
+    overlay.classList.add('is-open');
+  }
+
+  function commit(){
+    if(!targetId) return;
+    var hidden=document.getElementById(targetId);
+    var trig=document.getElementById(targetId+'-trig');
+
+    /* Read every value fresh from the real scroll position, not from
+       state.X - guarantees the committed value always matches exactly
+       what is visually centered, even for a column the user never
+       touched (whose settle() may never have run). */
+    if(kind==='date'){
+      var dayIdx=currentRealIndex('day'), monthIdx=currentRealIndex('month'), yearIdx=currentRealIndex('year');
+      var day=dayIdx+1, month=monthIdx, year=YEAR_MIN+yearIdx;
+      var maxDay=daysIn(year,month);
+      if(day>maxDay) day=maxDay;
+      var iso = year+'-'+pad2(month+1)+'-'+pad2(day);
+      hidden.value = iso;
+      trig.textContent = day+' '+MONTHS[month]+' '+year;
+    } else {
+      var hourIdx=currentRealIndex('hour'), minuteIdx=currentRealIndex('minute'), periodIdx=currentRealIndex('period');
+      var hour12=hourIdx+1, minute=minuteIdx, period=periodIdx===0?'AM':'PM';
+      var h24 = period==='AM' ? (hour12===12?0:hour12) : (hour12===12?12:hour12+12);
+      hidden.value = pad2(h24)+':'+pad2(minute);
+      trig.textContent = hour12+':'+pad2(minute)+' '+period;
+    }
+    trig.classList.add('has-value');
+    overlay.classList.remove('is-open');
+  }
+
+  document.querySelectorAll('.wp-trigger').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      openPicker(btn.getAttribute('data-target'), btn.getAttribute('data-kind'));
+    });
+  });
+  doneBtn.addEventListener('click', commit);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) commit(); });
+})();
+</script>
+
+<div class="nk-tip" id="nk-tip"><span></span><button class="nk-tip-x" id="nk-tip-x" aria-label="dismiss">&times;</button></div>
+<button class="nk-fab" id="nk-fab" type="button" aria-label="Chat with Naksha">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<circle cx="46" cy="44" r="32" fill="none" stroke="#A9801F" stroke-width="5"/>
+<path d="M50 24 L57 37 L71 39 L61 49 L63 63 L50 56 L37 63 L39 49 L29 39 L43 37 Z" fill="#DE8F22"/>
+<path d="M50 76 L58 76 L62 88 L50 82 Z" fill="#A9801F"/>
+</svg>
+</button>
+
+<div class="nk-panel" id="nk-panel" role="dialog" aria-label="Naksha chat">
+  <div class="nk-head">
+    <div class="nk-head-mark"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<circle cx="46" cy="44" r="32" fill="none" stroke="#A9801F" stroke-width="5"/>
+<path d="M50 24 L57 37 L71 39 L61 49 L63 63 L50 56 L37 63 L39 49 L29 39 L43 37 Z" fill="#DE8F22"/>
+<path d="M50 76 L58 76 L62 88 L50 82 Z" fill="#A9801F"/>
+</svg></div>
+    <div class="nk-head-txt"><b>Naksha</b><span>The map of you</span></div>
+    <button class="nk-close" id="nk-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="nk-body" id="nk-body">
+    <div class="nk-msg nk-bot">
+      <p>Namaste. I'm Naksha — ask me about your chart, today's horoscope, or how any of this works. Five questions a day, free.</p>
+    </div>
+    <div class="nk-chips" id="nk-chips">
+      <button class="nk-chip" data-q="What is my Ishta Devata?">What is an Ishta Devata?</button>
+      <button class="nk-chip" data-q="What is a dasha?">What is a dasha?</button>
+      <button class="nk-chip" data-q="How does kundali matching work?">How does matching work?</button>
+      <button class="nk-chip" data-svc="kundali">Create my free kundali</button>
+      <button class="nk-chip" data-svc="horo">Today's horoscope</button>
+    </div>
+  </div>
+  <div class="nk-quota" id="nk-quota"></div>
+  <div class="nk-input-row">
+    <input type="text" id="nk-input" placeholder="Ask Naksha…" autocomplete="off">
+    <button class="nk-send" id="nk-send" type="button" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13 M22 2 15 22 11 13 2 9 22 2Z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ---------- naksha chat ---------- */
+(function(){
+  var BASE = (typeof API_BASE !== 'undefined') ? API_BASE : 'https://api.muhurata.com';
+  var fab=document.getElementById('nk-fab'), panel=document.getElementById('nk-panel'),
+      closeBtn=document.getElementById('nk-close'), body=document.getElementById('nk-body'),
+      input=document.getElementById('nk-input'), sendBtn=document.getElementById('nk-send'),
+      quota=document.getElementById('nk-quota'), chips=document.getElementById('nk-chips');
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+  /* session id: a browser-local id, not tied to identity, just to meter the free cap */
+  function sessionId(){
+    var k='mh-naksha-session';
+    var v=null;
+    try{ v=localStorage.getItem(k); }catch(e){}
+    if(!v){
+      v='nk_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,10);
+      try{ localStorage.setItem(k,v); }catch(e){}
+    }
+    return v;
+  }
+  var SID = sessionId();
+  var history = [];
+  var limitReached = false;
+
+  function open_(){ panel.classList.add('is-open'); fab.classList.add('is-hidden'); input.focus(); }
+  function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); }
+  fab.addEventListener('click', open_);
+  closeBtn.addEventListener('click', close_);
+  window.__mhOpenNaksha = open_;  /* exposed so the proactive tooltip (different scope) can trigger it */
+
+  function scrollBottom(){ body.scrollTop = body.scrollHeight; }
+
+  function addUserMsg(text){
+    var d=document.createElement('div'); d.className='nk-msg nk-user';
+    d.innerHTML='<p>'+esc(text)+'</p>';
+    body.appendChild(d); scrollBottom();
+  }
+  function addBotMsg(text){
+    var d=document.createElement('div'); d.className='nk-msg nk-bot';
+    d.innerHTML='<p>'+esc(text)+'</p>';
+    body.appendChild(d); scrollBottom();
+    return d;
+  }
+  function addTyping(){
+    var d=document.createElement('div'); d.className='nk-msg nk-typing';
+    d.innerHTML='<span class="nk-dots"><i></i><i></i><i></i></span>';
+    body.appendChild(d); scrollBottom();
+    return d;
+  }
+  function addCard(html){
+    var wrap=document.createElement('div'); wrap.className='nk-msg nk-bot';
+    wrap.innerHTML='<div class="nk-card">'+html+'</div>';
+    body.appendChild(wrap); scrollBottom();
+  }
+  function addUpsell(){
+    var wrap=document.createElement('div'); wrap.className='nk-msg nk-bot';
+    wrap.innerHTML = '<div class="nk-upsell"><b>Naksha Pro \u2014 coming soon</b>'
+      + 'Unlimited chat, grounded in your own birth chart. '
+      + '<button class="nk-notify" id="nk-notify-btn">Notify me</button></div>';
+    body.appendChild(wrap); scrollBottom();
+    document.getElementById('nk-notify-btn').addEventListener('click', function(btn){
+      return function(){
+        btn.textContent='Noted \u2014 thank you';
+        btn.disabled=true;
+        fetch('https://formspree.io/f/mrpgyozv', {
+          method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({_subject:'Naksha Pro interest', session:SID})
+        }).catch(function(){});
+      };
+    }(document.getElementById('nk-notify-btn')));
+  }
+
+  function renderToolResults(results){
+    (results||[]).forEach(function(tr){
+      if(tr.tool==='get_kundali' && tr.result && !tr.result.error){
+        var r=tr.result;
+        addCard('<b>Your chart</b>'
+          + '<div class="row"><span>Lagna</span><span>'+esc(r.lagna)+'</span></div>'
+          + '<div class="row"><span>Moon sign</span><span>'+esc(r.moon_sign)+'</span></div>'
+          + '<div class="row"><span>Nakshatra</span><span>'+esc(r.nakshatra)+'</span></div>'
+          + '<div class="row"><span>Running</span><span>'+esc(r.mahadasha)+' / '+esc(r.antardasha)+'</span></div>'
+          + '<div class="row"><span>Ishta Devata</span><span>'+esc(r.ishta_devata)+'</span></div>');
+      } else if(tr.tool==='get_matching' && tr.result && !tr.result.error){
+        var m=tr.result;
+        addCard('<b>Match result</b>'
+          + '<div class="row"><span>Score</span><span>'+m.total+' / 36</span></div>'
+          + '<div class="row"><span>Verdict</span><span>'+esc(m.verdict)+'</span></div>');
+      } else if(tr.tool==='get_horoscope' && tr.result && !tr.result.error){
+        var h=tr.result;
+        addCard('<b>'+esc(h.sign)+'</b><div class="row"><span></span><span>'+esc(h.text)+'</span></div>');
+      }
+    });
+  }
+
+  function setQuota(remaining){
+    if(remaining==null) return;
+    quota.textContent = remaining>0
+      ? remaining+' free question'+(remaining===1?'':'s')+' left today'
+      : "Today's free questions are used";
+  }
+
+  function send(text){
+    text = (text||'').trim();
+    if(!text || limitReached) return;
+
+    /* Naksha now needs a signed-in account — that's what makes the
+       "5 free questions a day" limit real (a refresh can't reset it). */
+    if(!(window.mhAuth && window.mhAuth.user())){
+      addUserMsg(text);
+      addBotMsg("Sign in with Google to chat with me — you get 5 free questions a day, and your chart stays with your account.");
+      var b=document.createElement('button');
+      b.className='nk-notify'; b.textContent='Sign in with Google';
+      b.addEventListener('click', function(){ window.mhAuth.signInGoogle(); });
+      body.appendChild(b); scrollBottom();
+      return;
+    }
+
+    chips.style.display='none';   /* the original static row - inline copies replace it from here on */
+    addUserMsg(text);
+    history.push({role:'user', content:text});
+    input.value='';
+    sendBtn.disabled=true;
+    var typing = addTyping();
+
+    window.mhApiFetch(BASE + '/api/naksha/chat', { body:{ messages:history, context: window.__mhPageContext || null } })
+    .then(function(d){
+      typing.remove();
+      addBotMsg(d.reply);
+      history.push({role:'assistant', content:d.reply});
+      renderToolResults(d.tool_results);
+      setQuota(d.remaining_today);
+      if(d.limit_reached){
+        limitReached=true; addUpsell(); input.placeholder='Come back tomorrow, or go Pro';
+      } else {
+        appendChipRow();   /* tapping stays available after every answer */
+      }
+    })
+    .catch(function(err){
+      typing.remove();
+      var msg;
+      if(err && err.code === 'unauthorized'){
+        msg = "Your sign-in expired — please sign in again.";
+      } else if(err && (err.code === 'rate_limited' || err.code === 'unavailable' || err.code === 'cold')){
+        msg = window.MH_ERR[err.code];
+      } else if(err && err.message && err.message.indexOf('Naksha') === 0){
+        msg = err.message;
+      } else {
+        msg = "I couldn't reach my chart brain just now. Try again in a moment?";
+      }
+      addBotMsg(msg);
+      if(!limitReached) appendChipRow();
+    })
+    .then(function(){ sendBtn.disabled=false; });
+  }
+
+  sendBtn.addEventListener('click', function(){ send(input.value); });
+  input.addEventListener('keydown', function(e){ if(e.key==='Enter') send(input.value); });
+
+  function getContextChips(){
+    /* Naksha is context-aware: suggested questions change based on what
+       the user is currently looking at, so it feels like a companion
+       that knows where you are, not a generic FAQ list. */
+    var activeTab = document.querySelector('.svc-tab.is-on');
+    var tabName = activeTab ? activeTab.getAttribute('data-svc') : null;
+
+    if(tabName==='milan') return [
+      {q:"What does our matching score mean?", label:"What does the score mean?"},
+      {q:"What is Mangal dosha and does it matter?", label:"Is Mangal dosha serious?"},
+      {q:"Which koota matters most?", label:"Which koota matters most?"},
+      {svc:"kundali", label:"Check my own chart"},
+    ];
+    if(tabName==='horo') return [
+      {q:"How is today's horoscope calculated?", label:"How is this calculated?"},
+      {q:"What does Moon transit mean for my sign?", label:"What is a Moon transit?"},
+      {q:"What is the difference between moon sign and sun sign?", label:"Moon vs sun sign?"},
+      {svc:"kundali", label:"See my full chart"},
+    ];
+    if(tabName==='kundali') return [
+      {q:"What does my lagna mean?", label:"What is a lagna?"},
+      {q:"What is my Ishta Devata?", label:"What is an Ishta Devata?"},
+      {q:"What dasha am I running right now?", label:"What dasha am I in?"},
+      {q:"How do I read a North Indian chart?", label:"How to read this chart?"},
+    ];
+    // default (landing page)
+    return [
+      {q:"What is my Ishta Devata?", label:"What is an Ishta Devata?"},
+      {q:"What is a dasha?", label:"What is a dasha?"},
+      {q:"How does kundali matching work?", label:"How does matching work?"},
+      {svc:"kundali", label:"Create my free kundali"},
+      {svc:"horo", label:"Today's horoscope"},
+    ];
+  }
+  var CHIP_DEFS = getContextChips();
+
+  function wireChip(chip){
+    chip.addEventListener('click', function(){
+      var svc = chip.getAttribute('data-svc');
+      if(svc){
+        close_();
+        var el = document.querySelector('.svc-tab[data-svc="'+svc+'"]');
+        if(el){ el.click(); document.getElementById('services').scrollIntoView({behavior:'smooth'}); }
+        return;
+      }
+      send(chip.getAttribute('data-q'));
+    });
+  }
+  /* Rebuild the initial chip set from context when Naksha opens */
+  function rebuildInitialChips(){
+    var defs = getContextChips();
+    chips.innerHTML = '';
+    defs.forEach(function(def){
+      var b = document.createElement('button'); b.className = 'nk-chip';
+      if(def.svc) b.setAttribute('data-svc', def.svc);
+      if(def.q) b.setAttribute('data-q', def.q);
+      b.textContent = def.label;
+      wireChip(b);
+      chips.appendChild(b);
+    });
+  }
+  rebuildInitialChips();
+  /* Refresh suggestions when Naksha opens (user may have switched tabs) */
+  var origOpen = open_;
+  open_ = function(){ rebuildInitialChips(); origOpen(); };
+
+  /* Reappear after every reply, right where the conversation currently
+     is, so tapping stays available throughout - not just at the start. */
+  function appendChipRow(){
+    /* keep exactly one live row - drop any earlier ones so the
+       conversation doesn't fill up with duplicate chip strips */
+    body.querySelectorAll('.nk-chips-inline').forEach(function(el){ el.remove(); });
+    var contextDefs = getContextChips();   /* re-read context each time */
+    var row = document.createElement('div');
+    row.className = 'nk-chips nk-chips-inline';
+    contextDefs.forEach(function(def){
+      var b = document.createElement('button');
+      b.className = 'nk-chip';
+      if(def.svc) b.setAttribute('data-svc', def.svc);
+      if(def.q) b.setAttribute('data-q', def.q);
+      b.textContent = def.label;
+      wireChip(b);
+      row.appendChild(b);
+    });
+    body.appendChild(row);
+    scrollBottom();
+  }
+})();
+</script>
+<script>
+(function(){
+  var g=document.getElementById('glow-trail'); if(!g) return;
+  var tx=0,ty=0,cx=0,cy=0,active=false,raf=null;
+  function loop(){
+    cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18;
+    g.style.left=cx+'px'; g.style.top=cy+'px';
+    if(Math.abs(tx-cx)>0.5||Math.abs(ty-cy)>0.5){ raf=requestAnimationFrame(loop); } else { raf=null; }
+  }
+  function move(x,y){ tx=x; ty=y; if(!active){active=true;g.style.opacity='1';} if(!raf) raf=requestAnimationFrame(loop); }
+  window.addEventListener('mousemove',function(e){ move(e.clientX,e.clientY); },{passive:true});
+  window.addEventListener('touchmove',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
+  window.addEventListener('touchstart',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
+  window.addEventListener('mouseleave',function(){ g.style.opacity='0'; active=false; });
+})();
+</script>
+</body>
+</html>
