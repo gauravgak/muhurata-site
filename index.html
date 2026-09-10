@@ -18,7 +18,7 @@
 <link rel="icon" href="muhurata-lotus.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --wall:#F5EDDC;
@@ -612,6 +612,37 @@ button.go:disabled{opacity:.65;cursor:default}
 <body>
 <div id="glow-trail"></div>
 
+<nav class="mh-nav" id="mh-nav">
+  <a class="mh-brand" href="/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#f4b52e" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18M3 12h18"/></svg>
+    Muhurata
+  </a>
+  <div class="mh-nav-links">
+    <a href="#get">Free Kundli</a>
+    <a href="#services">Matching</a>
+    <a href="#swayamvar">Swayamvar</a>
+    <a href="#services">Tarot</a>
+    <a href="kundli.html">Full Chart</a>
+    <a href="#" id="nav-naksha">Naksha</a>
+  </div>
+  <div class="mh-nav-right">
+    <button class="mh-pill ghost" type="button" data-mh-auth data-signed-out="Sign in">Sign in</button>
+    <a href="#get" class="mh-pill mh-cta">Get my reading</a>
+  </div>
+  <button class="mh-nav-toggle" id="mh-nav-toggle" type="button" aria-label="Menu">&#9776;</button>
+</nav>
+<script>
+(function(){
+  var nav=document.getElementById('mh-nav'), t=document.getElementById('mh-nav-toggle');
+  if(t) t.addEventListener('click', function(){ nav.classList.toggle('is-open'); });
+  var nk=document.getElementById('nav-naksha');
+  if(nk) nk.addEventListener('click', function(e){ e.preventDefault(); nav.classList.remove('is-open'); if(window.__mhOpenNaksha) window.__mhOpenNaksha(); });
+  nav.querySelectorAll('.mh-nav-links a:not(#nav-naksha)').forEach(function(a){
+    a.addEventListener('click', function(){ nav.classList.remove('is-open'); });
+  });
+})();
+</script>
+
 <!-- toran: fine chain, small leaves, tight rosettes -->
 <svg class="toran" preserveAspectRatio="none" viewBox="0 0 1200 38" aria-hidden="true">
   <defs>
@@ -691,11 +722,12 @@ button.go:disabled{opacity:.65;cursor:default}
       </div>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="get">
       <div>
-        <p class="pull">Muhurata — the right moment to act.</p>
-        <h1>Know what to do, not just what's written.</h1>
-        <p class="lede">Your chart, the dasha you are running, your ishta devata, and one clear remedy — with the date to do it on. Everything the remedy needs, sourced and sent to you.</p>
+        <p class="pull">★ Free chart · one real remedy · the date to do it</p>
+        <h1>Your chart's been hiding something.</h1>
+        <p class="lede">Drop your birth details. Get it read straight — the one remedy that actually moves things, and the exact day to do it. Sent to your WhatsApp.</p>
+        <div class="mh-proof"><span class="dot"></span> <b>1,200+</b> charts read this week &nbsp;·&nbsp; <b>Naksha</b> is online for your daily dilemmas</div>
 
         <div class="card" id="card">
           <div class="form-body">
@@ -2151,7 +2183,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 <path d="M50 24 L57 37 L71 39 L61 49 L63 63 L50 56 L37 63 L39 49 L29 39 L43 37 Z" fill="#DE8F22"/>
 <path d="M50 76 L58 76 L62 88 L50 82 Z" fill="#A9801F"/>
 </svg></div>
-    <div class="nk-head-txt"><b>Naksha</b><span>The map of you</span></div>
+    <div class="nk-head-txt"><b>Naksha</b><span>your companion for daily dilemmas</span></div>
     <button class="nk-close" id="nk-close" type="button" aria-label="Close">&times;</button>
   </div>
   <div class="nk-body" id="nk-body">
