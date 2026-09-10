@@ -18,7 +18,7 @@
 <link rel="icon" href="muhurata-lotus.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 :root{
   --wall:#F5EDDC;
@@ -2254,7 +2254,10 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     sendBtn.disabled=true;
     var typing = addTyping();
 
-    window.mhApiFetch(BASE + '/api/naksha/chat', { body:{ messages:history, context: window.__mhPageContext || null } })
+    window.mhApiFetch(BASE + '/api/naksha/chat', {
+      body:{ messages:history, context: window.__mhPageContext || null },
+      onRetry: function(){ if(typing){ typing.className='nk-msg nk-bot'; typing.innerHTML='<p>Waking the server up — the free tier is slow on the first request. Hang on…</p>'; scrollBottom(); } }
+    })
     .then(function(d){
       typing.remove();
       addBotMsg(d.reply);
