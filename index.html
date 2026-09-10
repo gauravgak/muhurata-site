@@ -589,6 +589,7 @@ button.go:disabled{opacity:.65;cursor:default}
 <script src="auth.js"></script>
 <script src="api.js"></script>
 <script src="profile.js"></script>
+<script src="cities.js"></script>
 <script>
 (function(){
   var saved=null;
@@ -2507,9 +2508,14 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
   function need(){ return SPREAD_N[spread]||3; }
   function slug(n){ return String(n).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+  var GLYPH='<svg class="tr-gl" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">'
+    +'<circle cx="24" cy="24" r="8.5"/>'
+    +'<path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.8 9.8l4.3 4.3M33.9 33.9l4.3 4.3M38.2 9.8l-4.3 4.3M14.1 33.9l-4.3 4.3"/>'
+    +'<path d="M24 19c2.6 1.8 2.6 8.2 0 10-2.6-1.8-2.6-8.2 0-10z" fill="currentColor" stroke="none"/></svg>';
   function fcHTML(i){
     return '<button class="tr-fc" type="button" data-i="'+i+'" aria-label="card '+(i+1)+'">'
-      + '<span class="tr-fc-inner"><span class="tr-fc-face tr-fc-back"></span>'
+      + '<span class="tr-fc-inner">'
+      + '<span class="tr-fc-face tr-fc-back">'+GLYPH+'</span>'
       + '<span class="tr-fc-face tr-fc-front"></span></span></button>';
   }
 
@@ -2562,8 +2568,10 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       (d.cards||[]).forEach(function(c, k){
         var el=pickedEls[k]; if(!el) return;
         var front=el.querySelector('.tr-fc-front');
-        front.textContent=c.name;
-        front.style.setProperty('--img', "url('"+CARDS+slug(c.name)+".png')");
+        front.innerHTML=GLYPH+'<span class="tr-nm">'+esc(c.name)+'</span>';
+        var img=new Image();
+        img.onload=function(){ front.style.setProperty('--img', "url('"+img.src+"')"); };
+        img.src=CARDS+slug(c.name)+'.png';
         if(c.orientation==='reversed') el.classList.add('is-rev');
         setTimeout(function(){ el.classList.add('is-flipped'); }, 250 + k*240);
       });
@@ -2609,7 +2617,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       + '<input class="sw-p-pob" type="text" placeholder="City">'
       + '<button class="sw-rm" type="button" aria-label="Remove">&times;</button>';
     d.querySelector('.sw-rm').addEventListener('click', function(){ d.remove(); n--; sync(); });
-    list.appendChild(d); n++; sync();
+    list.appendChild(d); n++; sync(); if(window.mhAttachCities) window.mhAttachCities(d);
   }
   function sync(){
     count.textContent='('+n+')';
@@ -2647,8 +2655,8 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     go.disabled=true; go.textContent='Matching…';
     out.innerHTML='<p class="svc-load">Running guna milan for each…</p>';
     window.mhApiFetch((window.API_BASE||'')+'/api/swayamvar', {
-      anon:true, body:{ self:me, self_role:role, candidates:cands },
-      onRetry:function(){ out.innerHTML='<p class="svc-load">Waking the server up — first request is slow on the free tier…</p>'; }
+      body:{ self:me, self_role:role, candidates:cands },
+      onRetry:function(){ out.innerHTML='<p class="svc-load">Running the match — first request is slow on the free tier…</p>'; }
     })
     .then(function(d){
       var rows=(d.results||[]).map(function(r,i){
@@ -2658,10 +2666,16 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           + '<td>'+esc(r.verdict||'')+'</td>'
           + '<td>'+(r.mangal_dosha?'Mangal dosha':'—')+'</td></tr>';
       }).join('');
+      var summaryHtml = d.summary
+        ? '<p class="sw-summary">'+esc(d.summary)+'</p>'
+        : (window.mhAuth && window.mhAuth.user()
+            ? ''
+            : '<p class="sw-signin">Sign in and Naksha writes you a full comparison — why the top pick wins, and what the Mangal-dosha notes actually mean.</p>');
       out.innerHTML='<p class="sw-best">Best match: <b>'+esc(d.best_match||'—')+'</b></p>'
         + '<div class="tw"><table class="tbl sw-tbl"><thead><tr>'
         + '<th>#</th><th>Partner</th><th>Score</th><th>Verdict</th><th>Note</th>'
-        + '</tr></thead><tbody>'+rows+'</tbody></table></div>';
+        + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
+        + summaryHtml;
     })
     .catch(function(e){
       out.innerHTML='<p class="err">'+esc((window.MH_ERR&&window.MH_ERR[e.code])||e.message||'Could not run the comparison.')+'</p>';
