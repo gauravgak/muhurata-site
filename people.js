@@ -8,7 +8,15 @@
     if (!(w.mhAuth && w.mhAuth.user())) { w.mhPeople = []; return; }
     w.mhApiFetch("/api/people")
       .then(function (d) {
-        w.mhPeople = (d && d.people) || [];
+        var list = (d && d.people) || [];
+        // always offer the user's own saved details, even before they've
+        // saved anyone else
+        var pr = w.mhProfile;
+        if (pr && pr.dob && pr.tob && pr.place &&
+            !list.some(function (x) { return x.dob === pr.dob && x.tob === pr.tob && x.place === pr.place; })) {
+          list.unshift({ person_id: "me", name: (pr.name || "You"), dob: pr.dob, tob: pr.tob, place: pr.place });
+        }
+        w.mhPeople = list;
         w.dispatchEvent(new CustomEvent("mh-people", { detail: w.mhPeople }));
       })
       .catch(function () {});
@@ -76,4 +84,5 @@
   } else {
     document.addEventListener("DOMContentLoaded", load);
   }
+  w.addEventListener("mh-profile", load);
 })(window);

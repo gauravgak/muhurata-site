@@ -2048,6 +2048,49 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function scrollBottom(){ body.scrollTop = body.scrollHeight; }
 
+  /* Saved-people row: tap a name to load that person's chart into the
+     chat for FREE (no question spent). Follow-ups then cost as normal. */
+  function renderPeople(){
+    var old=body.querySelector('.nk-people'); if(old) old.remove();
+    var ppl=window.mhPeople||[]; if(!ppl.length) return;
+    var row=document.createElement('div'); row.className='nk-people';
+    row.innerHTML='<span class="nk-people-h">Your people</span>';
+    ppl.slice(0,12).forEach(function(p){
+      var b=document.createElement('button'); b.type='button'; b.className='nk-chip';
+      b.textContent=p.name;
+      b.addEventListener('click', function(){ loadPerson(p); });
+      row.appendChild(b);
+    });
+    var ref=body.querySelector('#nk-chips');
+    body.insertBefore(row, ref||body.firstChild);
+  }
+  function loadPerson(p){
+    addUserMsg('Tell me about '+p.name);
+    var typing=addTyping();
+    window.mhApiFetch((window.API_BASE||'')+'/api/kundali', { anon:true, body:{name:p.name,dob:p.dob,tob:p.tob,place:p.place} })
+      .then(function(d){
+        typing.remove();
+        window.__mhPageContext={
+          name:p.name, dob:p.dob, tob:p.tob, place:p.place,
+          lagna:(d.ascendant||{}).sign, moon_sign:d.moon_sign, nakshatra:d.birth_nakshatra,
+          mahadasha:(d.running||{}).mahadasha, antardasha:(d.running||{}).antardasha,
+          ishta_devata:(d.ishta_devata||{}).devata,
+          positions:(d.positions||[]).map(function(x){ return {name:x.name,sign:x.sign,house:x.house,retro:x.retrograde}; })
+        };
+        addCard('<b>'+esc(p.name)+'</b>'
+          + '<div class="row"><span>Lagna</span><span>'+esc((d.ascendant||{}).sign||'')+'</span></div>'
+          + '<div class="row"><span>Moon</span><span>'+esc(d.moon_sign||'')+'</span></div>'
+          + '<div class="row"><span>Nakshatra</span><span>'+esc(d.birth_nakshatra||'')+'</span></div>'
+          + '<div class="row"><span>Running</span><span>'+esc((d.running||{}).mahadasha||'')+' / '+esc((d.running||{}).antardasha||'')+'</span></div>'
+          + '<div class="row"><span>Ishta Devata</span><span>'+esc((d.ishta_devata||{}).devata||'')+'</span></div>');
+        addBotMsg('Loaded '+p.name+"'s chart — ask me anything about them. This one's free.");
+        appendChipRow();
+      })
+      .catch(function(e){ typing.remove(); addBotMsg((window.MH_ERR&&window.MH_ERR[e.code])||"Couldn't load that chart just now."); });
+  }
+  renderPeople();
+  window.addEventListener('mh-people', renderPeople);
+
   function addUserMsg(text){
     var d=document.createElement('div'); d.className='nk-msg nk-user';
     d.innerHTML='<p>'+esc(text)+'</p>';

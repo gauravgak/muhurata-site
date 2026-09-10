@@ -233,6 +233,9 @@ input[type="tel"], .wp-trigger, .nk-input, #nk-input {
 .nk-msg.nk-user { background: var(--brass) !important; color: #17110a !important; }
 .nk-chip { border: 1px solid var(--rule) !important; border-radius: var(--pill) !important; background: transparent !important; color: var(--ink) !important; }
 .nk-chip:hover { border-color: var(--brass) !important; color: var(--brass) !important; }
+.nk-people { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0 10px; }
+.nk-people-h { width: 100%; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 50%, transparent); }
+.nk-people .nk-chip { background: color-mix(in srgb, var(--brass) 12%, transparent) !important; border-color: color-mix(in srgb, var(--brass) 40%, transparent) !important; }
 .nk-input-row { border-top: 1px solid var(--rule); }
 .nk-send { background: var(--brass) !important; color: #17110a !important; }
 .nk-quota { color: color-mix(in srgb, var(--ink) 55%, transparent); }

@@ -646,6 +646,40 @@ header *{position:relative;z-index:1}
   window.addEventListener('resize', function(){ if(_nkLocked && !window.matchMedia('(max-width: 640px)').matches) nkUnlock(); });
 
   function scrollBottom(){ body.scrollTop=body.scrollHeight; }
+
+  /* saved-people row — tap a name to load their chart for free */
+  function renderPeople(){
+    var old=body.querySelector('.nk-people'); if(old) old.remove();
+    var ppl=window.mhPeople||[]; if(!ppl.length) return;
+    var row=document.createElement('div'); row.className='nk-people';
+    row.innerHTML='<span class="nk-people-h">Your people</span>';
+    ppl.slice(0,12).forEach(function(p){
+      var b=document.createElement('button'); b.type='button'; b.className='nk-chip'; b.textContent=p.name;
+      b.addEventListener('click', function(){ loadPerson(p); });
+      row.appendChild(b);
+    });
+    body.insertBefore(row, body.querySelector('#nk-chips')||body.firstChild);
+  }
+  function loadPerson(p){
+    addUserMsg('Tell me about '+p.name);
+    var typing=addTyping();
+    window.mhApiFetch((window.API_BASE||'')+'/api/kundali',{ anon:true, body:{name:p.name,dob:p.dob,tob:p.tob,place:p.place} })
+      .then(function(d){
+        typing.remove();
+        window.__mhPageContext={ name:p.name,dob:p.dob,tob:p.tob,place:p.place,
+          lagna:(d.ascendant||{}).sign, moon_sign:d.moon_sign, nakshatra:d.birth_nakshatra,
+          mahadasha:(d.running||{}).mahadasha, antardasha:(d.running||{}).antardasha,
+          ishta_devata:(d.ishta_devata||{}).devata,
+          positions:(d.positions||[]).map(function(x){ return {name:x.name,sign:x.sign,house:x.house,retro:x.retrograde}; }) };
+        addBotMsg(p.name+': '+((d.ascendant||{}).sign||'?')+' lagna, '+(d.moon_sign||'?')+' moon, '
+          +(d.birth_nakshatra||'?')+' nakshatra. Running '+((d.running||{}).mahadasha||'?')+' / '+((d.running||{}).antardasha||'?')
+          +'. Ask me anything about them — this one’s free.');
+        appendChipRow();
+      })
+      .catch(function(e){ typing.remove(); addBotMsg((window.MH_ERR&&window.MH_ERR[e.code])||"Couldn't load that chart just now."); });
+  }
+  renderPeople(); window.addEventListener('mh-people', renderPeople);
+
   function addUserMsg(t){ var d=document.createElement('div');d.className='nk-msg nk-user';d.innerHTML='<p>'+esc(t)+'</p>';body.appendChild(d);scrollBottom(); }
   function addBotMsg(t){ var d=document.createElement('div');d.className='nk-msg nk-bot';d.innerHTML='<p>'+esc(t)+'</p>';body.appendChild(d);scrollBottom();return d; }
   function addTyping(){ var d=document.createElement('div');d.className='nk-msg nk-typing';d.innerHTML='<span class="nk-dots"><i></i><i></i><i></i></span>';body.appendChild(d);scrollBottom();return d; }
