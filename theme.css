@@ -323,6 +323,40 @@ body.nk-scroll-lock { overflow: hidden !important; position: fixed !important; w
 @media (max-width: 480px) { .tr-fc { --w: 52px; } .tr-leg .p { display: block; min-width: 0; } }
 @media (prefers-reduced-motion: reduce) { .tr-fc-inner { transition: none; } }
 
+/* ── Wheel date/time picker (shared, wheelpicker.js) ───────────── */
+.wp-trigger {
+  width: 100%; min-height: 44px; padding: 0 12px; text-align: left;
+  font-family: var(--font-body); font-size: 15px;
+  display: flex; align-items: center; cursor: pointer;
+  background: color-mix(in srgb, #000 28%, var(--wall-lit)) !important;
+  border: 1px solid var(--rule); border-radius: var(--radius-md);
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+.wp-trigger.has-value { color: var(--ink); }
+.wp-trigger:focus-visible { outline: none; border-color: var(--brass); }
+.wp-overlay {
+  position: fixed; inset: 0; z-index: 400; display: none;
+  background: rgba(0,0,0,.6); align-items: flex-end; justify-content: center;
+}
+.wp-overlay.is-open { display: flex; }
+@media (min-width: 640px) { .wp-overlay { align-items: center; } }
+.wp-sheet {
+  background: var(--wall-lit); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0; width: 100%; max-width: 420px;
+  box-shadow: var(--shadow-lg); overflow: hidden;
+}
+@media (min-width: 640px) { .wp-sheet { border-radius: var(--radius-lg); } }
+.wp-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--rule); }
+.wp-head .wp-title { font-family: var(--font-heading); font-weight: 700; font-size: 16px; color: var(--teak-dk); }
+.wp-done { background: var(--brass); color: #17110a; border: 0; border-radius: var(--pill); padding: 9px 20px; font-family: var(--font-heading); font-weight: 700; font-size: 14px; cursor: pointer; }
+.wp-cols { display: flex; height: 210px; position: relative; padding: 0 16px; }
+.wp-hl { position: absolute; top: 84px; left: 16px; right: 16px; height: 42px; border-top: 1px solid color-mix(in srgb, var(--brass) 45%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--brass) 45%, transparent); pointer-events: none; }
+.wp-col { flex: 1; height: 210px; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.wp-col::-webkit-scrollbar { display: none; }
+.wp-spacer { height: 84px; }
+.wp-item { height: 42px; line-height: 42px; text-align: center; scroll-snap-align: center; font-size: 16px; color: color-mix(in srgb, var(--ink) 45%, transparent); transition: color .12s, font-size .12s; }
+.wp-item.is-sel { font-weight: 700; color: var(--brass); font-size: 19px; }
+
 /* ── Swayamvar ─────────────────────────────────────────────── */
 .sw-card { display: block; }
 .sw-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 26px; }

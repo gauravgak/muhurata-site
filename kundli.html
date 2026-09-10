@@ -14,6 +14,7 @@
 <script src="api.js"></script>
 <script src="profile.js"></script>
 <script src="cities.js"></script>
+<script src="wheelpicker.js"></script>
 <style>
 :root{
   --wall:#171410; --wall-lit:#2c2620; --wall-shade:#0f0d0a;
@@ -235,8 +236,8 @@ header *{position:relative;z-index:1}
 <div class="form-card wrap" id="form-card">
   <div class="field"><label for="f-name">Full name</label><input id="f-name" placeholder="Name"></div>
   <div class="field two">
-    <div><label for="f-dob">Date of Birth</label><input id="f-dob" type="date" min="1900-01-01"></div>
-    <div><label for="f-tob">Time of Birth</label><input id="f-tob" type="time"></div>
+    <div><label>Date of Birth</label><button type="button" class="wp-trigger" data-target="f-dob" data-kind="date">Select date</button><input type="hidden" id="f-dob"></div>
+    <div><label>Time of Birth</label><button type="button" class="wp-trigger" data-target="f-tob" data-kind="time">Select time</button><input type="hidden" id="f-tob"></div>
   </div>
   <div class="field"><label for="f-pob">Place of Birth</label><input id="f-pob" placeholder="City"></div>
   <button class="go" id="f-go">Generate Kundli</button>
@@ -545,19 +546,25 @@ header *{position:relative;z-index:1}
     loadKundli(fd);
   };
 
+  function _setDT(dob, tob){
+    if(window.mhWheelLabel){ if(dob) window.mhWheelLabel('f-dob', dob); if(tob) window.mhWheelLabel('f-tob', tob); }
+    else { $('f-dob').value=dob||''; $('f-tob').value=tob||''; }
+  }
+
   // support ?name=&dob=&tob=&place= deep-link (e.g. from the main site form)
   (function(){
     var q=new URLSearchParams(location.search);
     if(q.get('dob')&&q.get('tob')&&q.get('place')){
       var fd={name:q.get('name')||'',dob:q.get('dob'),tob:q.get('tob'),place:q.get('place')};
-      $('f-name').value=fd.name; $('f-dob').value=fd.dob; $('f-tob').value=fd.tob; $('f-pob').value=fd.place;
+      $('f-name').value=fd.name; _setDT(fd.dob, fd.tob); $('f-pob').value=fd.place;
       if(fd.name) loadKundli(fd);
     }
   })();
 
   // prefill from the signed-in user's saved birth details
   function _fillKundli(){
-    if(window.mhFillForm) window.mhFillForm({name:'#f-name', dob:'#f-dob', tob:'#f-tob', place:'#f-pob'});
+    if(window.mhFillForm) window.mhFillForm({name:'#f-name', place:'#f-pob'});
+    if(window.mhProfile) _setDT(window.mhProfile.dob, window.mhProfile.tob);
   }
   _fillKundli();
   window.addEventListener('mh-profile', _fillKundli);

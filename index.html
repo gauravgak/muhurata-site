@@ -590,6 +590,7 @@ button.go:disabled{opacity:.65;cursor:default}
 <script src="api.js"></script>
 <script src="profile.js"></script>
 <script src="cities.js"></script>
+<script src="wheelpicker.js"></script>
 <script>
 (function(){
   var saved=null;
@@ -929,8 +930,8 @@ button.go:disabled{opacity:.65;cursor:default}
         <h3>You</h3>
         <div class="field"><label for="sw-name">Full name</label><input id="sw-name" type="text" placeholder="Your name" autocomplete="name"></div>
         <div class="two">
-          <div class="field"><label for="sw-dob">Date of birth</label><input id="sw-dob" type="date" min="1900-01-01"></div>
-          <div class="field"><label for="sw-tob">Time of birth</label><input id="sw-tob" type="time"></div>
+          <div class="field"><label>Date of birth</label><button type="button" class="wp-trigger" data-target="sw-dob" data-kind="date">Select date</button><input type="hidden" id="sw-dob"></div>
+          <div class="field"><label>Time of birth</label><button type="button" class="wp-trigger" data-target="sw-tob" data-kind="time">Select time</button><input type="hidden" id="sw-tob"></div>
         </div>
         <div class="field"><label for="sw-pob">Place of birth</label><input id="sw-pob" type="text" placeholder="City, state"></div>
         <div class="sw-role">
@@ -1949,224 +1950,6 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 })();
 </script>
 
-<div class="wp-overlay" id="wp-overlay">
-  <div class="wp-sheet">
-    <div class="wp-head"><span id="wp-title">Select</span>
-      <button class="wp-done" type="button" id="wp-done">Done</button></div>
-    <div class="wp-cols" id="wp-cols"><div class="wp-hl"></div></div>
-  </div>
-</div>
-
-<script>
-/* ---------- wheel date/time picker ---------- */
-(function(){
-  var IH = 42, ROWS = 5, PAD = (ROWS-1)/2 * IH;   /* 84 */
-  var overlay=document.getElementById('wp-overlay'),
-      colsBox=document.getElementById('wp-cols'),
-      title=document.getElementById('wp-title'),
-      doneBtn=document.getElementById('wp-done');
-
-  var MONTHS=['January','February','March','April','May','June','July',
-              'August','September','October','November','December'];
-  var YEAR_MIN=1900, YEAR_MAX=new Date().getFullYear();
-
-  function daysIn(year,monthIdx){ return new Date(year, monthIdx+1, 0).getDate(); }
-  function pad2(n){ return n<10 ? '0'+n : ''+n; }
-  function mod(n,m){ return ((n%m)+m)%m; }   /* always non-negative, unlike JS % */
-
-  var state = {}, cols = {}, colMeta = {}, targetId=null, kind=null;
-
-  function makeCol(key){
-    var col=document.createElement('div');
-    col.className='wp-col'; col.dataset.col=key;
-    colsBox.appendChild(col);
-    cols[key]=col;
-    col.addEventListener('scroll', function(){ onScroll(key); });
-    return col;
-  }
-
-  /* circular=true triples the list and silently re-centers on wrap, so
-     scrolling past the last item continues into the first - an actual
-     wheel, not a list with two dead ends. day/year stay linear since
-     their bounds are meaningful (a month really does end, a birth year
-     really is bounded); month/hour/minute/period wrap because on a
-     clock or calendar face they actually do. */
-  function fillCol(key, items, selIndex, circular){
-    var col=cols[key];
-    col.innerHTML='';
-    var n=items.length;
-    var full = circular ? items.concat(items).concat(items) : items;
-    var top=document.createElement('div'); top.className='wp-spacer'; col.appendChild(top);
-    full.forEach(function(label){
-      var it=document.createElement('div');
-      it.className='wp-item';
-      it.textContent=label;
-      col.appendChild(it);
-    });
-    var bot=document.createElement('div'); bot.className='wp-spacer'; col.appendChild(bot);
-
-    colMeta[key] = {n:n, circular:!!circular};
-    var startIndex = circular ? n + selIndex : selIndex;
-    col._items = full;
-
-    markSelByIndex(key, startIndex);
-    void col.offsetHeight;   /* force reflow before reading/setting scrollTop */
-    col.scrollTop = startIndex*IH;
-    requestAnimationFrame(function(){
-      col.scrollTop = startIndex*IH;
-      requestAnimationFrame(function(){ col.scrollTop = startIndex*IH; });
-    });
-  }
-
-  function markSelByIndex(key, idx){
-    var col=cols[key], items=col.querySelectorAll('.wp-item');
-    for(var i=0;i<items.length;i++) items[i].classList.toggle('is-sel', i===idx);
-  }
-
-  /* The single source of truth for "what is centered right now" - reads
-     the real scroll position rather than a variable that a settle()
-     call might not have gotten around to updating yet. This is what a
-     commit reads, so what you see is always exactly what you get. */
-  function currentRealIndex(key){
-    var col=cols[key], meta=colMeta[key];
-    var raw = Math.round(col.scrollTop / IH);
-    raw = Math.max(0, Math.min(col._items.length-1, raw));
-    return meta.circular ? mod(raw, meta.n) : raw;
-  }
-
-  var settleT={};
-  function onScroll(key){
-    clearTimeout(settleT[key]);
-    settleT[key]=setTimeout(function(){ settle(key); }, 110);
-  }
-
-  function settle(key){
-    var col=cols[key], meta=colMeta[key];
-    var raw=Math.round(col.scrollTop / IH);
-    raw=Math.max(0, Math.min(col._items.length-1, raw));
-
-    if(meta.circular){
-      var realIdx = mod(raw, meta.n);
-      /* if we've drifted into the first or third copy, jump back to the
-         equivalent spot in the middle copy - instant, same content, so
-         the jump is invisible and scrolling can continue forever */
-      var middleIdx = meta.n + realIdx;
-      if(raw !== middleIdx){ col.scrollTop = middleIdx*IH; raw = middleIdx; }
-      markSelByIndex(key, middleIdx);
-    } else {
-      if(col.scrollTop !== raw*IH) col.scrollTop = raw*IH;
-      markSelByIndex(key, raw);
-    }
-
-    var realIdx2 = currentRealIndex(key);
-    if(kind==='date'){
-      if(key==='month') state.month=realIdx2;
-      if(key==='year') state.year=YEAR_MIN+realIdx2;
-      if(key==='day') state.day=realIdx2+1;
-      if(key==='month' || key==='year') rebuildDay();
-    } else {
-      if(key==='hour') state.hour12=realIdx2+1;
-      if(key==='minute') state.minute=realIdx2;
-      if(key==='period') state.period=realIdx2===0?'AM':'PM';
-    }
-  }
-
-  function rebuildDay(){
-    var n=daysIn(state.year, state.month);
-    var items=[]; for(var i=1;i<=n;i++) items.push(String(i));
-    if(state.day>n) state.day=n;
-    fillCol('day', items, state.day-1, false);
-  }
-
-  function mkHl(){ var d=document.createElement('div'); d.className='wp-hl'; return d; }
-
-  function buildDate(){
-    colsBox.innerHTML=''; colsBox.appendChild(mkHl()); cols={}; colMeta={};
-    makeCol('day'); makeCol('month'); makeCol('year');
-    var dn=daysIn(state.year, state.month);
-    var dayItems=[]; for(var i=1;i<=dn;i++) dayItems.push(String(i));
-    fillCol('day', dayItems, state.day-1, false);
-    fillCol('month', MONTHS, state.month, true);
-    var yearItems=[]; for(var y=YEAR_MIN;y<=YEAR_MAX;y++) yearItems.push(String(y));
-    fillCol('year', yearItems, state.year-YEAR_MIN, false);
-  }
-
-  function buildTime(){
-    colsBox.innerHTML=''; colsBox.appendChild(mkHl()); cols={}; colMeta={};
-    makeCol('hour'); makeCol('minute'); makeCol('period');
-    var hourItems=[]; for(var h=1;h<=12;h++) hourItems.push(String(h));
-    fillCol('hour', hourItems, state.hour12-1, true);
-    var minItems=[]; for(var m=0;m<60;m++) minItems.push(pad2(m));
-    fillCol('minute', minItems, state.minute, true);
-    fillCol('period', ['AM','PM'], state.period==='AM'?0:1, true);
-  }
-
-  function openPicker(fid, k){
-    targetId=fid; kind=k;
-    var hidden=document.getElementById(fid);
-    var val=hidden.value;
-
-    if(k==='date'){
-      title.textContent='Date of Birth';
-      if(val){
-        var parts=val.split('-');
-        state={year:+parts[0], month:+parts[1]-1, day:+parts[2]};
-      } else {
-        state={year:YEAR_MAX-25, month:0, day:1};
-      }
-      buildDate();
-    } else {
-      title.textContent='Time of Birth';
-      if(val){
-        var hm=val.split(':'); var h24=+hm[0], m=+hm[1];
-        var period = h24>=12 ? 'PM' : 'AM';
-        var h12 = h24%12; if(h12===0) h12=12;
-        state={hour12:h12, minute:m, period:period};
-      } else {
-        state={hour12:12, minute:0, period:'PM'};
-      }
-      buildTime();
-    }
-    overlay.classList.add('is-open');
-  }
-
-  function commit(){
-    if(!targetId) return;
-    var hidden=document.getElementById(targetId);
-    var trig=document.getElementById(targetId+'-trig');
-
-    /* Read every value fresh from the real scroll position, not from
-       state.X - guarantees the committed value always matches exactly
-       what is visually centered, even for a column the user never
-       touched (whose settle() may never have run). */
-    if(kind==='date'){
-      var dayIdx=currentRealIndex('day'), monthIdx=currentRealIndex('month'), yearIdx=currentRealIndex('year');
-      var day=dayIdx+1, month=monthIdx, year=YEAR_MIN+yearIdx;
-      var maxDay=daysIn(year,month);
-      if(day>maxDay) day=maxDay;
-      var iso = year+'-'+pad2(month+1)+'-'+pad2(day);
-      hidden.value = iso;
-      trig.textContent = day+' '+MONTHS[month]+' '+year;
-    } else {
-      var hourIdx=currentRealIndex('hour'), minuteIdx=currentRealIndex('minute'), periodIdx=currentRealIndex('period');
-      var hour12=hourIdx+1, minute=minuteIdx, period=periodIdx===0?'AM':'PM';
-      var h24 = period==='AM' ? (hour12===12?0:hour12) : (hour12===12?12:hour12+12);
-      hidden.value = pad2(h24)+':'+pad2(minute);
-      trig.textContent = hour12+':'+pad2(minute)+' '+period;
-    }
-    trig.classList.add('has-value');
-    overlay.classList.remove('is-open');
-  }
-
-  document.querySelectorAll('.wp-trigger').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      openPicker(btn.getAttribute('data-target'), btn.getAttribute('data-kind'));
-    });
-  });
-  doneBtn.addEventListener('click', commit);
-  overlay.addEventListener('click', function(e){ if(e.target===overlay) commit(); });
-})();
-</script>
 
 <div class="nk-tip" id="nk-tip"><span></span><button class="nk-tip-x" id="nk-tip-x" aria-label="dismiss">&times;</button></div>
 <button class="nk-fab" id="nk-fab" type="button" aria-label="Chat with Naksha">
@@ -2609,11 +2392,13 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(m){
     return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
 
+  var rowSeq=0;
   function row(){
     var d=document.createElement('div'); d.className='sw-p';
+    var rid='swp'+(++rowSeq);
     d.innerHTML='<input class="sw-p-name" type="text" placeholder="Partner name">'
-      + '<input class="sw-p-dob" type="date" min="1900-01-01">'
-      + '<input class="sw-p-tob" type="time">'
+      + '<button type="button" class="wp-trigger" data-target="'+rid+'-dob" data-kind="date">Date</button><input type="hidden" id="'+rid+'-dob" class="sw-p-dob">'
+      + '<button type="button" class="wp-trigger" data-target="'+rid+'-tob" data-kind="time">Time</button><input type="hidden" id="'+rid+'-tob" class="sw-p-tob">'
       + '<input class="sw-p-pob" type="text" placeholder="City">'
       + '<button class="sw-rm" type="button" aria-label="Remove">&times;</button>';
     d.querySelector('.sw-rm').addEventListener('click', function(){ d.remove(); n--; sync(); });
@@ -2630,9 +2415,11 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fill(){
     var p=window.mhProfile; if(!p) return;
     if(!document.getElementById('sw-name').value) document.getElementById('sw-name').value=p.name||'';
-    if(!document.getElementById('sw-dob').value)  document.getElementById('sw-dob').value=p.dob||'';
-    if(!document.getElementById('sw-tob').value)  document.getElementById('sw-tob').value=p.tob||'';
     if(!document.getElementById('sw-pob').value)  document.getElementById('sw-pob').value=p.place||'';
+    if(window.mhWheelLabel){
+      if(p.dob) window.mhWheelLabel('sw-dob', p.dob);
+      if(p.tob) window.mhWheelLabel('sw-tob', p.tob);
+    }
   }
   fill(); window.addEventListener('mh-profile', fill);
 
