@@ -178,6 +178,7 @@ a { color: var(--brass); }
 .nk-fab { z-index: 500 !important; }
 .nk-panel { z-index: 501 !important; }
 @media (max-width: 640px) { .nk-panel.is-open { z-index: 501 !important; } }
+@keyframes nk-fade { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
 
 /* ── buttons → pills everywhere ─────────────────────────────────── */
 .go, button.go, .rd-pdf-btn, .nk-notify, .per, .pred-tab, .ct-tab, .svc-tab,

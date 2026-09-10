@@ -640,7 +640,23 @@ header *{position:relative;z-index:1}
     window.scrollTo(0, _nkScrollY);
     _nkLocked = false;
   }
-  function open_(){ rebuildChips(); panel.classList.add('is-open'); fab.classList.add('is-hidden'); nkLock(); input.focus(); }
+  /* open the panel from wherever the (draggable) Naksha button sits */
+  function positionPanel(){
+    if(window.matchMedia('(max-width: 640px)').matches){
+      panel.style.left=panel.style.top=panel.style.right=panel.style.bottom=panel.style.transform=panel.style.animation='';
+      return;
+    }
+    var f=fab.getBoundingClientRect();
+    var pw=Math.min(370, window.innerWidth-24), ph=Math.min(560, window.innerHeight-24), gap=14;
+    var left = (f.left + f.width/2 > window.innerWidth/2)
+      ? Math.max(12, f.right - pw) : Math.min(window.innerWidth-pw-12, f.left);
+    var top = Math.min(window.innerHeight-ph-12, Math.max(12, f.top + f.height/2 - ph/2));
+    if(f.left - pw - gap > 12) left = f.left - pw - gap;
+    panel.style.left=left+'px'; panel.style.top=top+'px';
+    panel.style.right='auto'; panel.style.bottom='auto';
+    panel.style.transform='none'; panel.style.animation='nk-fade .18s ease both';
+  }
+  function open_(){ positionPanel(); rebuildChips(); panel.classList.add('is-open'); fab.classList.add('is-hidden'); nkLock(); input.focus(); }
   function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); nkUnlock(); }
   fab.addEventListener('click', open_);
   closeBtn.addEventListener('click', close_);

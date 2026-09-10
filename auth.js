@@ -92,8 +92,7 @@
     });
     menu.appendChild(nm); menu.appendChild(em); menu.appendChild(out); menu.appendChild(sw);
 
-    btn.addEventListener("click", function (e) {
-      e.stopPropagation();
+    btn.addEventListener("click", function () {
       var willOpen = menu.hidden;
       closeAcctMenus(menu);
       menu.hidden = !willOpen;
@@ -102,7 +101,16 @@
     host.appendChild(menu);
   }
 
-  document.addEventListener("click", function () { closeAcctMenus(null); });
+  /* Dismiss on any tap/click outside the widget. Capture phase so a
+     stopPropagation() somewhere in the page can't trap the menu open;
+     pointerdown so it closes on the press, before the tap resolves. */
+  function outsideClose(e) {
+    var t = e.target;
+    if (t && t.closest && t.closest(".mh-acct")) return;
+    closeAcctMenus(null);
+  }
+  document.addEventListener("pointerdown", outsideClose, true);
+  document.addEventListener("click", outsideClose, true);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAcctMenus(null); });
 
   function syncButtons() {

@@ -559,12 +559,22 @@ button.go:disabled{opacity:.65;cursor:default}
 @media (prefers-reduced-motion:reduce){.nk-fab::before{animation:none}}
 
 .rd-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule)}
-.rd-pdf-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;height:46px;
+.rd-pdf-btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;height:46px;
   font:inherit;font-size:14.5px;font-weight:600;color:var(--teak-dk);background:var(--wall-lit);
   border:1px solid var(--brass);border-radius:2px;cursor:pointer;transition:background .18s ease}
 .rd-pdf-btn:hover{background:var(--wall-shade)}
-.rd-pdf-btn:disabled{opacity:.6;cursor:default}
+.rd-pdf-btn:disabled{cursor:default}
 [data-theme="dark"] .rd-pdf-btn{background:#241A0D;color:#F2E4C8}
+.rd-pdf-btn.is-loading{color:var(--teak-dk);border-color:var(--brass);
+  animation:rd-pdf-glow 1.6s ease-in-out infinite}
+.rd-pdf-btn.is-loading::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 20%,rgba(244,181,46,.28) 50%,transparent 80%);
+  transform:translateX(-100%);animation:rd-pdf-sweep 1.35s linear infinite}
+.rd-pdf-btn.is-loading svg{animation:rd-pdf-spin 1s linear infinite}
+@keyframes rd-pdf-sweep{to{transform:translateX(100%)}}
+@keyframes rd-pdf-spin{to{transform:rotate(360deg)}}
+@keyframes rd-pdf-glow{0%,100%{box-shadow:0 0 0 0 rgba(244,181,46,.0)}50%{box-shadow:0 0 18px 1px rgba(244,181,46,.45)}}
+@media (prefers-reduced-motion:reduce){.rd-pdf-btn.is-loading,.rd-pdf-btn.is-loading::before,.rd-pdf-btn.is-loading svg{animation:none}}
 .rd-full-link{display:block;text-align:center;font-size:13.5px;color:var(--kumkum);text-decoration:none;
   font-weight:600;padding:4px}
 .rd-full-link:hover{text-decoration:underline}
@@ -1588,9 +1598,17 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var pdfBtn = box.querySelector('#rd-pdf-btn');
     if(pdfBtn && formData){
       pdfBtn.addEventListener('click', function(){
+        if(pdfBtn.disabled) return;
         var origText = pdfBtn.innerHTML;
+        var span = pdfBtn.querySelector('span');
         pdfBtn.disabled = true;
-        pdfBtn.querySelector('span').textContent = 'Preparing your PDF\u2026';
+        pdfBtn.classList.add('is-loading');
+        /* the reading is LLM-written per section and takes ~30s the first
+           time - keep the wait honest with staged messages + a live glow */
+        var stages = ['Preparing your PDF\u2026','Writing your chart sections\u2026','Setting the type\u2026','Almost there\u2026'];
+        var si = 0; span.textContent = stages[0];
+        var ticker = setInterval(function(){ si = Math.min(si+1, stages.length-1); span.textContent = stages[si]; }, 9000);
+        function stop(){ clearInterval(ticker); pdfBtn.classList.remove('is-loading'); pdfBtn.disabled = false; pdfBtn.innerHTML = origText; }
         fetch(API_BASE + '/api/reading/pdf', {
           method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({name:formData.name, dob:formData.dob, tob:formData.tob, place:formData.place, phone:formData.phone||''})
@@ -1606,13 +1624,12 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           a.download = 'muhurata-reading-' + (formData.name||'chart').trim().split(' ')[0].toLowerCase() + '.pdf';
           document.body.appendChild(a); a.click(); document.body.removeChild(a);
           setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+          span.textContent = 'Saved \u2713';
+          setTimeout(stop, 1400);
         })
         .catch(function(e){
+          stop();
           alert(e.message || 'Could not download the PDF just now. Please try again.');
-        })
-        .then(function(){
-          pdfBtn.disabled = false;
-          pdfBtn.innerHTML = origText;
         });
       });
     }
@@ -2039,7 +2056,30 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo(0, _nkScrollY);
     _nkLocked = false;
   }
-  function open_(){ panel.classList.add('is-open'); fab.classList.add('is-hidden'); nkLock(); input.focus(); }
+  /* open the panel next to wherever Naksha currently sits (it's draggable),
+     so the chat + "thinking" bubble appear where the button is, not at a
+     fixed corner. On phones the panel is a full sheet, so skip it. */
+  function positionPanel(){
+    if(window.matchMedia('(max-width: 640px)').matches){
+      panel.style.left=panel.style.top=panel.style.right=panel.style.bottom=panel.style.transform=panel.style.animation='';
+      return;
+    }
+    var f=fab.getBoundingClientRect();
+    var pw=Math.min(370, window.innerWidth-24);
+    var ph=Math.min(560, window.innerHeight-24);
+    var gap=14;
+    var left = (f.left + f.width/2 > window.innerWidth/2)
+      ? Math.max(12, f.right - pw)          /* Naksha on the right half -> panel's right edge by the button */
+      : Math.min(window.innerWidth-pw-12, f.left);
+    var top = Math.min(window.innerHeight-ph-12, Math.max(12, f.top + f.height/2 - ph/2));
+    /* if there's room, sit the panel just left of the button instead of over it */
+    if(f.left - pw - gap > 12) left = f.left - pw - gap;
+    panel.style.left = left+'px'; panel.style.top = top+'px';
+    panel.style.right='auto'; panel.style.bottom='auto';
+    panel.style.transform='none';
+    panel.style.animation='nk-fade .18s ease both';
+  }
+  function open_(){ positionPanel(); panel.classList.add('is-open'); fab.classList.add('is-hidden'); nkLock(); input.focus(); }
   function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); nkUnlock(); }
   fab.addEventListener('click', open_);
   closeBtn.addEventListener('click', close_);
