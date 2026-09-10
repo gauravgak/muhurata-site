@@ -17,11 +17,19 @@
     }
     // normalise the CSS-positioned FAB to explicit left/top so the bounce
     // keyframes (which set transform) don't fight a translateY(-50%).
-    var r0 = fab.getBoundingClientRect();
-    clampAndPlace(r0.left, r0.top);
+    var narrow = w.innerWidth <= 640;
+    var cw = fab.offsetWidth || 52, ch = fab.offsetHeight || 52;
+    if (narrow) {
+      // phones: pin bottom-right, clear of the form fields in mid-screen
+      clampAndPlace(w.innerWidth - cw - 14, w.innerHeight - ch - 84);
+    } else {
+      var r0 = fab.getBoundingClientRect();
+      clampAndPlace(r0.left, r0.top);
+    }
     try {
+      // don't trust a saved spot on phones — the viewport is too variable
       var p = JSON.parse(localStorage.getItem(KEY) || "null");
-      if (p && typeof p.x === "number") clampAndPlace(p.x, p.y);
+      if (p && typeof p.x === "number" && !narrow) clampAndPlace(p.x, p.y);
     } catch (e) {}
     fab.classList.add("nk-free");
 

@@ -33,7 +33,77 @@
   function emit() {
     listeners.forEach(function (fn) { try { fn({ user: _user }); } catch (e) {} });
     syncButtons();
+    renderAccounts();
   }
+
+  /* Account control: fills every [data-mh-acct] container. Signed out ->
+     a "Sign in" pill. Signed in -> a round avatar that opens a small
+     menu with the name, email, "Sign out" and "Use another account". */
+  function renderAccounts() {
+    var hosts = document.querySelectorAll("[data-mh-acct]");
+    for (var i = 0; i < hosts.length; i++) paintAccount(hosts[i]);
+  }
+
+  function closeAcctMenus(except) {
+    var open = document.querySelectorAll(".mh-acct-menu");
+    for (var i = 0; i < open.length; i++) if (open[i] !== except) open[i].hidden = true;
+  }
+
+  function paintAccount(host) {
+    host.innerHTML = "";
+    if (!_user) {
+      var inBtn = document.createElement("button");
+      inBtn.type = "button";
+      inBtn.className = "mh-acct-in";
+      inBtn.textContent = "Sign in";
+      inBtn.addEventListener("click", function () { w.mhAuth.signInGoogle(); });
+      host.appendChild(inBtn);
+      return;
+    }
+    var p = w.mhAuth.profile() || { name: "You", email: "", avatar: "", initial: "Y" };
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mh-acct-btn";
+    btn.setAttribute("aria-label", "Account");
+    var ini = document.createElement("span");
+    ini.className = "mh-acct-ini";
+    ini.textContent = p.initial;
+    btn.appendChild(ini);
+    if (p.avatar) {
+      var img = document.createElement("img");
+      img.alt = "";
+      img.referrerPolicy = "no-referrer";
+      img.addEventListener("error", function () { img.remove(); });
+      img.addEventListener("load", function () { ini.hidden = true; });
+      img.src = p.avatar;
+      btn.appendChild(img);
+    }
+
+    var menu = document.createElement("div");
+    menu.className = "mh-acct-menu";
+    menu.hidden = true;
+    var nm = document.createElement("div"); nm.className = "nm"; nm.textContent = p.name;
+    var em = document.createElement("div"); em.className = "em"; em.textContent = p.email;
+    var out = document.createElement("button"); out.type = "button"; out.textContent = "Sign out";
+    out.addEventListener("click", function () { w.mhAuth.signOut(); });
+    var sw = document.createElement("button"); sw.type = "button"; sw.textContent = "Use another account";
+    sw.addEventListener("click", function () {
+      Promise.resolve(w.mhAuth.signOut()).then(function () { w.mhAuth.signInGoogle(); });
+    });
+    menu.appendChild(nm); menu.appendChild(em); menu.appendChild(out); menu.appendChild(sw);
+
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var willOpen = menu.hidden;
+      closeAcctMenus(menu);
+      menu.hidden = !willOpen;
+    });
+    host.appendChild(btn);
+    host.appendChild(menu);
+  }
+
+  document.addEventListener("click", function () { closeAcctMenus(null); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAcctMenus(null); });
 
   function syncButtons() {
     var els = document.querySelectorAll("[data-mh-auth]");
@@ -84,8 +154,24 @@
       if (!client) { alert("Sign-in isn't configured yet."); return; }
       return client.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: w.location.origin + w.location.pathname },
+        options: {
+          redirectTo: w.location.origin + w.location.pathname,
+          // always let the user pick which Google account
+          queryParams: { prompt: "select_account" },
+        },
       });
+    },
+    /* name / email / avatar for the account menu, from Google's claims */
+    profile: function () {
+      if (!_user) return null;
+      var m = _user.user_metadata || {};
+      var name = m.full_name || m.name || (_user.email || "").split("@")[0] || "You";
+      return {
+        name: name,
+        email: _user.email || "",
+        avatar: m.avatar_url || m.picture || "",
+        initial: (name.trim()[0] || "?").toUpperCase(),
+      };
     },
     signOut: function () { return client ? client.auth.signOut() : null; },
     onChange: function (fn) { listeners.push(fn); if (_user !== undefined) fn({ user: _user }); },
@@ -99,5 +185,5 @@
     else w.mhAuth.signInGoogle();
   });
 
-  document.addEventListener("DOMContentLoaded", syncButtons);
+  document.addEventListener("DOMContentLoaded", function () { syncButtons(); renderAccounts(); });
 })(window);
