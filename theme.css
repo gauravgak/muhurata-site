@@ -197,11 +197,23 @@ input[type="tel"], .wp-trigger, .nk-input, #nk-input {
 .mh-proof .dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: #46d17a; box-shadow: 0 0 8px #46d17a; }
 .mh-proof b { color: var(--teak-dk); font-weight: 700; }
 
-/* ── Naksha: identity + dark pill FAB ─────────────────────────── */
+/* ── Naksha: identity + dark pill FAB, draggable + bouncy ─────── */
 .nk-fab {
   background: var(--brass) !important; border: 0 !important;
   box-shadow: var(--glow), var(--shadow-md) !important;
+  touch-action: none;
 }
+.nk-fab.nk-free { animation: nk-bob 5s ease-in-out infinite; }
+.nk-fab.nk-free:hover, .nk-fab.nk-dragging, .nk-fab.is-hidden { animation: none; }
+.nk-fab.nk-dragging { cursor: grabbing; transform: scale(1.08) !important; }
+@keyframes nk-bob {
+  0%, 62%, 100% { transform: translateY(0) scale(1) rotate(0); }
+  68% { transform: translateY(-10px) scale(1.08, 0.92) rotate(-6deg); }
+  74% { transform: translateY(0) scale(0.94, 1.06) rotate(4deg); }
+  80% { transform: translateY(-4px) scale(1.03, 0.97) rotate(-2deg); }
+  86% { transform: translateY(0) scale(1) rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) { .nk-fab.nk-free { animation: none; } }
 .nk-fab::after {
   content: "Naksha"; position: absolute; right: calc(100% + 10px); top: 50%;
   transform: translateY(-50%);
@@ -356,6 +368,25 @@ body.nk-scroll-lock { overflow: hidden !important; position: fixed !important; w
 .wp-spacer { height: 84px; }
 .wp-item { height: 42px; line-height: 42px; text-align: center; scroll-snap-align: center; font-size: 16px; color: color-mix(in srgb, var(--ink) 45%, transparent); transition: color .12s, font-size .12s; }
 .wp-item.is-sel { font-weight: 700; color: var(--brass); font-size: 19px; }
+
+/* ── "Pick a saved person" dropdown ──────────────────────────── */
+.mh-people-wrap { margin-bottom: 14px; }
+.mh-people {
+  width: 100%; max-width: 340px; min-height: 40px; padding: 8px 12px;
+  font-family: var(--font-body); font-size: 14px; cursor: pointer;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--brass) 10%, var(--wall-lit));
+  border: 1px dashed color-mix(in srgb, var(--brass) 55%, transparent);
+  border-radius: var(--radius-md);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--brass) 50%), linear-gradient(135deg, var(--brass) 50%, transparent 50%);
+  background-position: right 14px center, right 9px center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.mh-people[hidden] { display: none; }
+.mh-people option { background: var(--wall-lit); color: var(--ink); }
+.sw-p .mh-people-row { grid-column: 1 / -1; max-width: 100%; margin-bottom: 4px; }
 
 /* ── Swayamvar ─────────────────────────────────────────────── */
 .sw-card { display: block; }

@@ -13,8 +13,10 @@
 <script src="auth.js"></script>
 <script src="api.js"></script>
 <script src="profile.js"></script>
+<script src="people.js"></script>
 <script src="cities.js"></script>
 <script src="wheelpicker.js"></script>
+<script src="nkdrag.js"></script>
 <style>
 :root{
   --wall:#171410; --wall-lit:#2c2620; --wall-shade:#0f0d0a;
@@ -566,6 +568,16 @@ header *{position:relative;z-index:1}
     if(window.mhFillForm) window.mhFillForm({name:'#f-name', place:'#f-pob'});
     if(window.mhProfile) _setDT(window.mhProfile.dob, window.mhProfile.tob);
   }
+
+  // "pick a saved person" dropdown
+  function _mountPeople(){
+    var c=$('form-card');
+    if(!c || !window.mhPeopleSelect || c.querySelector('.mh-people-wrap')) return;
+    var wrap=document.createElement('div'); wrap.className='mh-people-wrap';
+    wrap.appendChild(window.mhPeopleSelect({name:'#f-name', place:'#f-pob', dobWheel:'f-dob', tobWheel:'f-tob'}));
+    c.insertBefore(wrap, c.firstChild);
+  }
+  _mountPeople(); window.addEventListener('mh-people', _mountPeople);
   _fillKundli();
   window.addEventListener('mh-profile', _fillKundli);
 })();

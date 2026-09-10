@@ -589,8 +589,10 @@ button.go:disabled{opacity:.65;cursor:default}
 <script src="auth.js"></script>
 <script src="api.js"></script>
 <script src="profile.js"></script>
+<script src="people.js"></script>
 <script src="cities.js"></script>
 <script src="wheelpicker.js"></script>
+<script src="nkdrag.js"></script>
 <script>
 (function(){
   var saved=null;
@@ -1774,6 +1776,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var b={name:val('k-nm'),dob:val('k-dob'),tob:val('k-tob'),place:val('k-pob')};
     if(!b.name||!b.dob||!b.tob||!b.place){ kout.innerHTML='<p class="err">Fill in every field. Time of birth matters most.</p>'; return; }
     if(!window.mhValidDate(b.dob)){ kout.innerHTML='<p class="err">That date of birth does not look right. Please check the year.</p>'; return; }
+    if(window.mhSavePerson) window.mhSavePerson(b);
     kgo.disabled=true; kgo.textContent='Calculating\u2026';
     post('/api/kundali', b, function(d){
       kout.innerHTML =
@@ -1797,6 +1800,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var girl={name:val('g-nm')||'Bride',dob:val('g-dob'),tob:val('g-tob'),place:val('g-pob')};
     if(!boy.dob||!boy.tob||!boy.place||!girl.dob||!girl.tob||!girl.place){
       mout.innerHTML='<p class="err">Both sets of birth details are needed.</p>'; return; }
+    if(window.mhSavePerson){ window.mhSavePerson(boy); window.mhSavePerson(girl); }
     if(!window.mhValidDate(boy.dob) || !window.mhValidDate(girl.dob)){
       mout.innerHTML='<p class="err">One of the dates of birth does not look right. Please check the years.</p>'; return; }
     mgo.disabled=true; mgo.textContent='Matching\u2026';
@@ -2403,6 +2407,24 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       + '<button class="sw-rm" type="button" aria-label="Remove">&times;</button>';
     d.querySelector('.sw-rm').addEventListener('click', function(){ d.remove(); n--; sync(); });
     list.appendChild(d); n++; sync(); if(window.mhAttachCities) window.mhAttachCities(d);
+
+    /* per-row "pick a saved person" */
+    if((window.mhPeople||[]).length){
+      var s=document.createElement('select'); s.className='mh-people mh-people-row';
+      function fillOpts(){
+        s.innerHTML='<option value="">Pick a saved person…</option>';
+        window.mhPeople.forEach(function(p,i){ var o=document.createElement('option'); o.value=i; o.textContent=p.name+(p.dob?' · '+p.dob:''); s.appendChild(o); });
+      }
+      fillOpts(); window.addEventListener('mh-people', fillOpts);
+      s.addEventListener('change', function(){
+        var p=window.mhPeople[+s.value]; s.value='';
+        if(!p) return;
+        d.querySelector('.sw-p-name').value=p.name||'';
+        d.querySelector('.sw-p-pob').value=p.place||'';
+        if(window.mhWheelLabel){ window.mhWheelLabel(rid+'-dob', p.dob, true); window.mhWheelLabel(rid+'-tob', p.tob, true); }
+      });
+      d.insertBefore(s, d.firstChild);
+    }
   }
   function sync(){
     count.textContent='('+n+')';
@@ -2469,6 +2491,28 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     })
     .then(function(){ go.disabled=false; go.textContent='Find my best match'; });
   });
+})();
+</script>
+<script>
+/* ---------- "pick a saved person" dropdowns on every birth form ---------- */
+(function(){
+  function mount(containerSel, beforeSel, map){
+    var c=document.querySelector(containerSel);
+    if(!c || !window.mhPeopleSelect || c.querySelector(':scope > .mh-people-wrap')) return;
+    var wrap=document.createElement('div'); wrap.className='mh-people-wrap';
+    wrap.appendChild(window.mhPeopleSelect(map));
+    var b=beforeSel ? c.querySelector(beforeSel) : c.firstChild;
+    c.insertBefore(wrap, b);
+  }
+  function build(){
+    mount('#card .form-body', '.field', {name:'#nm', place:'#pob', phone:'#wa', dobWheel:'dob', tobWheel:'tob'});
+    mount('[data-svcp="kundali"] .svc-card', '.field', {name:'#k-nm', place:'#k-pob', dobWheel:'k-dob', tobWheel:'k-tob'});
+    mount('[data-svcp="milan"] .pair > div:nth-child(1)', 'h4 + *', {name:'#b-nm', place:'#b-pob', dobWheel:'b-dob', tobWheel:'b-tob'});
+    mount('[data-svcp="milan"] .pair > div:nth-child(2)', 'h4 + *', {name:'#g-nm', place:'#g-pob', dobWheel:'g-dob', tobWheel:'g-tob'});
+    mount('.sw-you', '.field', {name:'#sw-name', place:'#sw-pob', dobWheel:'sw-dob', tobWheel:'sw-tob'});
+  }
+  document.addEventListener('DOMContentLoaded', build);
+  window.addEventListener('mh-people', build);
 })();
 </script>
 </body>

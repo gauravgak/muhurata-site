@@ -195,10 +195,10 @@
   });
 
   /* let profile.js prefill work on wp triggers too */
-  window.mhWheelLabel = function (targetId, iso) {
+  window.mhWheelLabel = function (targetId, iso, force) {
     var trig = document.querySelector('.wp-trigger[data-target="' + targetId + '"]');
     var hid = document.getElementById(targetId);
-    if (!trig || !hid || hid.value) return;
+    if (!trig || !hid || (hid.value && !force)) return;
     hid.value = iso;
     if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
       var p = iso.split("-");
