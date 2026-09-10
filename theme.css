@@ -219,39 +219,113 @@ body.nk-scroll-lock {
   .nk-think i { animation: none; }
 }
 
-/* ── Tarot ───────────────────────────────────────────────────────── */
-.tr-hint { font-size: 13px; color: var(--brass); margin: 14px 0 8px; }
-.tr-fan { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; }
-.tr-slot {
-  width: 44px; height: 68px; flex: none; cursor: pointer; padding: 0;
-  border: 1px solid var(--brass); border-radius: var(--radius-md);
-  background:
-    repeating-linear-gradient(45deg, transparent 0 4px,
-      color-mix(in srgb, var(--brass) 22%, transparent) 4px 8px),
-    var(--wall-lit);
-  transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
-}
-.tr-slot:hover:not(:disabled):not(.is-picked) { transform: translateY(-4px); }
-.tr-slot:disabled { opacity: .35; cursor: default; }
-.tr-slot.is-picked {
-  transform: translateY(-8px);
-  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--brass) 60%, transparent);
-  background: var(--brass);
-}
-.tr-slot.is-flipped { opacity: .5; }
-@media (max-width: 480px) { .tr-slot { width: 38px; height: 58px; } }
+/* ── Tarot: flip cards ────────────────────────────────────────────── */
+:root { --tr-back: url("cards/back.png"); }
 
-.tr-cards { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
-.tr-card {
-  flex: 1 1 150px; min-width: 130px;
-  border: 1px solid var(--rule); border-radius: var(--radius-md);
-  padding: 12px 13px; background: var(--wall-lit);
+.tr-hint { font-size: 13px; color: var(--brass); margin: 16px 0 10px; }
+
+.tr-fan { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 8px; }
+
+.tr-fc {
+  --w: 74px; width: var(--w); height: calc(var(--w) * 1.66);
+  flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+  perspective: 900px;
+  transition: transform .18s ease, opacity .3s ease, width .3s ease, margin .3s ease;
 }
-.tr-card .pos { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
-.tr-card .nm { font-family: var(--font-heading, Georgia, serif); font-size: 16px; margin: 3px 0 2px; color: var(--teak-dk); }
-.tr-card .or { font-size: 11px; color: color-mix(in srgb, var(--ink) 55%, transparent); text-transform: capitalize; }
-.tr-card .mn { font-size: 12.5px; margin-top: 6px; line-height: 1.45; }
-.tr-reading { margin-top: 6px; line-height: 1.65; white-space: pre-wrap; }
+.tr-fc:hover:not(.is-picked):not(.is-flipped) { transform: translateY(-6px); }
+.tr-fc.is-picked { transform: translateY(-10px); }
+.tr-fc.is-gone { opacity: 0; width: 0; margin-left: -3px; margin-right: -3px; pointer-events: none; }
+.tr-fc:disabled { cursor: default; }
+
+.tr-fc-inner {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.tr-fc.is-flipped .tr-fc-inner { transform: rotateY(180deg); }
+
+.tr-fc-face {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border-radius: 7px; border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent);
+  overflow: hidden; box-shadow: 0 4px 14px -6px rgba(0,0,0,.4);
+  background-size: cover; background-position: center;
+}
+.tr-fc-back {
+  background-image: var(--tr-back),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--brass) 30%, transparent) 0 6px, transparent 6px 12px),
+    linear-gradient(150deg, var(--wall-shade), var(--wall-lit));
+}
+.tr-fc-front {
+  transform: rotateY(180deg);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 8px 6px;
+  font-family: var(--font-heading, Georgia, serif); font-size: 12px; line-height: 1.2;
+  color: var(--teak-dk);
+  background-image: var(--img, none),
+    linear-gradient(160deg, color-mix(in srgb, var(--brass) 16%, var(--wall-lit)), var(--wall-lit));
+}
+.tr-fc.is-rev .tr-fc-front { transform: rotateY(180deg) rotate(180deg); }
+
+/* revealed: card legend + reading */
+.tr-legend { display: flex; flex-direction: column; gap: 6px; margin: 20px 0 4px; }
+.tr-leg { font-size: 13.5px; }
+.tr-leg .p { display: inline-block; min-width: 130px; font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--brass); }
+.tr-leg b { font-family: var(--font-heading, Georgia, serif); font-size: 15px; color: var(--teak-dk); }
+.tr-leg .r { font-size: 11px; color: color-mix(in srgb, var(--ink) 55%, transparent); }
+.tr-reading { margin-top: 14px; line-height: 1.7; white-space: pre-wrap; }
+
+@media (max-width: 480px) {
+  .tr-fc { --w: 52px; }
+  .tr-leg .p { display: block; min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tr-fc-inner { transition: none; }
+}
+
+/* ── Swayamvar ───────────────────────────────────────────────────── */
+.sw-card { display: block; }
+.sw-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 26px; }
+@media (max-width: 720px) { .sw-grid { grid-template-columns: 1fr; gap: 18px; } }
+.sw-you h3, .sw-partners h3 {
+  font-family: var(--font-heading, Georgia, serif); font-size: 16px;
+  color: var(--teak-dk); margin: 0 0 10px;
+}
+.sw-count { color: var(--brass); font-size: 13px; }
+.sw-role { display: flex; gap: 16px; margin-top: 6px; }
+.sw-radio { font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.sw-p {
+  display: grid; grid-template-columns: 1.2fr 1fr .8fr 1fr auto; gap: 8px;
+  align-items: center; margin-bottom: 8px;
+}
+.sw-p input {
+  width: 100%; min-height: 38px; padding: 6px 9px; font: inherit; font-size: 14px;
+  color: var(--ink); background: color-mix(in srgb, var(--ink) 4%, transparent);
+  border: 1px solid var(--rule); border-radius: var(--radius-md);
+}
+.sw-p input:focus-visible { border-color: var(--brass); outline: none; }
+.sw-rm {
+  width: 30px; height: 30px; border: 1px solid var(--rule); border-radius: 50%;
+  background: transparent; color: var(--brass); cursor: pointer; font-size: 16px; line-height: 1;
+}
+.sw-rm:disabled { opacity: .35; cursor: default; }
+@media (max-width: 560px) { .sw-p { grid-template-columns: 1fr 1fr; } .sw-p .sw-rm { grid-column: 2; justify-self: end; } }
+
+.sw-add {
+  font: inherit; font-size: 13px; color: var(--brass); background: transparent;
+  border: 1px dashed var(--brass); border-radius: var(--radius-md);
+  padding: 7px 12px; cursor: pointer; margin-top: 2px;
+}
+.sw-add:disabled { opacity: .4; cursor: default; }
+
+.sw-best { font-size: 15px; margin: 6px 0 12px; }
+.sw-best b { font-family: var(--font-heading, Georgia, serif); color: var(--brass); font-size: 18px; }
+.sw-tbl td.num, .sw-tbl th:nth-child(3) { white-space: nowrap; }
+.sw-tbl tr.is-best td {
+  background: color-mix(in srgb, var(--brass) 12%, transparent);
+  font-weight: 600;
+}
+.sw-tbl tr.is-best td:first-child { box-shadow: inset 3px 0 0 var(--brass); }
 
 /* ── Reading + prediction surfaces read cleanly on the light ground ── */
 .rd, .card, .pred-card, .tab-body {
