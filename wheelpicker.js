@@ -15,11 +15,21 @@
     '<div class="wp-sheet"><div class="wp-head"><span class="wp-title">Select</span>' +
     '<button class="wp-done" type="button">Done</button></div>' +
     '<div class="wp-cols"><div class="wp-hl"></div></div></div>';
-  (document.body || document.documentElement).appendChild(overlay);
 
   var colsBox = overlay.querySelector(".wp-cols"),
       title = overlay.querySelector(".wp-title"),
       doneBtn = overlay.querySelector(".wp-done");
+
+  // This script may load in <head> (no <body> yet). Mount the overlay
+  // and its handlers once the document body exists.
+  function mount() {
+    if (overlay.parentNode) return;
+    document.body.appendChild(overlay);
+    doneBtn.addEventListener("click", commit);
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) commit(); });
+  }
+  if (document.body) mount();
+  else document.addEventListener("DOMContentLoaded", mount);
 
   var MONTHS = ["January","February","March","April","May","June","July",
                 "August","September","October","November","December"];
@@ -181,10 +191,8 @@
 
   document.addEventListener("click", function (e) {
     var t = e.target.closest && e.target.closest(".wp-trigger");
-    if (t) { e.preventDefault(); openPicker(t); }
+    if (t) { e.preventDefault(); mount(); openPicker(t); }
   });
-  doneBtn.addEventListener("click", commit);
-  overlay.addEventListener("click", function (e) { if (e.target === overlay) commit(); });
 
   /* let profile.js prefill work on wp triggers too */
   window.mhWheelLabel = function (targetId, iso) {
