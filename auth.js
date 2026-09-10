@@ -45,8 +45,8 @@
   }
 
   function closeAcctMenus(except) {
-    var open = document.querySelectorAll(".mh-acct-menu");
-    for (var i = 0; i < open.length; i++) if (open[i] !== except) open[i].hidden = true;
+    var open = document.querySelectorAll(".mh-acct-menu.is-open");
+    for (var i = 0; i < open.length; i++) if (open[i] !== except) open[i].classList.remove("is-open");
   }
 
   function paintAccount(host) {
@@ -80,8 +80,7 @@
     }
 
     var menu = document.createElement("div");
-    menu.className = "mh-acct-menu";
-    menu.hidden = true;
+    menu.className = "mh-acct-menu";   /* closed until .is-open is added */
     var nm = document.createElement("div"); nm.className = "nm"; nm.textContent = p.name;
     var em = document.createElement("div"); em.className = "em"; em.textContent = p.email;
     var out = document.createElement("button"); out.type = "button"; out.textContent = "Sign out";
@@ -93,9 +92,9 @@
     menu.appendChild(nm); menu.appendChild(em); menu.appendChild(out); menu.appendChild(sw);
 
     btn.addEventListener("click", function () {
-      var willOpen = menu.hidden;
+      var willOpen = !menu.classList.contains("is-open");
       closeAcctMenus(menu);
-      menu.hidden = !willOpen;
+      menu.classList.toggle("is-open", willOpen);
     });
     host.appendChild(btn);
     host.appendChild(menu);
