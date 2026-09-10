@@ -146,6 +146,34 @@ h1 { letter-spacing: -0.01em; line-height: 1.14; }
   background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brass-lt) 70%, transparent), transparent);
 }
 
+/* ── Naksha panel: stable full-screen sheet on phones ─────────────── */
+/* Scrolling the page behind the open panel wrecks the UX on mobile.
+   On <=640px the panel becomes a real full-height sheet and the page
+   body is scroll-locked (JS toggles .nk-scroll-lock). */
+.nk-panel, .nk-body { overscroll-behavior: contain; }
+
+html.nk-scroll-lock { overflow: hidden !important; }
+body.nk-scroll-lock {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100%; left: 0; right: 0;
+}
+
+@media (max-width: 640px) {
+  .nk-panel.is-open {
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;
+    width: 100% !important; max-width: 100% !important;
+    height: 100% !important; height: 100dvh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    z-index: 300;
+  }
+  .nk-body { flex: 1 1 auto; min-height: 0; }
+}
+
 /* ── Naksha proactive nudge — the little "want me to explain this?" card ── */
 .nk-nudge {
   position: fixed; right: 22px; bottom: 92px; z-index: 60;
@@ -190,6 +218,19 @@ h1 { letter-spacing: -0.01em; line-height: 1.14; }
   .nk-nudge { transition: opacity .2s ease; }
   .nk-think i { animation: none; }
 }
+
+/* ── Tarot ───────────────────────────────────────────────────────── */
+.tr-cards { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.tr-card {
+  flex: 1 1 150px; min-width: 130px;
+  border: 1px solid var(--rule); border-radius: var(--radius-md);
+  padding: 12px 13px; background: var(--wall-lit);
+}
+.tr-card .pos { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
+.tr-card .nm { font-family: var(--font-heading, Georgia, serif); font-size: 16px; margin: 3px 0 2px; color: var(--teak-dk); }
+.tr-card .or { font-size: 11px; color: color-mix(in srgb, var(--ink) 55%, transparent); text-transform: capitalize; }
+.tr-card .mn { font-size: 12.5px; margin-top: 6px; line-height: 1.45; }
+.tr-reading { margin-top: 6px; line-height: 1.65; white-space: pre-wrap; }
 
 /* ── Reading + prediction surfaces read cleanly on the light ground ── */
 .rd, .card, .pred-card, .tab-body {

@@ -593,10 +593,28 @@ header *{position:relative;z-index:1}
   }
   var SID=sessionId(), history=[], limitReached=false;
 
-  function open_(){ rebuildChips(); panel.classList.add('is-open'); fab.classList.add('is-hidden'); input.focus(); }
-  function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); }
+  var _nkScrollY = 0, _nkLocked = false;
+  function nkLock(){
+    if(_nkLocked || !window.matchMedia('(max-width: 640px)').matches) return;
+    _nkScrollY = window.scrollY || window.pageYOffset || 0;
+    document.documentElement.classList.add('nk-scroll-lock');
+    document.body.classList.add('nk-scroll-lock');
+    document.body.style.top = (-_nkScrollY) + 'px';
+    _nkLocked = true;
+  }
+  function nkUnlock(){
+    if(!_nkLocked) return;
+    document.documentElement.classList.remove('nk-scroll-lock');
+    document.body.classList.remove('nk-scroll-lock');
+    document.body.style.top = '';
+    window.scrollTo(0, _nkScrollY);
+    _nkLocked = false;
+  }
+  function open_(){ rebuildChips(); panel.classList.add('is-open'); fab.classList.add('is-hidden'); nkLock(); input.focus(); }
+  function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); nkUnlock(); }
   fab.addEventListener('click', open_);
   closeBtn.addEventListener('click', close_);
+  window.addEventListener('resize', function(){ if(_nkLocked && !window.matchMedia('(max-width: 640px)').matches) nkUnlock(); });
 
   function scrollBottom(){ body.scrollTop=body.scrollHeight; }
   function addUserMsg(t){ var d=document.createElement('div');d.className='nk-msg nk-user';d.innerHTML='<p>'+esc(t)+'</p>';body.appendChild(d);scrollBottom(); }

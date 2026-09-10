@@ -800,6 +800,7 @@ button.go:disabled{opacity:.65;cursor:default}
     <button class="svc-tab is-on" data-svc="kundali" role="tab">Kundali</button>
     <button class="svc-tab" data-svc="milan" role="tab">Matching</button>
     <button class="svc-tab" data-svc="horo" role="tab">Horoscope</button>
+    <button class="svc-tab" data-svc="tarot" role="tab">Tarot</button>
     <button class="svc-tab" data-svc="chat" role="tab">Chat <span class="soon">soon</span></button>
   </div>
 
@@ -861,6 +862,24 @@ button.go:disabled{opacity:.65;cursor:default}
         <button class="per" data-per="yearly">Yearly</button>
       </div>
       <div id="h-out" class="svc-out"><p class="svc-load">Loading…</p></div>
+    </div>
+  </div>
+
+  <!-- TAROT -->
+  <div class="svc-pane" data-svcp="tarot">
+    <div class="svc-card">
+      <h3>Tarot</h3>
+      <p class="svc-sub">A drawn spread, read the classical way — an ending means a clearing, not harm. Ask a question or leave it open.</p>
+      <div class="field">
+        <input id="tr-q" type="text" maxlength="200" placeholder="What should I know about…?" autocomplete="off">
+      </div>
+      <div class="per-tabs" id="tr-spread" role="tablist">
+        <button class="per is-on" data-sp="three" type="button">Three cards</button>
+        <button class="per" data-sp="one" type="button">One card</button>
+        <button class="per" data-sp="cross" type="button">Six-card cross</button>
+      </div>
+      <button class="go" id="tr-go" type="button" style="margin-top:14px">Draw the cards</button>
+      <div id="tr-out" class="svc-out"></div>
     </div>
   </div>
 
@@ -2154,10 +2173,28 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var history = [];
   var limitReached = false;
 
-  function open_(){ panel.classList.add('is-open'); fab.classList.add('is-hidden'); input.focus(); }
-  function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); }
+  var _nkScrollY = 0, _nkLocked = false;
+  function nkLock(){
+    if(_nkLocked || !window.matchMedia('(max-width: 640px)').matches) return;
+    _nkScrollY = window.scrollY || window.pageYOffset || 0;
+    document.documentElement.classList.add('nk-scroll-lock');
+    document.body.classList.add('nk-scroll-lock');
+    document.body.style.top = (-_nkScrollY) + 'px';
+    _nkLocked = true;
+  }
+  function nkUnlock(){
+    if(!_nkLocked) return;
+    document.documentElement.classList.remove('nk-scroll-lock');
+    document.body.classList.remove('nk-scroll-lock');
+    document.body.style.top = '';
+    window.scrollTo(0, _nkScrollY);
+    _nkLocked = false;
+  }
+  function open_(){ panel.classList.add('is-open'); fab.classList.add('is-hidden'); nkLock(); input.focus(); }
+  function close_(){ panel.classList.remove('is-open'); fab.classList.remove('is-hidden'); nkUnlock(); }
   fab.addEventListener('click', open_);
   closeBtn.addEventListener('click', close_);
+  window.addEventListener('resize', function(){ if(_nkLocked && !window.matchMedia('(max-width: 640px)').matches) nkUnlock(); });
   window.__mhOpenNaksha = open_;  /* exposed so the proactive tooltip (different scope) can trigger it */
 
   function scrollBottom(){ body.scrollTop = body.scrollHeight; }
@@ -2394,6 +2431,56 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   window.addEventListener('touchmove',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
   window.addEventListener('touchstart',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
   window.addEventListener('mouseleave',function(){ g.style.opacity='0'; active=false; });
+})();
+</script>
+<script>
+/* ---------- Tarot (free services tab) ---------- */
+(function(){
+  var q=document.getElementById('tr-q'), go=document.getElementById('tr-go'),
+      out=document.getElementById('tr-out'), sp=document.getElementById('tr-spread');
+  if(!go) return;
+  var spread='three';
+  function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+  sp.addEventListener('click', function(e){
+    var b=e.target.closest('.per'); if(!b) return;
+    sp.querySelectorAll('.per').forEach(function(x){ x.classList.remove('is-on'); });
+    b.classList.add('is-on'); spread=b.getAttribute('data-sp');
+  });
+
+  function render(d){
+    var cards=(d.cards||[]).map(function(c){
+      return '<div class="tr-card"><div class="pos">'+esc(c.position)+'</div>'
+        + '<div class="nm">'+esc(c.name)+'</div>'
+        + '<div class="or">'+esc(c.orientation)+'</div>'
+        + '<div class="mn">'+esc(c.meaning)+'</div></div>';
+    }).join('');
+    out.innerHTML='<div class="tr-cards">'+cards+'</div>'
+      + '<p class="tr-reading">'+esc(d.reading)+'</p>';
+  }
+
+  go.addEventListener('click', function(){
+    go.disabled=true; go.textContent='Drawing…';
+    out.innerHTML='<p class="svc-load">Turning the cards…</p>';
+    window.mhApiFetch((window.API_BASE||'')+'/api/tarot', {
+      body:{ question:(q.value||'').trim(), spread:spread },
+      onRetry:function(){ out.innerHTML='<p class="svc-load">Waking the server up — the free tier is slow on the first request…</p>'; }
+    })
+    .then(function(d){ render(d); })
+    .catch(function(e){
+      if(e && e.code==='unauthorized'){
+        out.innerHTML='<p class="svc-sub">Sign in to draw a spread.</p>';
+        var b=document.createElement('button'); b.className='go'; b.style.marginTop='10px';
+        b.textContent='Sign in with Google';
+        b.addEventListener('click', function(){ if(window.mhAuth) window.mhAuth.signInGoogle(); });
+        out.appendChild(b);
+      } else {
+        out.innerHTML='<p class="err">'+esc((window.MH_ERR&&window.MH_ERR[e.code])||e.message||'Could not draw right now.')+'</p>';
+      }
+    })
+    .then(function(){ go.disabled=false; go.textContent='Draw the cards'; });
+  });
 })();
 </script>
 </body>
