@@ -18,7 +18,7 @@
 <link rel="icon" href="muhurata-lotus.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Karla:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --wall:#F5EDDC;
@@ -39,7 +39,7 @@
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;color:var(--ink);background:var(--wall);overflow-x:hidden;
   font-family:"Karla",system-ui,sans-serif;font-size:17px;line-height:1.62}
-h1,h2,h3,.brand,.pull{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400}
+h1,h2,h3,.brand,.pull{font-family:var(--font-heading,Georgia,serif);font-weight:400}
 
 /* ---------- toran ---------- */
 .toran{display:block;width:100%;height:38px;background:var(--wall-lit)}
@@ -166,7 +166,7 @@ button.go:focus-visible{outline:2px solid var(--marigold);outline-offset:2px}
   opacity:0;transform:translateY(8px)}
 .reveal .d{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
 .d svg{flex:none;margin-top:2px}
-.d b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+.d b{display:block;font-family:var(--font-heading,Georgia,serif);font-weight:400;
   font-size:17px;color:var(--teak-dk);line-height:1.3}
 .d span{font-size:13.5px;color:#6B5340}
 .note{margin:22px 0 0;font-size:14.5px;color:#5C452F;max-width:66ch;
@@ -212,12 +212,12 @@ footer a{color:var(--teak);text-decoration:none;border-bottom:1px solid var(--br
 
 .rd h2{font-size:24px;margin:0 0 16px;color:var(--teak-dk)}
 .rd h3{font-size:17px;margin:22px 0 6px;color:var(--kumkum);
-  font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400}
+  font-family:var(--font-heading,Georgia,serif);font-weight:400}
 .rd p{margin:0;font-size:15.5px;color:#4B3524;line-height:1.62}
 .rd-hi{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;
   background:var(--wall-shade);padding:14px 16px;border-radius:2px;margin-bottom:6px}
 .rd-hi span{font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--brass)}
-.rd-hi b{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+.rd-hi b{font-family:var(--font-heading,Georgia,serif);font-weight:400;
   font-size:19px;color:var(--teak-dk)}
 .rd-planets{margin-top:8px;border-top:1px solid var(--rule)}
 .rd-p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;
@@ -296,7 +296,7 @@ button.go:disabled{opacity:.65;cursor:default}
 .svc-card{background:linear-gradient(180deg,#FFFCF3,#F9F0DC);border:1px solid var(--rule);
   border-top:3px solid var(--brass);border-radius:2px;padding:26px 24px 24px}
 .svc-card h3{font-size:23px;margin:0 0 4px;color:var(--teak-dk);
-  font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400}
+  font-family:var(--font-heading,Georgia,serif);font-weight:400}
 .svc-card h4{font-size:15px;margin:0 0 12px;color:var(--kumkum);letter-spacing:1.4px;
   text-transform:uppercase;font-family:"Karla",sans-serif;font-weight:700}
 .svc-sub{font-size:14.5px;color:#6B5340;margin:0 0 20px}
@@ -319,7 +319,7 @@ button.go:disabled{opacity:.65;cursor:default}
   border:1px solid var(--rule)}
 .hz{background:#FFFCF3;padding:15px 16px}
 [data-theme="dark"] .hz{background:#241A0D}
-.hz b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+.hz b{display:block;font-family:var(--font-heading,Georgia,serif);font-weight:400;
   font-size:18px;color:var(--teak-dk);margin-bottom:3px}
 .hz .mood{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--kumkum);
   font-weight:700;display:block;margin-bottom:6px}
@@ -337,7 +337,7 @@ button.go:disabled{opacity:.65;cursor:default}
 .koot .zero{color:var(--kumkum)}
 .total{display:flex;align-items:baseline;gap:12px;margin:20px 0 6px;padding:16px 18px;
   background:var(--wall-shade);border-radius:2px}
-.total b{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;font-size:34px;color:var(--teak-dk)}
+.total b{font-family:var(--font-heading,Georgia,serif);font-weight:400;font-size:34px;color:var(--teak-dk)}
 .total span{font-size:15px;color:#6B5340}
 [data-theme="dark"] .total span{color:#A99570}
 .verdict{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;
@@ -388,7 +388,7 @@ button.go:disabled{opacity:.65;cursor:default}
 
 .wp-head{display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;border-bottom:1px solid var(--rule)}
-.wp-head span{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-size:17px;color:var(--teak-dk)}
+.wp-head span{font-family:var(--font-heading,Georgia,serif);font-size:17px;color:var(--teak-dk)}
 .wp-done{background:var(--kumkum);color:#FFF6E2;border:0;border-radius:999px;
   padding:8px 18px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
 .wp-done:hover{background:#7E1B15}
@@ -428,7 +428,7 @@ button.go:disabled{opacity:.65;cursor:default}
 .nk-head{flex:none;display:flex;align-items:center;gap:11px;padding:14px 14px;border-bottom:1px solid var(--rule)}
 .nk-head-mark{width:34px;height:34px;flex:none}
 .nk-head-txt{display:flex;flex-direction:column;line-height:1.25}
-.nk-head-txt b{font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;font-size:18px;color:var(--teak-dk)}
+.nk-head-txt b{font-family:var(--font-heading,Georgia,serif);font-weight:400;font-size:18px;color:var(--teak-dk)}
 .nk-head-txt span{font-size:11.5px;color:var(--brass);letter-spacing:.4px}
 .nk-close{margin-left:auto;background:none;border:0;font-size:26px;line-height:1;color:#9B876C;cursor:pointer;padding:0 4px}
 .nk-close:hover{color:var(--kumkum)}
@@ -458,7 +458,7 @@ button.go:disabled{opacity:.65;cursor:default}
 .nk-card{background:var(--wall-lit);border:1px solid var(--rule);border-left:3px solid var(--brass);
   border-radius:6px;padding:10px 12px;font-size:13.5px;margin-top:2px}
 [data-theme="dark"] .nk-card{background:#1F1608}
-.nk-card b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+.nk-card b{display:block;font-family:var(--font-heading,Georgia,serif);font-weight:400;
   font-size:15.5px;color:var(--teak-dk);margin-bottom:3px}
 .nk-card .row{display:flex;justify-content:space-between;padding:2px 0;color:#4B3524}
 [data-theme="dark"] .nk-card .row{color:#D9C9AC}
@@ -478,7 +478,7 @@ button.go:disabled{opacity:.65;cursor:default}
 .nk-upsell{background:linear-gradient(180deg,#FBF4E4,#F3E9D2);border:1px solid var(--rule);
   border-radius:8px;padding:12px 14px;font-size:13.5px;color:#4B3524}
 [data-theme="dark"] .nk-upsell{background:#241A0D;color:#D9C9AC}
-.nk-upsell b{display:block;font-family:"Tiro Devanagari Hindi",Georgia,serif;font-weight:400;
+.nk-upsell b{display:block;font-family:var(--font-heading,Georgia,serif);font-weight:400;
   color:var(--teak-dk);font-size:15px;margin-bottom:4px}
 .nk-notify{margin-top:8px;background:var(--kumkum);color:#FFF6E2;border:0;border-radius:999px;
   padding:7px 14px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}

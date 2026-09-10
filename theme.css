@@ -9,7 +9,8 @@
 
    Palette + type from the "Classical" design system:
      ground #f3f2f2 · surface #eae9e9 · ink #201f1d · gold accent #b68235
-     Cormorant Garamond (headings) · Lora (body)
+     Newsreader (headings, soft bracketed serif) · Spectral (body, calm
+     low-contrast serif) — chosen to read gentle, not pointy.
    No harsh reds — the old brick-red roles are remapped to deep bronze.
    ──────────────────────────────────────────────────────────────────── */
 
@@ -43,8 +44,8 @@
   --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
   --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
 
-  --font-heading: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --font-body: "Lora", Georgia, serif;
+  --font-heading: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Spectral", Georgia, serif;
 }
 
 /* Dark variant — keep it, but cool it toward the Classical dark ramp. */
@@ -71,12 +72,12 @@ h1, h2, h3, h4, h5, h6,
 .brand, .pull,
 .nk-head-txt b, .card-title, .rd h2, .rd h3, .pred-title, .tab-h {
   font-family: var(--font-heading);
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-weight: 500;
+  letter-spacing: -0.005em;
 }
-h1 { letter-spacing: -0.02em; }
+h1 { letter-spacing: -0.01em; line-height: 1.14; }
 .brand small { font-family: var(--font-body); }
-.pull { font-style: italic; font-weight: 500; }
+.pull { font-style: italic; font-weight: 400; }
 
 /* ── Buttons: outline style from the system ─────────────────────────── */
 .go, button.go, .rd-pdf-btn, .nk-notify {
@@ -85,7 +86,7 @@ h1 { letter-spacing: -0.02em; }
   border: 1px solid var(--brass);
   border-radius: var(--radius-md);
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 500;
 }
 .go:hover, button.go:hover, .rd-pdf-btn:hover {
   background: color-mix(in srgb, var(--brass) 12%, transparent);
