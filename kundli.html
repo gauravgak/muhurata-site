@@ -271,9 +271,12 @@ header *{position:relative;z-index:1}
   })();
 
 
-  // pointer glow trail - follows mouse and touch, eases toward the target
+  // pointer glow trail - desktop only. On touch it followed every scroll
+  // tap and never faded back out (no touchend handler), leaving a 280px
+  // glow parked wherever you last touched, sometimes half off an edge.
   (function(){
     var g=$('glow-trail'); if(!g) return;
+    if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     var tx=0,ty=0,cx=0,cy=0,active=false,raf=null;
     function loop(){
       cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18;
@@ -282,8 +285,6 @@ header *{position:relative;z-index:1}
     }
     function move(x,y){ tx=x; ty=y; if(!active){active=true;g.style.opacity='1';} if(!raf) raf=requestAnimationFrame(loop); }
     window.addEventListener('mousemove',function(e){ move(e.clientX,e.clientY); },{passive:true});
-    window.addEventListener('touchmove',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
-    window.addEventListener('touchstart',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
     window.addEventListener('mouseleave',function(){ g.style.opacity='0'; active=false; });
   })();
 

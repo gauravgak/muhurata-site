@@ -1531,10 +1531,9 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       + '<div class="rd-actions">'
       +   '<button class="rd-pdf-btn" id="rd-pdf-btn" type="button">'
       +     '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0-4-4m4 4 4-4M5 21h14"/></svg>'
-      +     '<span>Get the full report — ₹51</span></button>'
+      +     '<span>Want a detailed report? Get it for ₹51</span></button>'
       +   '<div class="rd-pay" id="rd-pay" hidden>'
-      +     '<p class="rd-pay-h">Pay ₹51, then send us the screenshot on WhatsApp — '
-      +     'your full written report is with you inside the hour.</p>'
+      +     '<p class="rd-pay-h">Pay ₹51 and you’ll receive your detailed report on WhatsApp.</p>'
       +     '<div class="rd-pay-row">'
       +       '<img class="rd-pay-qr" id="rd-pay-qr" alt="Scan to pay ₹51 by UPI" width="132" height="132">'
       +       '<div class="rd-pay-side">'
@@ -2386,6 +2385,12 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 <script>
 (function(){
   var g=document.getElementById('glow-trail'); if(!g) return;
+  /* A cursor-follow glow only makes sense with an actual mouse. On a
+     touchscreen it was firing on every scroll/tap (touchmove/touchstart)
+     with nothing to ever fade it back out - a 280px glow parked at the
+     edge of whatever you last touched, sometimes hanging half off the
+     side of the screen. Desktop-only. */
+  if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   var tx=0,ty=0,cx=0,cy=0,active=false,raf=null;
   function loop(){
     cx+=(tx-cx)*0.18; cy+=(ty-cy)*0.18;
@@ -2394,8 +2399,6 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
   function move(x,y){ tx=x; ty=y; if(!active){active=true;g.style.opacity='1';} if(!raf) raf=requestAnimationFrame(loop); }
   window.addEventListener('mousemove',function(e){ move(e.clientX,e.clientY); },{passive:true});
-  window.addEventListener('touchmove',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
-  window.addEventListener('touchstart',function(e){ var t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
   window.addEventListener('mouseleave',function(){ g.style.opacity='0'; active=false; });
 })();
 </script>
