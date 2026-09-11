@@ -30,6 +30,8 @@
   .claim .actions button{border:1px solid #3a3226;background:transparent;color:#eee6d8;
     border-radius:999px;padding:7px 14px;font-size:13px}
   .claim .actions button.done{border-color:#f4b52e;color:#f4b52e}
+  .claim .actions button.pdf{border-color:#7fb0e0;color:#7fb0e0}
+  .claim .actions button:disabled{opacity:.6;cursor:default}
   .claim .actions button.reject{opacity:.7}
   .empty{color:#8a7c62;padding:30px 0;text-align:center}
   .err{color:#e0a35c;padding:20px 0}
@@ -70,6 +72,7 @@
     d.appendChild(img);
 
     var meta = document.createElement('div'); meta.className = 'meta';
+    var hasLeadDetails = c.lead_name && c.lead_dob && c.lead_tob && c.lead_place;
     var leadBit = c.lead_name
       ? (esc(c.lead_name) + (c.lead_dob ? ' · ' + esc(c.lead_dob) + ' ' + esc(c.lead_tob||'') : ''))
       : 'No matching lead found — check the phone number by hand';
@@ -77,6 +80,9 @@
       + '<div class="lead">'+leadBit+'</div>'
       + '<div class="time">'+when(c.received_at)+'</div>'
       + '<div class="actions">'
+      +   (c.has_pdf
+            ? '<button class="pdf dl">Download PDF</button>'
+            : (hasLeadDetails ? '<button class="pdf gen">Generate PDF</button>' : ''))
       +   '<button class="done">Mark done</button>'
       +   '<button class="reject">Not a payment</button>'
       + '</div>';
@@ -84,7 +90,33 @@
 
     meta.querySelector('.done').addEventListener('click', function(){ resolve(c.id, 'done'); });
     meta.querySelector('.reject').addEventListener('click', function(){ resolve(c.id, 'rejected'); });
+    var genBtn = meta.querySelector('.pdf.gen');
+    if(genBtn) genBtn.addEventListener('click', function(){ generatePdf(c.id, genBtn); });
+    var dlBtn = meta.querySelector('.pdf.dl');
+    if(dlBtn) dlBtn.addEventListener('click', function(){ downloadPdf(c.id); });
     return d;
+  }
+
+  function generatePdf(id, btn){
+    btn.disabled = true; btn.textContent = 'Writing the report…';
+    window.mhApiFetch('/api/admin/payment-claims/'+id+'/generate-pdf', {method:'POST'})
+      .then(function(){ downloadPdf(id); load(); })
+      .catch(function(e){
+        btn.disabled = false; btn.textContent = 'Generate PDF';
+        alert(e.message || 'Could not generate the PDF.');
+      });
+  }
+
+  function downloadPdf(id){
+    window.mhApiFetch('/api/admin/payment-claims/'+id+'/pdf', {raw:true})
+      .then(function(r){ return r.blob(); })
+      .then(function(blob){
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href = url; a.download = 'claim-'+id+'.pdf';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+      })
+      .catch(function(e){ alert(e.message || 'Could not download the PDF.'); });
   }
 
   function resolve(id, status){
