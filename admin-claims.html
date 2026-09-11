@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Payment claims — admin</title>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.74.0/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<style>
+  :root{color-scheme:light dark}
+  body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:#141210;color:#eee6d8;padding:20px 16px 60px}
+  .wrap{max-width:720px;margin:0 auto}
+  h1{font-size:19px;margin:0 0 4px}
+  p.sub{margin:0 0 22px;color:#a99a80;font-size:13px}
+  button{font:inherit;cursor:pointer}
+  .gate{padding:40px 0;text-align:center}
+  .gate button{background:#f4b52e;color:#1c130a;border:0;border-radius:999px;padding:10px 22px;font-weight:700}
+  .claim{border:1px solid #3a3226;border-radius:8px;padding:14px;margin-bottom:12px;
+    display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;background:#1b1712}
+  .claim img{width:120px;height:120px;object-fit:cover;border-radius:4px;background:#000;flex:none;cursor:zoom-in}
+  .claim .meta{flex:1;min-width:200px}
+  .claim .phone{font-weight:700;font-size:15px}
+  .claim .lead{color:#c9b98f;font-size:13px;margin-top:2px}
+  .claim .time{color:#8a7c62;font-size:12px;margin-top:4px}
+  .claim .actions{display:flex;gap:8px;margin-top:10px}
+  .claim .actions button{border:1px solid #3a3226;background:transparent;color:#eee6d8;
+    border-radius:999px;padding:7px 14px;font-size:13px}
+  .claim .actions button.done{border-color:#f4b52e;color:#f4b52e}
+  .claim .actions button.reject{opacity:.7}
+  .empty{color:#8a7c62;padding:30px 0;text-align:center}
+  .err{color:#e0a35c;padding:20px 0}
+  .refresh{background:transparent;border:1px solid #3a3226;color:#eee6d8;border-radius:999px;
+    padding:7px 16px;font-size:13px;margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Payment claims</h1>
+  <p class="sub">Screenshots WhatsApp has received for the manual UPI-via-WhatsApp flow.
+    Verify the payment landed yourself, send the report, then mark it done — nothing here sends anything automatically.</p>
+  <div id="gate" class="gate" hidden><button id="signin">Sign in with Google</button></div>
+  <div id="main" hidden>
+    <button class="refresh" id="refresh">Refresh</button>
+    <div id="list"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var gate = document.getElementById('gate'), main = document.getElementById('main'),
+      list = document.getElementById('list');
+
+  document.getElementById('signin').addEventListener('click', function(){ window.mhAuth.signInGoogle(); });
+  document.getElementById('refresh').addEventListener('click', load);
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m];}); }
+  function when(ts){ try{ return new Date(ts*1000).toLocaleString(); }catch(e){ return ''; } }
+
+  function row(c){
+    var d = document.createElement('div'); d.className = 'claim';
+    var img = document.createElement('img'); img.alt = 'payment screenshot';
+    window.mhApiFetch('/api/admin/payment-claims/'+c.id+'/image', {raw:true})
+      .then(function(r){ return r.blob(); })
+      .then(function(b){ img.src = URL.createObjectURL(b); })
+      .catch(function(){});
+    img.addEventListener('click', function(){ window.open(img.src, '_blank'); });
+    d.appendChild(img);
+
+    var meta = document.createElement('div'); meta.className = 'meta';
+    var leadBit = c.lead_name
+      ? (esc(c.lead_name) + (c.lead_dob ? ' · ' + esc(c.lead_dob) + ' ' + esc(c.lead_tob||'') : ''))
+      : 'No matching lead found — check the phone number by hand';
+    meta.innerHTML = '<div class="phone">'+esc(c.phone)+'</div>'
+      + '<div class="lead">'+leadBit+'</div>'
+      + '<div class="time">'+when(c.received_at)+'</div>'
+      + '<div class="actions">'
+      +   '<button class="done">Mark done</button>'
+      +   '<button class="reject">Not a payment</button>'
+      + '</div>';
+    d.appendChild(meta);
+
+    meta.querySelector('.done').addEventListener('click', function(){ resolve(c.id, 'done'); });
+    meta.querySelector('.reject').addEventListener('click', function(){ resolve(c.id, 'rejected'); });
+    return d;
+  }
+
+  function resolve(id, status){
+    window.mhApiFetch('/api/admin/payment-claims/'+id+'/resolve?status='+status, {method:'POST'})
+      .then(load)
+      .catch(function(e){ alert(e.message || 'Could not update that claim.'); });
+  }
+
+  function load(){
+    list.innerHTML = '<div class="empty">Loading…</div>';
+    window.mhApiFetch('/api/admin/payment-claims?status=pending')
+      .then(function(rows){
+        list.innerHTML = '';
+        if(!rows.length){ list.innerHTML = '<div class="empty">No pending claims.</div>'; return; }
+        rows.forEach(function(c){ list.appendChild(row(c)); });
+      })
+      .catch(function(e){
+        list.innerHTML = '<div class="err">'+esc(e.code === 'unauthorized'
+          ? 'Please sign in.' : (e.status === 403 ? 'This account is not an admin.' : (e.message||'Could not load claims.')))+'</div>';
+      });
+  }
+
+  window.mhAuth.ready.then(function(){
+    if(window.mhAuth.user()){ main.hidden = false; load(); }
+    else { gate.hidden = false; }
+  });
+  window.mhAuth.onChange(function(){
+    if(window.mhAuth.user()){ gate.hidden = true; main.hidden = false; load(); }
+    else { main.hidden = true; gate.hidden = false; }
+  });
+})();
+</script>
+</body>
+</html>

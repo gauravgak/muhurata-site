@@ -579,6 +579,18 @@ button.go:disabled{opacity:.65;cursor:default}
   font-weight:600;padding:4px}
 .rd-full-link:hover{text-decoration:underline}
 
+/* pay panel: manual UPI-via-WhatsApp - QR/deep-link/VPA, then a WhatsApp
+   button to send the screenshot. No checkout, nothing is charged by code. */
+.rd-pay{margin-top:12px;padding:14px;border:1px dashed var(--brass);border-radius:4px;
+  background:color-mix(in srgb, var(--brass) 6%, transparent)}
+.rd-pay-h{margin:0 0 12px;font-size:13.5px;line-height:1.5;color:var(--ink)}
+.rd-pay-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rd-pay-qr{width:110px;height:110px;flex:none;background:#fff;border-radius:4px;padding:4px}
+.rd-pay-side{display:flex;flex-direction:column;gap:8px;flex:1;min-width:160px}
+.rd-pay-vpa{margin:0;font-size:12px;color:var(--muted,var(--ink));word-break:break-all}
+.rd-pay .wa-btn{margin-top:12px;width:100%;justify-content:center}
+@media (max-width:420px){.rd-pay-row{justify-content:center}.rd-pay-qr{width:96px;height:96px}}
+
 /* naksha proactive tooltip - appears once when a chart is ready, never forced open */
 .nk-tip{position:fixed;top:calc(50% - 76px);right:86px;z-index:149;
   max-width:220px;background:var(--wall-lit);border:1px solid var(--brass);
@@ -1509,7 +1521,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       + '<h3>Positions</h3>'
       + '<div class="rd-planets">'+rows+'</div>'
       + (d.whatsapp_link
-          ? '<a class="wa-btn" href="'+esc(d.whatsapp_link)+'" target="_blank" rel="noopener">'
+          ? '<a class="wa-btn" id="rd-wa-btn" href="'+esc(d.whatsapp_link)+'" target="_blank" rel="noopener">'
             + '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
             + '<path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1a14 14 0 0 1-6.4-5.6c-.5-.8-.8-1.7-.8-2.5 0-.8.4-1.5.9-1.9.2-.2.4-.2.6-.2h.4c.2 0 .4 0 .5.4l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.1.2-.3.3-.1.6.5.9 1.2 1.6 2.1 2.1.3.2.5.1.6 0l.6-.7c.2-.2.3-.2.5-.1l1.8.9c.2.1.4.2.4.3v.5z"/></svg>'
             + '<span>Send it to my WhatsApp</span></a>'
@@ -1519,7 +1531,22 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       + '<div class="rd-actions">'
       +   '<button class="rd-pdf-btn" id="rd-pdf-btn" type="button">'
       +     '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0-4-4m4 4 4-4M5 21h14"/></svg>'
-      +     '<span>Download full PDF report</span></button>'
+      +     '<span>Get the full report — ₹51</span></button>'
+      +   '<div class="rd-pay" id="rd-pay" hidden>'
+      +     '<p class="rd-pay-h">Pay ₹51, then send us the screenshot on WhatsApp — '
+      +     'your full written report is with you inside the hour.</p>'
+      +     '<div class="rd-pay-row">'
+      +       '<img class="rd-pay-qr" id="rd-pay-qr" alt="Scan to pay ₹51 by UPI" width="132" height="132">'
+      +       '<div class="rd-pay-side">'
+      +         '<a class="mh-pill" id="rd-pay-link" href="#" target="_blank" rel="noopener">Pay ₹51 via UPI</a>'
+      +         '<p class="rd-pay-vpa" id="rd-pay-vpa"></p>'
+      +       '</div>'
+      +     '</div>'
+      +     '<a class="wa-btn" id="rd-pay-wa" target="_blank" rel="noopener" hidden>'
+      +       '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+      +       '<path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1a14 14 0 0 1-6.4-5.6c-.5-.8-.8-1.7-.8-2.5 0-.8.4-1.5.9-1.9.2-.2.4-.2.6-.2h.4c.2 0 .4 0 .5.4l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.1.2-.3.3-.1.6.5.9 1.2 1.6 2.1 2.1.3.2.5.1.6 0l.6-.7c.2-.2.3-.2.5-.1l1.8.9c.2.1.4.2.4.3v.5z"/></svg>'
+      +       '<span>Send us the screenshot</span></a>'
+      +   '</div>'
       +   '<a class="rd-full-link" id="rd-full-link" href="#">'
       +     'See your full reading \u2014 KP, Ashtakvarga, Dasha timeline &amp; more &rarr;</a>'
       + '</div>'
@@ -1594,43 +1621,42 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       fullLink.href = 'kundli.html?' + qs.toString();
     }
 
-    /* PDF download - fetches the actual PDF bytes and triggers a browser save */
+    /* Full PDF report is now a paid unlock (\u20b951), collected manually:
+       pay by UPI, send a screenshot on WhatsApp, we send the report
+       ourselves once we've checked it landed. Tapping the button reveals
+       the pay panel rather than fetching anything. */
     var pdfBtn = box.querySelector('#rd-pdf-btn');
-    if(pdfBtn && formData){
+    var payPanel = box.querySelector('#rd-pay');
+    if(pdfBtn && payPanel && formData){
+      var payLoaded = false;
       pdfBtn.addEventListener('click', function(){
-        if(pdfBtn.disabled) return;
-        var origText = pdfBtn.innerHTML;
-        var span = pdfBtn.querySelector('span');
-        pdfBtn.disabled = true;
-        pdfBtn.classList.add('is-loading');
-        /* the reading is LLM-written per section and takes ~30s the first
-           time - keep the wait honest with staged messages + a live glow */
-        var stages = ['Preparing your PDF\u2026','Writing your chart sections\u2026','Setting the type\u2026','Almost there\u2026'];
-        var si = 0; span.textContent = stages[0];
-        var ticker = setInterval(function(){ si = Math.min(si+1, stages.length-1); span.textContent = stages[si]; }, 9000);
-        function stop(){ clearInterval(ticker); pdfBtn.classList.remove('is-loading'); pdfBtn.disabled = false; pdfBtn.innerHTML = origText; }
-        fetch(API_BASE + '/api/reading/pdf', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({name:formData.name, dob:formData.dob, tob:formData.tob, place:formData.place, phone:formData.phone||''})
-        })
-        .then(function(r){
-          if(!r.ok) throw new Error('Could not generate the PDF right now.');
-          return r.blob();
-        })
-        .then(function(blob){
-          var url = URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = url;
-          a.download = 'muhurata-reading-' + (formData.name||'chart').trim().split(' ')[0].toLowerCase() + '.pdf';
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-          setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
-          span.textContent = 'Saved \u2713';
-          setTimeout(stop, 1400);
-        })
-        .catch(function(e){
-          stop();
-          alert(e.message || 'Could not download the PDF just now. Please try again.');
-        });
+        var willOpen = payPanel.hidden;
+        payPanel.hidden = !willOpen;
+        if(!willOpen || payLoaded) return;
+        payLoaded = true;
+        var note = 'pdf ' + (formData.name||'').trim().split(' ')[0];
+        var qr = payPanel.querySelector('#rd-pay-qr');
+        var link = payPanel.querySelector('#rd-pay-link');
+        var vpaEl = payPanel.querySelector('#rd-pay-vpa');
+        qr.src = API_BASE + '/api/pay/qr?amount=51&note=' + encodeURIComponent(note);
+        fetch(API_BASE + '/api/pay/link?amount=51&note=' + encodeURIComponent(note))
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            link.href = d.link || '#';
+            vpaEl.textContent = d.vpa ? ('UPI ID: ' + d.vpa) : '';
+          })
+          .catch(function(){ vpaEl.textContent = ''; });
+        /* reuse the same WhatsApp business number as the free-reading
+           button, with a payment-specific prefilled message */
+        var freeWa = box.querySelector('#rd-wa-btn');
+        var waBase = freeWa ? (freeWa.getAttribute('href')||'').split('?')[0] : '';
+        if(waBase){
+          var waBtn = payPanel.querySelector('#rd-pay-wa');
+          var msg = "Hi! I've paid \u20b951 for my full report"
+            + (formData.name ? (' (' + formData.name + ')') : '') + " \u2014 sending the screenshot now.";
+          waBtn.href = waBase + '?text=' + encodeURIComponent(msg);
+          waBtn.hidden = false;
+        }
       });
     }
 
