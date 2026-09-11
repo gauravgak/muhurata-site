@@ -1538,7 +1538,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       +     '<div class="rd-pay-row">'
       +       '<img class="rd-pay-qr" id="rd-pay-qr" alt="Scan to pay ₹51 by UPI" width="132" height="132">'
       +       '<div class="rd-pay-side">'
-      +         '<a class="mh-pill" id="rd-pay-link" href="#" target="_blank" rel="noopener">Pay ₹51 via UPI</a>'
+      +         '<a class="mh-pill" id="rd-pay-link" href="#">Pay ₹51 via UPI</a>'
       +         '<p class="rd-pay-vpa" id="rd-pay-vpa"></p>'
       +       '</div>'
       +     '</div>'
@@ -1638,14 +1638,22 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var qr = payPanel.querySelector('#rd-pay-qr');
         var link = payPanel.querySelector('#rd-pay-link');
         var vpaEl = payPanel.querySelector('#rd-pay-vpa');
+        qr.addEventListener('error', function(){ qr.hidden = true; });
         qr.src = API_BASE + '/api/pay/qr?amount=51&note=' + encodeURIComponent(note);
+        function payNotReady(){
+          link.href = '#';
+          link.addEventListener('click', function(e){ e.preventDefault(); });
+          link.style.opacity = '.5'; link.style.pointerEvents = 'none';
+          vpaEl.textContent = "Payments aren't switched on yet — message us on WhatsApp instead.";
+        }
         fetch(API_BASE + '/api/pay/link?amount=51&note=' + encodeURIComponent(note))
-          .then(function(r){ return r.json(); })
+          .then(function(r){ if(!r.ok) throw new Error('not ready'); return r.json(); })
           .then(function(d){
-            link.href = d.link || '#';
+            if(!d.link){ payNotReady(); return; }
+            link.href = d.link;
             vpaEl.textContent = d.vpa ? ('UPI ID: ' + d.vpa) : '';
           })
-          .catch(function(){ vpaEl.textContent = ''; });
+          .catch(payNotReady);
         /* reuse the same WhatsApp business number as the free-reading
            button, with a payment-specific prefilled message */
         var freeWa = box.querySelector('#rd-wa-btn');
