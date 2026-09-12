@@ -80,7 +80,25 @@
 
     var detail = null;
     try { detail = (await res.json()).detail; } catch (e) {}
-    throw mkErr("http", detail || ("Request failed (" + res.status + ")."), res.status);
+    throw mkErr("http", detailToMessage(detail) || ("Request failed (" + res.status + ")."), res.status);
+  }
+
+  /* FastAPI's own validation errors (422 from a bad field, before your
+     handler even runs) put `detail` as an ARRAY of {msg, loc, ...}
+     objects, not a string - passed straight to `new Error(...)` that
+     stringifies to the useless "[object Object]". Pull out the actual
+     messages instead. A plain string `detail` (your own HTTPException)
+     passes through unchanged. */
+  function detailToMessage(detail) {
+    if (!detail) return null;
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+      var msgs = detail.map(function (d) {
+        return (d && typeof d === "object" && d.msg) ? d.msg : String(d);
+      }).filter(Boolean);
+      return msgs.length ? msgs.join(" ") : null;
+    }
+    return null;
   }
 
   function mkErr(code, message, status) {

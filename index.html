@@ -1749,6 +1749,10 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       alert('That date of birth does not look right. Please check the year.');
       return;
     }
+    if(d.phone.length < 6){
+      alert('That WhatsApp number looks too short — please check it.');
+      return;
+    }
 
     var first = d.name.split(' ')[0];
     var lastErr = null;
