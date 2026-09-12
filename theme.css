@@ -269,7 +269,7 @@ input[type="tel"], .wp-trigger, .nk-input, #nk-input {
   padding: 6px 12px; white-space: nowrap; box-shadow: var(--shadow-sm);
   pointer-events: none;
 }
-@media (max-width: 640px) { .nk-fab::after { display: none; } }
+@media (max-width: 480px) { .nk-fab::after { font-size: 11.5px; padding: 5px 10px; } }
 .nk-panel { background: var(--wall-lit) !important; border: 1px solid var(--rule) !important; border-radius: var(--radius-lg) !important; box-shadow: var(--shadow-lg) !important; }
 .nk-head { border-bottom: 1px solid var(--rule); }
 .nk-head-txt b { font-size: 18px; color: var(--teak-dk); }

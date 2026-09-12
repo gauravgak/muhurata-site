@@ -559,6 +559,8 @@ button.go:disabled{opacity:.65;cursor:default}
 @media (prefers-reduced-motion:reduce){.nk-fab::before{animation:none}}
 
 .rd-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--rule)}
+.rd-cta-lead{margin:0 0 2px;text-align:center;font-family:var(--font-heading,Georgia,serif);
+  font-weight:400;font-size:18px;color:var(--teak-dk)}
 .rd-pdf-btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;height:46px;
   font:inherit;font-size:14.5px;font-weight:600;color:var(--teak-dk);background:var(--wall-lit);
   border:1px solid var(--brass);border-radius:2px;cursor:pointer;transition:background .18s ease}
@@ -603,7 +605,15 @@ button.go:disabled{opacity:.65;cursor:default}
   width:11px;height:11px;background:inherit;border-right:1px solid var(--brass);border-top:1px solid var(--brass)}
 .nk-tip-x{position:absolute;top:4px;right:6px;background:none;border:0;font-size:15px;
   color:#9B876C;cursor:pointer;line-height:1;padding:3px}
-@media (max-width:480px){.nk-tip{display:none}}
+/* on phones Naksha sits bottom-right (see nkdrag.js), not mid-right - put
+   the tip just above the button instead of hiding it, arrow pointing down */
+@media (max-width:480px){
+  .nk-tip{top:auto;bottom:150px;right:14px;left:auto;max-width:min(230px, calc(100vw - 28px));
+    transform:translateY(8px) scale(.96)}
+  .nk-tip.is-shown{transform:none}
+  .nk-tip::after{right:20px;top:auto;bottom:-6px;transform:rotate(45deg);
+    border-right:1px solid var(--brass);border-top:0;border-bottom:1px solid var(--brass)}
+}
 </style>
 
 <script src="config.js"></script>
@@ -1477,6 +1487,16 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }catch(e){ /* swallowed on purpose - see note above */ }
   }
 
+  var SIGN_EN = {
+    Mesha:'Aries', Vrishabha:'Taurus', Mithuna:'Gemini', Karka:'Cancer',
+    Simha:'Leo', Kanya:'Virgo', Tula:'Libra', Vrischika:'Scorpio',
+    Dhanu:'Sagittarius', Makara:'Capricorn', Kumbha:'Aquarius', Meena:'Pisces'
+  };
+  function withEn(sign){
+    var en = SIGN_EN[sign];
+    return esc(sign) + (en ? ' (' + en + ')' : '');
+  }
+
   function renderReading(d){
     var r=d.reading;
     var rows = d.positions.map(function(p){
@@ -1489,19 +1509,13 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }).join('');
     return '<div class="rd">'
       + '<h2>'+esc(r.greeting)+'</h2>'
-      + '<div class="rd-hi"><span>Lagna</span><b>'+esc(d.ascendant.sign)+'</b>'
-      + '<span>Moon</span><b>'+esc(d.moon_sign)+'</b>'
+      + '<div class="rd-hi"><span>Lagna</span><b>'+withEn(d.ascendant.sign)+'</b>'
+      + '<span>Moon</span><b>'+withEn(d.moon_sign)+'</b>'
       + '<span>Nakshatra</span><b>'+esc(d.birth_nakshatra)+'</b></div>'
       + '<p class="rd-summary">'+esc(r.summary)+'</p>'
-      + '<h3>Your lagna</h3><p>'+esc(r.lagna)+'</p>'
-      + '<h3>Your mind</h3><p>'+esc(r.mind)+'</p>'
-      + '<h3>Money and family</h3><p>'+esc(r.money)+'</p>'
+      + '<h3>Your personality</h3><p>'+esc(r.lagna)+'</p>'
       + '<h3>Work and health</h3><p>'+esc(r.health)+'</p>'
-      + '<h3>Relationships</h3><p>'+esc(r.relationships)+'</p>'
-      + '<h3>Career</h3><p>'+esc(r.career)+'</p>'
-      + '<h3>The period you are in</h3><p>'+esc(r.period)+'</p>'
-      + '<h3>Your Ishta Devata</h3><p>'+esc(r.devata)+'</p>'
-      + '<h3>One practice</h3><p>'+esc(r.practice)+'</p>'
+      + (r.watch ? '<h3>Things to watch</h3><p>'+esc(r.watch)+'</p>' : '')
       + (d.charts ? (
             '<h3>Your chart</h3>'
           + '<div class="ct-tabs" role="tablist">'
@@ -1520,18 +1534,11 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         ) : '')
       + '<h3>Positions</h3>'
       + '<div class="rd-planets">'+rows+'</div>'
-      + (d.whatsapp_link
-          ? '<a class="wa-btn" id="rd-wa-btn" href="'+esc(d.whatsapp_link)+'" target="_blank" rel="noopener">'
-            + '<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
-            + '<path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1a14 14 0 0 1-6.4-5.6c-.5-.8-.8-1.7-.8-2.5 0-.8.4-1.5.9-1.9.2-.2.4-.2.6-.2h.4c.2 0 .4 0 .5.4l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.1.2-.3.3-.1.6.5.9 1.2 1.6 2.1 2.1.3.2.5.1.6 0l.6-.7c.2-.2.3-.2.5-.1l1.8.9c.2.1.4.2.4.3v.5z"/></svg>'
-            + '<span>Send it to my WhatsApp</span></a>'
-            + '<p class="rd-f">Tap the button, then send the message that opens. '
-            + 'Your full reading comes straight back.</p>'
-          : '<p class="rd-f">A copy is on its way to your WhatsApp.</p>')
       + '<div class="rd-actions">'
+      +   '<p class="rd-cta-lead">Want to know more about yourself?</p>'
       +   '<button class="rd-pdf-btn" id="rd-pdf-btn" type="button">'
       +     '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0-4-4m4 4 4-4M5 21h14"/></svg>'
-      +     '<span>Want a detailed report? Get it for ₹51</span></button>'
+      +     '<span>Get a detailed report with remedies — ₹51</span></button>'
       +   '<div class="rd-pay" id="rd-pay" hidden>'
       +     '<p class="rd-pay-h">Pay ₹51 and you’ll receive your detailed report on WhatsApp.</p>'
       +     '<div class="rd-pay-row">'
@@ -1575,7 +1582,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     return box;
   }
 
-  function done(html, formData){
+  function done(html, formData, waLink){
     card.classList.add('is-sent');
     var box = card.querySelector('.done');
     box.innerHTML = html;
@@ -1653,10 +1660,10 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             vpaEl.textContent = d.vpa ? ('UPI ID: ' + d.vpa) : '';
           })
           .catch(payNotReady);
-        /* reuse the same WhatsApp business number as the free-reading
-           button, with a payment-specific prefilled message */
-        var freeWa = box.querySelector('#rd-wa-btn');
-        var waBase = freeWa ? (freeWa.getAttribute('href')||'').split('?')[0] : '';
+        /* same WhatsApp business number the free reading used to show,
+           just with a payment-specific prefilled message - the reading is
+           no longer offered free over WhatsApp, only the paid report is */
+        var waBase = waLink ? waLink.split('?')[0] : '';
         if(waBase){
           var waBtn = payPanel.querySelector('#rd-pay-wa');
           var msg = "Hi! I've paid \u20b951 for my full report"
@@ -1760,7 +1767,7 @@ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             };
           }catch(e){}
           if(window.mhSaveProfile) window.mhSaveProfile({name:d.name, dob:d.dob, tob:d.tob, place:d.place, phone:d.phone});
-          done(renderReading(reading), d);
+          done(renderReading(reading), d, reading.whatsapp_link);
         })
         .catch(function(){
           btn.disabled=false; btn.textContent='Get my reading';
